@@ -1,0 +1,83 @@
+{# templates/components/_blog_advice.html.twig
+   Usage : {% include 'components/_blog_advice.html.twig' %}
+        ou {% include 'components/_blog_advice.html.twig' with {posts: articles} %}
+   Chaque article : {title, excerpt, image, url} #}
+
+{% set posts = posts|default([
+    {
+        title: "Entretien et réparation d'une voiture d'occasion : conseils et astuces",
+        excerpt: "Pour lui garantir une durabilité certaine, une voiture doit être régulièrement entretenue et réparée en cas de dysfonctionnement. Découvrez quelques conseils et astuces (...)",
+        image: 'uploads/conseils/elec_Voitures_Neuves_Electriques_Aides_0_d22d3022e6.avif',
+        url: '#'
+    },
+    {
+        title: "Où stocker sa voiture après les vacances ?",
+        excerpt: "Une fois les vacances terminées, il peut être difficile de trouver un endroit sûr pour stocker son véhicule. Voici les solutions à connaître (...)",
+        image: 'uploads/conseils/reprise_voiture_electrique_96a0c4679f.avif',
+        url: '#'
+    },
+    {
+        title: "Les 10 meilleures marques de voitures : un guide pour les acheteurs",
+        excerpt: "Vu les nombreuses marques et tous les modèles disponibles sur le marché, choisir sa voiture d'occasion peut être compliqué. Notre guide vous aide (...)",
+        image: 'uploads/conseils/people_driving_cars_city_street_1600x1064_c98a8ba090.avif',
+        url: '#'
+    },
+    {
+        title: "Voiture d'occasion : les contrôles à faire avant d'acheter",
+        excerpt: "Acheter un véhicule d'occasion ne s'improvise pas. Historique, carrosserie, mécanique, papiers : voici les points essentiels à vérifier (...)",
+        image: 'uploads/conseils/recyclage_voiture_electrique_1472f24d42.avif',
+        url: '#'
+    },
+]) %}
+
+<section class="max-w-7xl mx-auto px-6 py-10">
+
+    {# Titre + filet rouge #}
+    <div class="border-b-[3px] border-luxe-orange pb-2 text-center">
+        <h2 class="font-display text-2xl text-luxe-text md:text-3xl">
+            <span class="font-bold">Nos conseils</span> en vue d'un achat de voiture
+        </h2>
+    </div>
+
+    {# Cartes : 1 col mobile, 2 col sm, 4 col lg.
+       Pour retrouver les hauteurs inégales de la capture, ajoute "items-start" sur ce grid. #}
+    <div class="mt-8 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
+        {% for post in posts %}
+            <article class="group rounded-md flex flex-col border border-luxe-border bg-white">
+                <a href="{{ post.url }}" class="block focus-visible:outline-none" aria-label="{{ post.title }}" tabindex="-1">
+                    <div class="aspect-[3/2] rounded-md overflow-hidden bg-luxe-black-alt">
+                        <img src="{{ asset(post.image) }}" alt="{{ post.title }}" loading="lazy"
+                             class="h-full w-full  object-cover">
+                    </div>
+                </a>
+
+                <div class="flex flex-1 flex-col p-5">
+                    <h3 class="text-xl font-bold leading-snug text-luxe-text">
+                        <a href="{{ post.url }}" class="transition hover:text-luxe-orange-dark focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-luxe-orange">
+                            {{ post.title }}
+                        </a>
+                    </h3>
+
+                    <p class="mt-3 line-clamp-6 text-base leading-relaxed text-luxe-muted">
+                        {{ post.excerpt }}
+                    </p>
+
+                    {# mt-auto : "Lire la suite" reste aligné en bas des cartes #}
+                    <a href="{{ post.url }}" class="mt-auto pt-5 text-sm text-luxe-orange-dark hover:underline">
+                        Lire la suite ...
+                    </a>
+                </div>
+
+            </article>
+        {% endfor %}
+    </div>
+
+    {# Bouton bas de section #}
+    <div class="mt-10 text-center">
+        {# TODO : remplace '#' par ta route du blog, ex. path('blog_list') #}
+        <a href="#" class="inline-block rounded-full bg-luxe-orange px-5 py-3 text-white transition hover:bg-luxe-orange-dark focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-luxe-orange focus-visible:ring-offset-2">
+            Accéder à tous nos articles
+        </a>
+    </div>
+
+</section>

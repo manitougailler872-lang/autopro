@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="fr" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Administration — {{ site_setting('company_name') }}{% endblock %}</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ asset('build/app.css') }}">
+</head>
+<body class="bg-luxe-black text-luxe-text min-h-screen">
+    {# ============ MOBILE TOP BAR (burger only visible < md) ============ #}
+    <div class="md:hidden sticky top-0 z-30 flex items-center justify-between px-4 h-14 bg-luxe-black-alt border-b border-luxe-border">
+        <a href="{{ path('admin_dashboard') }}">
+                {% set logo =  site_setting('company_logo') %}
+                {% if logo is empty %}
+                    {% set logo = 'default_company_logo.png' %}
+                {% endif %}
+                <div class="flex items-center gap-2 font-semibold text-lg mb-4">
+                    <a href="{{ path('home') }}" class="inline-block">
+                        <img
+                            src="{{ asset('uploads/logos/' ~ logo) }}"
+                            alt="AUTOPRO"
+                            class="h-full w-full object-contain"
+                        >
+                    </a>
+                </div>
+        </a>
+        <button type="button" onclick="document.getElementById('admin-sidebar').classList.toggle('-translate-x-full')" class="w-10 h-10 rounded-full border border-luxe-border flex items-center justify-center text-white hover:text-luxe-orange hover:border-luxe-orange transition" aria-label="Menu">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="w-5 h-5" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" clip-rule="evenodd" d="M3 6.75A.75.75 0 013.75 6h16.5a.75.75 0 010 1.5H3.75A.75.75 0 013 6.75Zm0 5.25a.75.75 0 01.75-.75h16.5a.75.75 0 010 1.5H3.75A.75.75 0 013 12Zm.75 4.5a.75.75 0 000 1.5h16.5a.75.75 0 000-1.5H3.75Z"/></svg>
+        </button>
+    </div>
+
+    <div class="flex min-h-screen">
+        {# ============ SIDEBAR (fixed on mobile, sticky on desktop) ============ #}
+        <aside id="admin-sidebar"
+               class="fixed md:sticky md:translate-x-0 top-0 md:top-0 left-0 w-64 h-screen z-40 bg-luxe-black-alt border-r border-luxe-border p-4 transform -translate-x-full md:translate-x-0 transition-transform duration-200 shrink-0 overflow-y-auto">
+            <div class=" flex items-center justify-between">
+                <a href="{{ path('admin_dashboard') }}">
+                {% set logo =  site_setting('company_logo') %}
+                {% if logo is empty %}
+                    {% set logo = 'default_company_logo.png' %}
+                {% endif %}
+                <img
+                            src="{{ asset('uploads/logos/' ~ logo) }}"
+                            alt="AUTOPRO"
+                            class="h-full w-full object-contain"
+                        >
+                </a>
+                <button type="button" onclick="document.getElementById('admin-sidebar').classList.add('-translate-x-full')" class="md:hidden text-luxe-muted hover:text-white" aria-label="Fermer">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="w-5 h-5" fill="currentColor"><path fill-rule="evenodd" clip-rule="evenodd" d="M5.3 5.3a1 1 0 011.4 0L12 10.6l5.3-5.3a1 1 0 111.4 1.4L13.4 12l5.3 5.3a1 1 0 01-1.4 1.4L12 13.4l-5.3 5.3a1 1 0 01-1.4-1.4L10.6 12 5.3 6.7a1 1 0 010-1.4Z"/></svg>
+                </button>
+            </div>
+
+            {% set active = app.request.attributes.get('_route') %}
+            <nav class="text-sm space-y-1">
+                <a href="{{ path('admin_dashboard') }}" class="admin-nav {{ active == 'admin_dashboard' ? 'admin-nav--active' }}">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="w-5 h-5" fill="currentColor" aria-hidden="true"><path d="M3 3.75A.75.75 0 013.75 3h5.5a.75.75 0 01.75.75v6.5a.75.75 0 01-.75.75h-5.5A.75.75 0 013 10.25v-6.5Zm11.5 0A.75.75 0 0115.25 3h5.5a.75.75 0 01.75.75v3.5a.75.75 0 01-.75.75h-5.5a.75.75 0 01-.75-.75v-3.5Zm0 6.5a.75.75 0 01.75-.75h5.5a.75.75 0 01.75.75v10a.75.75 0 01-.75.75h-5.5a.75.75 0 01-.75-.75v-10ZM3 13.75a.75.75 0 01.75-.75h5.5a.75.75 0 01.75.75v6.5a.75.75 0 01-.75.75h-5.5a.75.75 0 01-.75-.75v-6.5Z"/></svg>
+                    Tableau de bord
+                </a>
+                <a href="{{ path('admin_vehicle_index') }}" class="admin-nav {{ active starts with 'admin_vehicle' ? 'admin-nav--active' }}">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="w-5 h-5" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" clip-rule="evenodd" d="M6.9 4.5a2 2 0 011.9-1.5h6.4a2 2 0 011.9 1.5l1.7 5.1c.7.4 1.2 1.1 1.2 1.9v4a1.5 1.5 0 01-.9 1.4v1.6a1.5 1.5 0 01-3 0v-1.5H8v1.5a1.5 1.5 0 01-3 0v-1.6a1.5 1.5 0 01-.9-1.4v-4c0-.8.5-1.5 1.2-1.9L6.9 4.5ZM8.5 6L7.1 10.5h9.8L15.5 6h-7ZM7 13.5a1 1 0 100 2 1 1 0 000-2Zm10 0a1 1 0 100 2 1 1 0 000-2Z"/></svg>
+                    Véhicules
+                </a>
+                <a href="{{ path('admin_piece_index') }}" class="admin-nav {{ active starts with 'admin_piece' ? 'admin-nav--active' }}">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="w-5 h-5" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" clip-rule="evenodd" d="M6.9 4.5a2 2 0 011.9-1.5h6.4a2 2 0 011.9 1.5l1.7 5.1c.7.4 1.2 1.1 1.2 1.9v4a1.5 1.5 0 01-.9 1.4v1.6a1.5 1.5 0 01-3 0v-1.5H8v1.5a1.5 1.5 0 01-3 0v-1.6a1.5 1.5 0 01-.9-1.4v-4c0-.8.5-1.5 1.2-1.9L6.9 4.5ZM8.5 6L7.1 10.5h9.8L15.5 6h-7ZM7 13.5a1 1 0 100 2 1 1 0 000-2Zm10 0a1 1 0 100 2 1 1 0 000-2Z"/></svg>
+                    Pièces Autos
+                </a>
+                <a href="{{ path('admin_reservation_index') }}" class="admin-nav {{ active starts with 'admin_reservation' ? 'admin-nav--active' }}">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="w-5 h-5" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" clip-rule="evenodd" d="M6.75 3A2.75 2.75 0 004 5.75v12.5A2.75 2.75 0 006.75 21h10.5A2.75 2.75 0 0020 18.25V9.5c0-.2-.08-.4-.22-.53L14 3.22A.75.75 0 0013.5 3h-6.75Zm7 6.75V4.75L18.5 9.75h-4.75Zm-6 3a.75.75 0 000 1.5h8.5a.75.75 0 000-1.5h-8.5Zm-.75 4.5a.75.75 0 01.75-.75h8.5a.75.75 0 010 1.5h-8.5a.75.75 0 01-.75-.75Z"/></svg>
+                    Réservations
+                </a>
+                <a href="{{ path('admin_blog_index') }}" class="admin-nav {{ active == 'admin_blog' ? 'admin-nav--active' }}">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="w-5 h-5" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" clip-rule="evenodd" d="M9.25 3.25c-.35 0-.66.24-.73.58l-.24 1.2a7.5 7.5 0 00-1.6.94l-1.17-.4a.75.75 0 00-.9.34l-1.5 2.6c-.17.3-.12.68.14.9l.94.8a7.55 7.55 0 000 1.84l-.94.8c-.26.22-.31.6-.14.9l1.5 2.6a.75.75 0 00.9.34l1.17-.4c.5.4 1.03.72 1.6.94l.24 1.2c.07.34.38.58.73.58h3c.35 0 .66-.24.73-.58l.24-1.2c.57-.22 1.1-.53 1.6-.94l1.17.4a.75.75 0 00.9-.34l1.5-2.6c.17-.3.12-.68-.14-.9l-.94-.8a7.55 7.55 0 000-1.84l.94-.8c.26-.22.31-.6.14-.9l-1.5-2.6a.75.75 0 00-.9-.34l-1.17.4a7.5 7.5 0 00-1.6-.94l-.24-1.2a.75.75 0 00-.73-.58h-3ZM12 15a3 3 0 100-6 3 3 0 000 6Z"/></svg>
+                    Actualités
+                </a>
+                <hr class="border-luxe-border my-3">  
+                <a href="{{ path('admin_payment_proof_index') }}" class="admin-nav {{ active starts with 'admin_payment_proof' ? 'admin-nav--active' }}">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="w-5 h-5" fill="currentColor" aria-hidden="true"><path d="M2.75 6A2.75 2.75 0 015.5 3.25h13A2.75 2.75 0 0121.25 6v12A2.75 2.75 0 0118.5 20.75h-13A2.75 2.75 0 012.75 18V6Zm1.5 4v8c0 .69.56 1.25 1.25 1.25h13c.69 0 1.25-.56 1.25-1.25v-8h-15.5Zm15.5-1.5V6c0-.69-.56-1.25-1.25-1.25h-13C4.81 4.75 4.25 5.31 4.25 6v2.5h15.5Z"/></svg>
+                    Preuves de virement
+                </a>
+                <a href="{{ path('admin_refund_index') }}" class="admin-nav {{ active starts with 'admin_refund' ? 'admin-nav--active' }}">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="w-5 h-5" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" clip-rule="evenodd" d="M9.53 2.47a.75.75 0 010 1.06L6.06 7h9.19a5.75 5.75 0 010 11.5h-4a.75.75 0 010-1.5h4a4.25 4.25 0 000-8.5H6.06l3.47 3.47a.75.75 0 11-1.06 1.06L3.72 8.28a.75.75 0 010-1.06l4.75-4.75a.75.75 0 011.06 0Z"/></svg>
+                    Remboursements
+                </a>
+                <a href="{{ path('admin_review_index') }}" class="admin-nav {{ active starts with 'admin_review' ? 'admin-nav--active' }}">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="w-5 h-5" fill="currentColor" aria-hidden="true"><path d="M11.32 2.61a.75.75 0 011.36 0l2.85 5.78 6.38.93a.75.75 0 01.42 1.28l-4.61 4.49 1.09 6.35a.75.75 0 01-1.09.79L12 19.24l-5.71 3a.75.75 0 01-1.09-.79l1.09-6.35-4.61-4.49a.75.75 0 01.42-1.28l6.38-.93 2.85-5.78Z"/></svg>
+                    Avis
+                </a>
+                <a href="{{ path('admin_brand_index') }}" class="admin-nav {{ active starts with 'admin_piece' ? 'admin-nav--active' }}">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="w-5 h-5" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" clip-rule="evenodd" d="M6.9 4.5a2 2 0 011.9-1.5h6.4a2 2 0 011.9 1.5l1.7 5.1c.7.4 1.2 1.1 1.2 1.9v4a1.5 1.5 0 01-.9 1.4v1.6a1.5 1.5 0 01-3 0v-1.5H8v1.5a1.5 1.5 0 01-3 0v-1.6a1.5 1.5 0 01-.9-1.4v-4c0-.8.5-1.5 1.2-1.9L6.9 4.5ZM8.5 6L7.1 10.5h9.8L15.5 6h-7ZM7 13.5a1 1 0 100 2 1 1 0 000-2Zm10 0a1 1 0 100 2 1 1 0 000-2Z"/></svg>
+                    Marques
+                </a>
+                <a href="{{ path('admin_lbc_index') }}" class="admin-nav {{ active starts with 'admin_lbc' ? 'admin-nav--active' }}">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="w-5 h-5" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" clip-rule="evenodd" d="M6.9 4.5a2 2 0 011.9-1.5h6.4a2 2 0 011.9 1.5l1.7 5.1c.7.4 1.2 1.1 1.2 1.9v4a1.5 1.5 0 01-.9 1.4v1.6a1.5 1.5 0 01-3 0v-1.5H8v1.5a1.5 1.5 0 01-3 0v-1.6a1.5 1.5 0 01-.9-1.4v-4c0-.8.5-1.5 1.2-1.9L6.9 4.5ZM8.5 6L7.1 10.5h9.8L15.5 6h-7ZM7 13.5a1 1 0 100 2 1 1 0 000-2Zm10 0a1 1 0 100 2 1 1 0 000-2Z"/></svg>
+                    Lien LBC
+                </a>
+             <hr class="border-luxe-border my-3">
+                <a href="{{ path('admin_mail_index') }}" class="admin-nav admin-nav--active">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="w-5 h-5" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" clip-rule="evenodd" d="M9.25 3.25c-.35 0-.66.24-.73.58l-.24 1.2a7.5 7.5 0 00-1.6.94l-1.17-.4a.75.75 0 00-.9.34l-1.5 2.6c-.17.3-.12.68.14.9l.94.8a7.55 7.55 0 000 1.84l-.94.8c-.26.22-.31.6-.14.9l1.5 2.6a.75.75 0 00.9.34l1.17-.4c.5.4 1.03.72 1.6.94l.24 1.2c.07.34.38.58.73.58h3c.35 0 .66-.24.73-.58l.24-1.2c.57-.22 1.1-.53 1.6-.94l1.17.4a.75.75 0 00.9-.34l1.5-2.6c.17-.3.12-.68-.14-.9l-.94-.8a7.55 7.55 0 000-1.84l.94-.8c.26-.22.31-.6.14-.9l-1.5-2.6a.75.75 0 00-.9-.34l-1.17.4a7.5 7.5 0 00-1.6-.94l-.24-1.2a.75.75 0 00-.73-.58h-3ZM12 15a3 3 0 100-6 3 3 0 000 6Z"/></svg>
+                   Générer Contrat Vente
+                </a>
+                <a href="{{ path('admin_mail_send_contrat') }}" class="admin-nav admin-nav--active">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="w-5 h-5" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" clip-rule="evenodd" d="M9.25 3.25c-.35 0-.66.24-.73.58l-.24 1.2a7.5 7.5 0 00-1.6.94l-1.17-.4a.75.75 0 00-.9.34l-1.5 2.6c-.17.3-.12.68.14.9l.94.8a7.55 7.55 0 000 1.84l-.94.8c-.26.22-.31.6-.14.9l1.5 2.6a.75.75 0 00.9.34l1.17-.4c.5.4 1.03.72 1.6.94l.24 1.2c.07.34.38.58.73.58h3c.35 0 .66-.24.73-.58l.24-1.2c.57-.22 1.1-.53 1.6-.94l1.17.4a.75.75 0 00.9-.34l1.5-2.6c.17-.3.12-.68-.14-.9l-.94-.8a7.55 7.55 0 000-1.84l.94-.8c.26-.22.31-.6.14-.9l-1.5-2.6a.75.75 0 00-.9-.34l-1.17.4a7.5 7.5 0 00-1.6-.94l-.24-1.2a.75.75 0 00-.73-.58h-3ZM12 15a3 3 0 100-6 3 3 0 000 6Z"/></svg>
+                   Envoyer Contrat  Vente
+                </a>
+                <a href="{{ path('admin_generate_ct') }}" class="admin-nav {{ active starts with 'admin_mail' ? 'admin-nav--active' }}">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="w-5 h-5" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" clip-rule="evenodd" d="M9.25 3.25c-.35 0-.66.24-.73.58l-.24 1.2a7.5 7.5 0 00-1.6.94l-1.17-.4a.75.75 0 00-.9.34l-1.5 2.6c-.17.3-.12.68.14.9l.94.8a7.55 7.55 0 000 1.84l-.94.8c-.26.22-.31.6-.14.9l1.5 2.6a.75.75 0 00.9.34l1.17-.4c.5.4 1.03.72 1.6.94l.24 1.2c.07.34.38.58.73.58h3c.35 0 .66-.24.73-.58l.24-1.2c.57-.22 1.1-.53 1.6-.94l1.17.4a.75.75 0 00.9-.34l1.5-2.6c.17-.3.12-.68-.14-.9l-.94-.8a7.55 7.55 0 000-1.84l.94-.8c.26-.22.31-.6.14-.9l-1.5-2.6a.75.75 0 00-.9-.34l-1.17.4a7.5 7.5 0 00-1.6-.94l-.24-1.2a.75.75 0 00-.73-.58h-3ZM12 15a3 3 0 100-6 3 3 0 000 6Z"/></svg>
+                   Générer CT
+                </a>
+                <a href="{{ path('admin_generate_rapport') }}" class="admin-nav {{ active starts with 'admin_mail' ? 'admin-nav--active' }}">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="w-5 h-5" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" clip-rule="evenodd" d="M9.25 3.25c-.35 0-.66.24-.73.58l-.24 1.2a7.5 7.5 0 00-1.6.94l-1.17-.4a.75.75 0 00-.9.34l-1.5 2.6c-.17.3-.12.68.14.9l.94.8a7.55 7.55 0 000 1.84l-.94.8c-.26.22-.31.6-.14.9l1.5 2.6a.75.75 0 00.9.34l1.17-.4c.5.4 1.03.72 1.6.94l.24 1.2c.07.34.38.58.73.58h3c.35 0 .66-.24.73-.58l.24-1.2c.57-.22 1.1-.53 1.6-.94l1.17.4a.75.75 0 00.9-.34l1.5-2.6c.17-.3.12-.68-.14-.9l-.94-.8a7.55 7.55 0 000-1.84l.94-.8c.26-.22.31-.6.14-.9l-1.5-2.6a.75.75 0 00-.9-.34l-1.17.4a7.5 7.5 0 00-1.6-.94l-.24-1.2a.75.75 0 00-.73-.58h-3ZM12 15a3 3 0 100-6 3 3 0 000 6Z"/></svg>
+                   Générer Rapport d'entretien
+                </a>
+                 <a href="{{ path('admin_generate_infos') }}" class="admin-nav {{ active starts with 'admin_mail' ? 'admin-nav--active' }}">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="w-5 h-5" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" clip-rule="evenodd" d="M9.25 3.25c-.35 0-.66.24-.73.58l-.24 1.2a7.5 7.5 0 00-1.6.94l-1.17-.4a.75.75 0 00-.9.34l-1.5 2.6c-.17.3-.12.68.14.9l.94.8a7.55 7.55 0 000 1.84l-.94.8c-.26.22-.31.6-.14.9l1.5 2.6a.75.75 0 00.9.34l1.17-.4c.5.4 1.03.72 1.6.94l.24 1.2c.07.34.38.58.73.58h3c.35 0 .66-.24.73-.58l.24-1.2c.57-.22 1.1-.53 1.6-.94l1.17.4a.75.75 0 00.9-.34l1.5-2.6c.17-.3.12-.68-.14-.9l-.94-.8a7.55 7.55 0 000-1.84l.94-.8c.26-.22.31-.6.14-.9l-1.5-2.6a.75.75 0 00-.9-.34l-1.17.4a7.5 7.5 0 00-1.6-.94l-.24-1.2a.75.75 0 00-.73-.58h-3ZM12 15a3 3 0 100-6 3 3 0 000 6Z"/></svg>
+                   Envoyer Info Complémentaires
+                </a>
+                <a href="{{ path('admin_sms_index') }}" class="admin-nav {{ active == 'admin_sms' ? 'admin-nav--active' }}">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="w-5 h-5" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" clip-rule="evenodd" d="M9.25 3.25c-.35 0-.66.24-.73.58l-.24 1.2a7.5 7.5 0 00-1.6.94l-1.17-.4a.75.75 0 00-.9.34l-1.5 2.6c-.17.3-.12.68.14.9l.94.8a7.55 7.55 0 000 1.84l-.94.8c-.26.22-.31.6-.14.9l1.5 2.6a.75.75 0 00.9.34l1.17-.4c.5.4 1.03.72 1.6.94l.24 1.2c.07.34.38.58.73.58h3c.35 0 .66-.24.73-.58l.24-1.2c.57-.22 1.1-.53 1.6-.94l1.17.4a.75.75 0 00.9-.34l1.5-2.6c.17-.3.12-.68-.14-.9l-.94-.8a7.55 7.55 0 000-1.84l.94-.8c.26-.22.31-.6.14-.9l-1.5-2.6a.75.75 0 00-.9-.34l-1.17.4a7.5 7.5 0 00-1.6-.94l-.24-1.2a.75.75 0 00-.73-.58h-3ZM12 15a3 3 0 100-6 3 3 0 000 6Z"/></svg>
+                    Sms
+                </a>
+                <a href="{{ path('admin_sender_index') }}" class="admin-nav {{ active == 'admin_sender' ? 'admin-nav--active' }}">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="w-5 h-5" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" clip-rule="evenodd" d="M9.25 3.25c-.35 0-.66.24-.73.58l-.24 1.2a7.5 7.5 0 00-1.6.94l-1.17-.4a.75.75 0 00-.9.34l-1.5 2.6c-.17.3-.12.68.14.9l.94.8a7.55 7.55 0 000 1.84l-.94.8c-.26.22-.31.6-.14.9l1.5 2.6a.75.75 0 00.9.34l1.17-.4c.5.4 1.03.72 1.6.94l.24 1.2c.07.34.38.58.73.58h3c.35 0 .66-.24.73-.58l.24-1.2c.57-.22 1.1-.53 1.6-.94l1.17.4a.75.75 0 00.9-.34l1.5-2.6c.17-.3.12-.68-.14-.9l-.94-.8a7.55 7.55 0 000-1.84l.94-.8c.26-.22.31-.6.14-.9l-1.5-2.6a.75.75 0 00-.9-.34l-1.17.4a7.5 7.5 0 00-1.6-.94l-.24-1.2a.75.75 0 00-.73-.58h-3ZM12 15a3 3 0 100-6 3 3 0 000 6Z"/></svg>
+                    Expéditeur
+                </a>
+            
+                <hr class="border-luxe-border my-3">
+                <a href="{{ path('admin_settings') }}" class="admin-nav {{ active == 'admin_settings' ? 'admin-nav--active' }}">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="w-5 h-5" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" clip-rule="evenodd" d="M9.25 3.25c-.35 0-.66.24-.73.58l-.24 1.2a7.5 7.5 0 00-1.6.94l-1.17-.4a.75.75 0 00-.9.34l-1.5 2.6c-.17.3-.12.68.14.9l.94.8a7.55 7.55 0 000 1.84l-.94.8c-.26.22-.31.6-.14.9l1.5 2.6a.75.75 0 00.9.34l1.17-.4c.5.4 1.03.72 1.6.94l.24 1.2c.07.34.38.58.73.58h3c.35 0 .66-.24.73-.58l.24-1.2c.57-.22 1.1-.53 1.6-.94l1.17.4a.75.75 0 00.9-.34l1.5-2.6c.17-.3.12-.68-.14-.9l-.94-.8a7.55 7.55 0 000-1.84l.94-.8c.26-.22.31-.6.14-.9l-1.5-2.6a.75.75 0 00-.9-.34l-1.17.4a7.5 7.5 0 00-1.6-.94l-.24-1.2a.75.75 0 00-.73-.58h-3ZM12 15a3 3 0 100-6 3 3 0 000 6Z"/></svg>
+                    Paramètres
+                </a>
+                <a href="{{ path('admin_logout') }}" class="admin-nav">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="w-5 h-5" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" clip-rule="evenodd" d="M4 4.75A2.75 2.75 0 016.75 2h4.5a2.75 2.75 0 012.75 2.75v.5a.75.75 0 01-1.5 0v-.5c0-.69-.56-1.25-1.25-1.25h-4.5c-.69 0-1.25.56-1.25 1.25v14.5c0 .69.56 1.25 1.25 1.25h4.5c.69 0 1.25-.56 1.25-1.25v-.5a.75.75 0 011.5 0v.5A2.75 2.75 0 0111.25 22h-4.5A2.75 2.75 0 014 19.25V4.75Zm12.28 3.72a.75.75 0 011.06 0l3 3a.75.75 0 010 1.06l-3 3a.75.75 0 11-1.06-1.06l1.72-1.72H9.75a.75.75 0 010-1.5h8.25l-1.72-1.72a.75.75 0 010-1.06Z"/></svg>
+                    Déconnexion
+                </a>
+            </nav>
+        </aside>
+
+        {# ============ MAIN ============ #}
+        <main class="flex-1 p-4 md:p-8 max-w-full">
+            {% for label, messages in app.flashes(['success','error','info','warning']) %}
+                {% for msg in messages %}
+                    {% include 'components/_flash.html.twig' with {label: label, msg: msg} %}
+                {% endfor %}
+            {% endfor %}
+            {% block body %}{% endblock %}
+        </main>
+    </div>
+    {% block javascripts %}{% endblock %}
+</body>
+</html>

@@ -1,0 +1,22 @@
+{% extends 'admin/_layout.html.twig' %}
+{% block title %}{{ is_new ? 'Nouveau borderau' : 'Éditer Borderau' }} — Admin{% endblock %}
+{% block body %}
+<h1 class="text-2xl font-display font-bold mb-6">{{'Nouvelle borderau'}}</h1>
+<div class="grid lg:grid-cols-3 gap-6">
+    <div class="lg:col-span-2 card-luxe p-6">
+        {{ form_start(form, {attr: {enctype: 'multipart/form-data', novalidate: 'novalidate'}}) }}
+            <div class="space-y-4">
+                {{ form_row(form.pseudo) }}
+                {{ form_row(form.transactionReference) }}
+                {{ form_row(form.number) }}
+                {{ form_row(form.vehicle) }}
+                {{ form_row(form.message) }}
+            </div>
+            <div class="mt-6 flex gap-3">
+                <button type="submit" class="btn-gold">{{ is_new ? 'Créer' : 'Enregistrer' }}</button>
+                <a href="{{ path('admin_borderau_index') }}" class="btn-outline">Annuler</a>
+            </div>
+        {{ form_end(form) }}
+    </div>
+</div>
+{% endblock %}

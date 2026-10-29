@@ -1,0 +1,47 @@
+{% extends 'admin/_layout.html.twig' %}
+{% block title %}Expéditeurs — Admin{% endblock %}
+{% block body %}
+<div class="flex justify-between items-center mb-6">
+    <h1 class="text-2xl font-display font-bold">Expéditeurs</h1>
+    <a href="{{ path('admin_sender_new') }}" class="btn-gold">+ Ajouter</a>
+</div>
+
+<div class="card-luxe overflow-x-auto">
+    <table class="w-full text-sm">
+        <thead class="text-luxe-muted uppercase text-xs tracking-widest">
+            <tr>
+                <th class="text-left px-4 py-3">Libellé</th>
+                <th class="text-left">Fournisseur</th>
+                <th class="text-left">Statut</th>
+                <th class="text-right px-4">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for sender in senders %}
+                <tr class="border-t border-luxe-border">
+                    <td class="px-4 py-3">{{ sender.name }}</td>
+                    <td class="font-semibold">{{ sender.provider.label }}</td>
+                   <td>
+                        {% if sender.active %}
+                            <span class="text-green-400 text-xs">● Active</span>
+                        {% else %}
+                            <span class="text-luxe-muted text-xs">○ Inactive</span>
+                        {% endif %}
+                    </td>
+                    <td class="text-right px-4">
+                        <div class="inline-flex gap-1 flex-wrap justify-end">
+                            <a href="{{ path('admin_sender_edit', {id: sender.id}) }}" class="btn-outline text-xs py-1.5 px-3">Éditer</a>
+                            <form method="post" action="{{ path('admin_sender_delete', {id: sender.id}) }}" class="inline" onsubmit="return confirm('Supprimer cet expéditeur ?')">
+                                <input type="hidden" name="_token" value="{{ csrf_token('sender_delete_' ~ sender.id) }}">
+                                <button class="btn-outline text-xs py-1.5 px-3 text-red-400 border-red-500/40">Suppr.</button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+            {% else %}
+                <tr><td colspan="6" class="px-4 py-8 text-center text-luxe-muted">Aucun expéditeur enregistré. Cliquez sur "Ajouter" pour commencer.</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

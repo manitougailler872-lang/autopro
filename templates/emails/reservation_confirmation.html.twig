@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Bon de réservation {{ reservation.reservationNumber }}</title>
+</head>
+<body style="margin:0;padding:0;background:#f4f5f7;font-family:'Verdana','Helvetica Neue',Arial,sans-serif;color:#1a1a1a;">
+
+<table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#f4f5f7;padding:40px 16px;">
+    <tr>
+        <td align="center">
+            <table role="presentation" width="600" cellpadding="0" cellspacing="0" style="max-width:600px;width:100%;background:#ffffff;border-radius:20px;overflow:hidden;box-shadow:0 4px 24px rgba(0,0,0,0.08);">
+
+                {# Header with orange banner #}
+                <tr>
+                    <td style="padding:32px;text-align:center;background:#000;color:#fff;">
+                        <div style="font-size:22px;font-weight:700;letter-spacing:0.5px;font-family:'Space Grotesk','Inter',sans-serif;">AUTOPRO EXPRESS</div>
+                        <div style="opacity:0.9;font-size:12px;text-transform:uppercase;letter-spacing:2px;margin-top:8px;">Bon de réservation</div>
+                    </td>
+                </tr>
+
+                {# Big check + welcome #}
+                <tr>
+                    <td style="padding:32px 32px 16px;text-align:center;">
+                        <div style="width:72px;height:72px;line-height:72px;border-radius:50%;background:#fff2ea;color:#C81214;font-size:36px;margin:0 auto 20px;font-weight:700;">✓</div>
+                        <h1 style="font-size:24px;color:#1a1a1a;margin:0;font-family:'Space Grotesk','Inter',sans-serif;">Réservation confirmée</h1>
+                        <p style="color:#6b6b70;font-size:14px;margin:8px 0 0;">Merci {{ reservation.customerName }}, votre réservation est validée.</p>
+                    </td>
+                </tr>
+
+                {# Vehicle card #}
+                {% if reservation.vehicle.primaryImage %}
+                <tr>
+                    <td style="padding:16px 32px;">
+                        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#f9fafb;border-radius:14px;padding:16px;">
+                            <tr>
+                                <td style="width:120px;padding-right:16px;">
+                                    <img src="{{ absolute_url(reservation.vehicle.primaryImage.publicPath) }}" alt="" width="120" style="width:120px;border-radius:10px;display:block;">
+                                </td>
+                                <td>
+                                    <div style="font-weight:600;font-size:14px;font-family:'Verdana','Inter',sans-serif;">{{ reservation.vehicle.brand }} {{ reservation.vehicle.model }}</div>
+                                    <div style="color:#6b6b70;font-size:13px;margin-top:2px;">{{ reservation.vehicle.version }}</div>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+                {% endif %}
+
+                {# Details #}
+                <tr>
+                    <td style="padding:16px 32px 8px;">
+                        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;font-size:14px;">
+                            <tr><td style="color:#6b6b70;padding:8px 0;border-bottom:1px solid #e5e7eb;">N° réservation</td><td style="padding:8px 0;border-top:1px solid #e5e7eb;text-align:right;">{{ reservation.reservationNumber }}</td></tr>
+                            {% if reservation.vehicle.vehicleType == 'CAR' %}
+                                <tr><td style="color:#6b6b70;padding:8px 0;border-bottom:1px solid #e5e7eb;">Prix du véhicule</td><td style="padding:8px 0;border-top:1px solid #e5e7eb;text-align:right;">{{ reservation.vehiclePriceSnapshot|money_eur }}</td></tr>
+                            {% else %}
+                                <tr><td style="color:#6b6b70;padding:8px 0;border-bottom:1px solid #e5e7eb;">Prix de la pièce</td><td style="padding:8px 0;border-top:1px solid #e5e7eb;text-align:right;">{{ reservation.vehiclePriceSnapshot|money_eur }}</td></tr>
+                            {% endif %}
+                              {% if reservation.vehicle.vehicleType == 'CAR' %}
+                                <tr><td style="color:#6b6b70;padding:8px 0;border-bottom:1px solid #e5e7eb;">Frais de réservation ({{ reservation.reservationFeePercentage }}%)</td><td style="padding:8px 0;border-top:1px solid #e5e7eb;text-align:right;">{{ reservation.reservationFeeAmount }} €</td></tr>
+                            {% endif %}
+                            <tr><td style="color:#6b6b70;padding:8px 0;border-bottom:1px solid #e5e7eb;">Mode de paiement</td><td style="padding:8px 0;border-top:1px solid #e5e7eb;text-align:right;">Virement bancaire</td></tr>
+                            <tr><td style="color:#6b6b70;padding:8px 0;">Mode de réception</td><td style="padding:8px 0;text-align:right;">{{ reservation.receptionMode.label }}</td></tr>
+                            {% if reservation.receptionMode.value == 'PICKUP' %}
+                                <tr><td style="color:#6b6b70;padding:8px 0;border-top:1px solid #e5e7eb;">Retrait</td><td style="padding:8px 0;border-top:1px solid #e5e7eb;text-align:right;">{{ reservation.pickupFirstName }} {{ reservation.pickupLastName }} — {{ reservation.pickupDate|date('d/m/Y') }} à {{ reservation.pickupTime }}</td></tr>
+                            {% else %}
+                                <tr><td style="color:#6b6b70;padding:8px 0;border-top:1px solid #e5e7eb;">Livraison</td><td style="padding:8px 0;border-top:1px solid #e5e7eb;text-align:right;">{{ reservation.deliveryAddress }}, {{ reservation.deliveryPostalCode }} {{ reservation.deliveryCity }}</td></tr>
+                            {% endif %}
+                        </table>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="padding:16px 32px 8px;padding-top:14px;">
+                        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;font-size:14px;">
+                            <tr>
+                                <td colspan="2" style="color:#C81214;font-size:16px;font-weight:bold;">Coordonnées bancaires (RIB)</td>
+                            </tr>
+                            <tr>
+                                <td colspan="2">Effectuez le virement en indiquant la référence.</td>
+                            </tr>
+                            <tr>
+                                <td style="color:#6b6b70;padding:8px 0;border-bottom:1px solid #e5e7eb;">Titulaire</td>
+                                <td style="padding:8px 0;border-bottom:1px solid #e5e7eb;text-align:right;color:#000;font-weight:600;">{{ settings.bank_holder }}</td>
+                            </tr>
+                            <tr><td style="color:#6b6b70;padding:8px 0;border-bottom:1px solid #e5e7eb;">Banque</td><td style="padding:8px 0;border-top:1px solid #e5e7eb;text-align:right;">{{ settings.bank_name }}</td></tr>
+                            <tr><td style="color:#6b6b70;padding:8px 0;border-bottom:1px solid #e5e7eb;">IBAN</td><td style="padding:8px 0;border-top:1px solid #e5e7eb;text-align:right;">{{ settings.bank_iban }}</td></tr>
+                            <tr><td style="color:#6b6b70;padding:8px 0;border-bottom:1px solid #e5e7eb;">BIC</td><td style="padding:8px 0;border-top:1px solid #e5e7eb;text-align:right;">{{ settings.bank_bic }}</td></tr>
+                            <tr><td style="color:#6b6b70;padding:8px 0;">Référence</td><td style="padding:8px 0;border-top:1px solid #e5e7eb;text-align:right;">{{ reservation.reservationNumber }}</td></tr>
+                        </table>
+                        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border-collapse:collapse;font-size:14px;">
+                            <tr style="padding-top:16px !important;">
+                                <td colspan="2" style="color:#C81214;font-size:16px;font-weight:bold;">Informations importantes</td>
+                            </tr>
+                            <tr>
+                                <td colspan="2"></td>
+                            </tr>
+                            <tr>
+                                <td colspan="2">
+                                    Le montant de la réservation sera déduit du prix total du véhicule. 
+                                    Ce paiement nous permet de garantir votre intention d'achat et de réserver le véhicule exclusivement pour vous jusqu'à votre visite.
+                                    Virement instantané ou votre virement pourra prendre jusqu'à 4 jours ouvrés. Votre banque peut nécessiter jusqu'à 48h pour valider votre bénéficiaire.
+                                    Un remboursement intégral est possible en cas de non-conclusion de la vente.
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
+                {# CTA button #}
+                <tr>
+                    <td style="padding:10px 32px;text-align:center;">
+                        <a href="{{ url('reservation_payment_proof', {uuid: reservation.uuid}) }}"
+                           style="display:inline-block;background:#000000;color:#ffffff;font-weight:600;text-decoration:none;padding:14px 32px;border-radius:100px;font-size:14px;">
+                            J'ai effectué mon virement
+                        </a>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="padding:10px 32px;text-align:center;">
+                        <a href="{{ url('reservation_release_funds', {uuid: reservation.uuid}) }}"
+                           style="display:inline-block;background:#C81214;color:#ffffff;font-weight:600;text-decoration:none;padding:14px 32px;border-radius:100px;font-size:14px;">
+                            Demander un remboursement
+                        </a>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="padding:10px 32px;text-align:center;">
+                        <a href="{{ url('reservation_confirmation', {uuid: reservation.uuid}) }}"
+                           style="display:inline-block;background:#000000;color:#ffffff;font-weight:600;text-decoration:none;padding:14px 32px;border-radius:100px;font-size:14px;">
+                            Voir ma réservation en ligne
+                        </a>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="padding:0 32px 24px;">
+                        <div style="background:#fff2ea;border-left:4px solid #C81214;border-radius:8px;padding:14px 16px;font-size:13px;color:#6b6b70;">
+                            <strong style="color:#1a1a1a;">Conservez cet e-mail comme confirmation.</strong><br>
+                            Notre équipe vous contactera pour finaliser la remise du véhicule.
+                        </div>
+                    </td>
+                </tr>
+
+                <tr>
+                    <td style="padding:20px 32px 32px;text-align:center;color:#9ca3af;font-size:12px;border-top:1px solid #e5e7eb;">
+                        L'équipe {{ settings.company_name|default('LUXE CAR AUTOMOBIL') }}<br>
+                        {{ settings.company_phone|default('') }} · {{ settings.company_email|default('') }}
+                    </td>
+                </tr>
+            </table>
+        </td>
+    </tr>
+</table>
+</body>
+</html>

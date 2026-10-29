@@ -1,0 +1,21 @@
+{% extends 'base.html.twig' %}
+{% block title %}Envoyer la preuve de virement — AutoPro{% endblock %}
+{% block body %}
+<div class="max-w-2xl mx-auto px-6 py-10">
+    <h1 class="text-2xl font-display font-bold mb-1">Preuve de virement</h1>
+    <p class="text-sm  text-luxe-muted mb-6">Envoyez un formulaire d'ordre de virement bancaire.
+        <br/>
+        PDF ou JPG · Max 4 MB
+    </p>
+    <div class="mb-6">
+        {% include 'components/_reservation_summary.html.twig' %}
+    </div>
+    <div class="card-luxe p-6">
+        {{ form_start(form, {attr: {enctype: 'multipart/form-data'}}) }}
+            {{ form_row(form.file) }}
+            <p class="text-xs text-luxe-muted mt-3">Formats acceptés : PDF, JPG, PNG, WEBP (8 Mo max).</p>
+            <button type="submit" class="btn-gold w-full mt-6">Envoyer la preuve</button>
+        {{ form_end(form) }}
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,290 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Signer votre contrat de vente - AUTO PRO{% endblock %}
+
+{% block body %}
+{% set ctx = sig.context %}
+{% set v = ctx.vehicle %}
+{% set price = v.price %}
+{% set deposit = ctx.reservation.deposit %}
+
+<section class="max-w-3xl mx-auto px-6 py-10">
+
+    <h1 class="text-2xl md:text-3xl font-display font-bold">Signer votre contrat de vente</h1>
+    <p class="mt-1 text-sm text-luxe-muted">Contrat n° {{ sig.contractNumber }}</p>
+
+    {# ===== Récapitulatif (toujours affiché) ===== #}
+    <div class="mt-6 rounded-2xl border border-luxe-border bg-luxe-card p-6">
+        <div class="flex flex-wrap items-start justify-between gap-4">
+            <div>
+                <span class="inline-block rounded-sm bg-[#FFCC00] px-2 py-1 text-[11px] font-semibold uppercase tracking-wide text-black">Occasion</span>
+                <p class="mt-2 text-lg font-semibold">{{ v.brand }} {{ v.model }}</p>
+                <p class="text-sm text-luxe-muted">Réf. {{ v.reference }} &middot; {{ v.plate }}</p>
+            </div>
+            <div class="text-right">
+                <p class="text-xs text-luxe-muted">Prix de vente TTC</p>
+                <p class="text-xl font-bold">{{ price|number_format(0, ',', ' ')|replace({' ': '&nbsp;'})|raw }}&nbsp;€</p>
+            </div>
+        </div>
+        <dl class="mt-4 grid grid-cols-2 gap-4 border-t border-luxe-border pt-4 text-sm">
+            <div>
+                <dt class="text-luxe-muted">Acompte ({{ ctx.reservation.depositRate|default(20) }} %)</dt>
+                <dd class="font-semibold">{{ deposit|number_format(0, ',', ' ')|replace({' ': '&nbsp;'})|raw }}&nbsp;€</dd>
+            </div>
+            <div>
+                <dt class="text-luxe-muted">Solde à payer</dt>
+                <dd class="font-semibold text-luxe-orange">{{ (price - deposit)|number_format(0, ',', ' ')|replace({' ': '&nbsp;'})|raw }}&nbsp;€</dd>
+            </div>
+        </dl>
+    </div>
+
+    {# ===== Contrat signé ===== #}
+    {% if sig.isSigned %}
+        <div class="mt-6 rounded-2xl border border-luxe-border bg-luxe-black-alt p-6 text-center">
+            <span class="mx-auto grid h-12 w-12 place-items-center rounded-full bg-black text-2xl font-bold text-white" aria-hidden="true">&#10003;</span>
+            <h2 class="mt-4 text-xl font-bold">Contrat signé</h2>
+            <p class="mt-2 text-sm text-luxe-muted">
+                Signé le {{ sig.signedAt|date('d/m/Y') }} à {{ sig.signedAt|date('H:i') }} (UTC). Un exemplaire vous a été envoyé par e-mail.
+            </p>
+            <a href="{{ path('contract_sign_document', {token: token}) }}" target="_blank" rel="noopener"
+               class="mt-5 inline-block rounded-xl bg-luxe-orange px-6 py-3 font-semibold text-white transition hover:bg-luxe-orange-dark">
+                Télécharger le contrat signé (PDF)
+            </a>
+        </div>
+
+    {# ===== Lien expiré ===== #}
+    {% elseif sig.status == 'expired' %}
+        <div class="mt-6 rounded-2xl border border-luxe-border bg-luxe-black-alt p-6 text-center">
+            <h2 class="text-xl font-bold">Ce lien a expiré</h2>
+            <p class="mt-2 text-sm text-luxe-muted">Pour des raisons de sécurité, le lien de signature est valable 7 jours. Contactez-nous pour en recevoir un nouveau.</p>
+            <a href="{{ path('contact') }}" class="mt-5 inline-block rounded-xl bg-luxe-orange px-6 py-3 font-semibold text-white transition hover:bg-luxe-orange-dark">Nous contacter</a>
+        </div>
+
+    {# ===== À signer ===== #}
+    {% else %}
+        <div id="sign-app" class="mt-6 space-y-5"
+             data-otp-url="{{ path('contract_sign_otp', {token: token}) }}"
+             data-submit-url="{{ path('contract_sign_submit', {token: token}) }}"
+             data-csrf="{{ csrf_token('sign-' ~ token) }}">
+
+            {# --- Étape 1 : lire --- #}
+            <div class="rounded-2xl border border-luxe-border bg-luxe-card p-6">
+                <div class="flex items-center gap-3">
+                    <span class="grid h-7 w-7 shrink-0 place-items-center rounded-full bg-black text-sm font-bold text-white">1</span>
+                    <h2 class="font-semibold">Lisez le contrat</h2>
+                </div>
+                <p class="mt-3 text-sm text-luxe-muted">Prix, livraison, garanties et droit de rétractation de 14 jours : tout est détaillé dans le contrat.</p>
+                <a href="{{ path('contract_sign_document', {token: token}) }}" target="_blank" rel="noopener"
+                   class="mt-3 inline-flex items-center gap-2 text-sm font-semibold text-luxe-orange-dark hover:underline">
+                    Ouvrir le contrat (PDF) &rsaquo;
+                </a>
+                <label class="mt-4 flex cursor-pointer items-start gap-3 text-sm">
+                    <input id="consent" type="checkbox" class="mt-0.5 h-4 w-4 shrink-0 accent-[#ED1719]">
+                    <span>J'ai lu le contrat et j'en accepte les conditions.</span>
+                </label>
+            </div>
+
+            {# --- Étape 2 : code SMS --- #}
+            <div class="rounded-2xl border border-luxe-border bg-luxe-card p-6">
+                <div class="flex items-center gap-3">
+                    <span class="grid h-7 w-7 shrink-0 place-items-center rounded-full bg-black text-sm font-bold text-white">2</span>
+                    <h2 class="font-semibold">Confirmez votre identité</h2>
+                </div>
+                <p class="mt-3 text-sm text-luxe-muted">Nous envoyons un code à 6 chiffres par SMS au numéro {{ phone }}.</p>
+                <button id="send-code" type="button"
+                        class="mt-3 rounded-xl border-2 border-black bg-white px-5 py-2.5 text-sm font-semibold transition hover:bg-black hover:text-white disabled:cursor-not-allowed disabled:opacity-40">
+                    Recevoir le code
+                </button>
+                <div id="code-box" class="mt-4 hidden">
+                    <label for="code" class="block text-sm font-medium">Code reçu par SMS</label>
+                    <input id="code" type="text" inputmode="numeric" autocomplete="one-time-code" maxlength="6" pattern="[0-9]{6}" placeholder="000000"
+                           class="mt-1 w-40 rounded-xl border border-luxe-border bg-luxe-black-alt px-4 py-3 text-center font-mono text-lg tracking-[0.4em] focus:border-luxe-orange focus:outline-none focus:ring-2 focus:ring-luxe-orange/25">
+                    <p id="code-hint" class="mt-2 text-xs text-luxe-muted"></p>
+                </div>
+            </div>
+
+            {# --- Étape 3 : signature --- #}
+            <div class="rounded-2xl border border-luxe-border bg-luxe-card p-6">
+                <div class="flex items-center gap-3">
+                    <span class="grid h-7 w-7 shrink-0 place-items-center rounded-full bg-black text-sm font-bold text-white">3</span>
+                    <h2 class="font-semibold">Signez dans le cadre</h2>
+                </div>
+                <div class="relative mt-3">
+                    <canvas id="pad" class="h-44 w-full touch-none rounded-xl border-2 border-dashed border-luxe-border bg-white" aria-label="Zone de signature"></canvas>
+                    <span id="pad-hint" class="pointer-events-none absolute inset-0 grid place-items-center text-sm text-luxe-muted">Dessinez votre signature avec le doigt ou la souris</span>
+                </div>
+                <button id="clear" type="button" class="mt-2 text-sm font-medium text-luxe-muted underline hover:text-luxe-text">Effacer</button>
+            </div>
+
+            {# --- Validation --- #}
+            <div>
+                <p id="error" role="alert" class="mb-3 hidden rounded-xl border border-luxe-orange bg-luxe-orange-soft px-4 py-3 text-sm text-luxe-orange-dark"></p>
+                <button id="submit" type="button" disabled
+                        class="w-full rounded-xl bg-luxe-orange px-6 py-4 text-base font-semibold text-white transition hover:bg-luxe-orange-dark disabled:cursor-not-allowed disabled:opacity-40">
+                    Signer le contrat
+                </button>
+                <p class="mt-3 text-xs leading-relaxed text-luxe-muted">
+                    Votre signature, l'heure, votre adresse IP et le code vérifié sont conservés comme preuve de la signature. Le contrat signé vous est envoyé par e-mail.
+                </p>
+            </div>
+        </div>
+
+        <script>
+            (function () {
+                var app = document.getElementById('sign-app');
+                if (!app) { return; }
+
+                var consent = document.getElementById('consent');
+                var sendBtn = document.getElementById('send-code');
+                var codeBox = document.getElementById('code-box');
+                var code = document.getElementById('code');
+                var codeHint = document.getElementById('code-hint');
+                var pad = document.getElementById('pad');
+                var padHint = document.getElementById('pad-hint');
+                var clearBtn = document.getElementById('clear');
+                var submit = document.getElementById('submit');
+                var error = document.getElementById('error');
+                var ctx = pad.getContext('2d');
+                var drawing = false;
+                var hasInk = false;
+                var codeSent = false;
+
+                function showError(message) {
+                    error.textContent = message;
+                    error.classList.toggle('hidden', !message);
+                }
+
+                function update() {
+                    submit.disabled = !(consent.checked && codeSent && /^[0-9]{6}$/.test(code.value) && hasInk);
+                }
+
+                // Canvas net sur écrans haute densité
+                function fit() {
+                    var rect = pad.getBoundingClientRect();
+                    var ratio = window.devicePixelRatio || 1;
+                    pad.width = Math.round(rect.width * ratio);
+                    pad.height = Math.round(rect.height * ratio);
+                    ctx.setTransform(ratio, 0, 0, ratio, 0, 0);
+                    ctx.lineWidth = 2.4;
+                    ctx.lineCap = 'round';
+                    ctx.lineJoin = 'round';
+                    ctx.strokeStyle = '#000000';
+                    hasInk = false;
+                    padHint.classList.remove('hidden');
+                    update();
+                }
+
+                function point(e) {
+                    var rect = pad.getBoundingClientRect();
+                    return { x: e.clientX - rect.left, y: e.clientY - rect.top };
+                }
+
+                pad.addEventListener('pointerdown', function (e) {
+                    e.preventDefault();
+                    pad.setPointerCapture(e.pointerId);
+                    drawing = true;
+                    var p = point(e);
+                    ctx.beginPath();
+                    ctx.moveTo(p.x, p.y);
+                    ctx.lineTo(p.x + 0.01, p.y);
+                    ctx.stroke();
+                    ctx.beginPath();
+                    ctx.moveTo(p.x, p.y);
+                    hasInk = true;
+                    padHint.classList.add('hidden');
+                    update();
+                });
+                pad.addEventListener('pointermove', function (e) {
+                    if (!drawing) { return; }
+                    var p = point(e);
+                    ctx.lineTo(p.x, p.y);
+                    ctx.stroke();
+                    ctx.beginPath();
+                    ctx.moveTo(p.x, p.y);
+                });
+                ['pointerup', 'pointercancel', 'pointerleave'].forEach(function (name) {
+                    pad.addEventListener(name, function () { drawing = false; });
+                });
+
+                clearBtn.addEventListener('click', fit);
+                consent.addEventListener('change', update);
+                code.addEventListener('input', function () {
+                    code.value = code.value.replace(/[^0-9]/g, '');
+                    update();
+                });
+
+                function post(url, fields) {
+                    var data = new FormData();
+                    data.append('_token', app.dataset.csrf);
+                    Object.keys(fields).forEach(function (key) { data.append(key, fields[key]); });
+                    return fetch(url, { method: 'POST', body: data, credentials: 'same-origin', headers: { 'X-Requested-With': 'XMLHttpRequest' } })
+                        .then(function (response) {
+                            return response.json().then(function (body) { return { ok: response.ok, body: body }; });
+                        });
+                }
+
+                // Renvoi du code possible après 60 s
+                function countdown(seconds) {
+                    sendBtn.disabled = true;
+                    var timer = setInterval(function () {
+                        seconds -= 1;
+                        if (seconds <= 0) {
+                            clearInterval(timer);
+                            sendBtn.disabled = false;
+                            sendBtn.textContent = 'Renvoyer le code';
+                            return;
+                        }
+                        sendBtn.textContent = 'Renvoyer le code (' + seconds + ' s)';
+                    }, 1000);
+                }
+
+                sendBtn.addEventListener('click', function () {
+                    showError('');
+                    sendBtn.disabled = true;
+                    post(app.dataset.otpUrl, {}).then(function (res) {
+                        if (!res.ok) {
+                            showError(res.body.error || "Une erreur est survenue.");
+                            sendBtn.disabled = false;
+                            return;
+                        }
+                        codeSent = true;
+                        codeBox.classList.remove('hidden');
+                        codeHint.textContent = 'Code envoyé. Il est valable 10 minutes.';
+                        code.focus();
+                        countdown(60);
+                        update();
+                    }).catch(function () {
+                        showError('Connexion impossible. Réessayez.');
+                        sendBtn.disabled = false;
+                    });
+                });
+
+                submit.addEventListener('click', function () {
+                    showError('');
+                    submit.disabled = true;
+                    submit.textContent = 'Signature en cours...';
+                    post(app.dataset.submitUrl, {
+                        consent: consent.checked ? '1' : '0',
+                        code: code.value,
+                        signature: pad.toDataURL('image/png')
+                    }).then(function (res) {
+                        if (res.ok) {
+                            window.location.reload();
+                            return;
+                        }
+                        showError(res.body.error || "Une erreur est survenue.");
+                        submit.textContent = 'Signer le contrat';
+                        update();
+                    }).catch(function () {
+                        showError('Connexion impossible. Réessayez.');
+                        submit.textContent = 'Signer le contrat';
+                        update();
+                    });
+                });
+
+                fit();
+            })();
+        </script>
+    {% endif %}
+</section>
+{% endblock %}

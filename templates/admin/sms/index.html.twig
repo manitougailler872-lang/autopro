@@ -1,0 +1,46 @@
+{% extends 'admin/_layout.html.twig' %}
+{% block title %}Sms — Admin{% endblock %}
+{% block body %}
+<div class="flex justify-between items-center mb-6">
+    <h1 class="text-2xl font-display font-bold">Sms</h1>
+    <a href="{{ path('admin_sms_new') }}" class="btn-gold">+ Nouveau message</a>
+</div>
+<div class="card-luxe overflow-x-auto">
+    <table class="w-full text-sm">
+        <thead class="text-luxe-muted uppercase text-xs tracking-widest">
+            <tr>
+                <th class="text-left px-4 py-3">Numéro</th>
+                <th class="text-left">Message</th>
+                <th class="text-left px-4 py-3">Expéditeur</th>
+                <th class="text-left px-4 py-3">Réservation</th>
+                <th class="text-left">Statut</th>
+                <th class="text-right px-4">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for sms in smsList %}
+                <tr class="border-t border-luxe-border">
+                    <td class="px-4 py-3">{{ sms.numero }}</td>
+                    <td class="px-4 py-3">{{ sms.message }}</td>
+                    <td class="px-4 py-3">{{ sms.expediteur.name }}</td>
+                    {% if sms.reservation is  empty %}
+                        <td class="px-4 py-3">-</td>
+                    {% else %}
+                        <td class="px-4 py-3">{{ sms.reservation.reservationNumber ~ ' - ' ~ sms.reservation.vehicle.brand ~ ' - ' ~ sms.reservation.customerName  }}</td>
+                    {% endif %}
+                    <td class="text-right px-4">
+                        <div class="inline-flex gap-1 flex-wrap justify-end">
+                            <form method="post" action="{{ path('admin_sms_delete', {id: sms.id}) }}" class="inline" onsubmit="return confirm('Supprimer cet sms ?')">
+                                <input type="hidden" name="_token" value="{{ csrf_token('sms_delete_' ~ sms.id) }}">
+                                <button class="btn-outline text-xs py-1.5 px-3 text-red-400 border-red-500/40">Suppr.</button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+            {% else %}
+                <tr><td colspan="6" class="px-4 py-8 text-center text-luxe-muted">Aucun sms créé. Cliquez sur "Ajouter" pour commencer.</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

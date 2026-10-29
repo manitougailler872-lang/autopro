@@ -1,0 +1,46 @@
+{% extends 'admin/_layout.html.twig' %}
+{% block title %}Borderaux — Admin{% endblock %}
+{% block body %}
+<div class="flex justify-between items-center mb-6">
+    <h1 class="text-2xl font-display font-bold">Borderau</h1>
+    <a href="{{ path('admin_borderau_new') }}" class="btn-gold">+ Ajouter</a>
+</div>
+
+<div class="card-luxe overflow-x-auto">
+    <table class="w-full text-sm">
+        <thead class="text-luxe-muted uppercase text-xs tracking-widest">
+            <tr>
+                <th class="text-left px-4 py-3">Pseudo</th>
+                <th class="text-left">Référence Paiement</th>
+                <th class="text-left">Véhicule concerné</th>
+                <th>Numéro du Client</th>
+                <th>Lien</th>
+                <th>Message</th>
+                <th class="text-right px-4">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for b in borderaux %}
+                <tr class="border-t border-luxe-border">
+                    <td class="px-4 py-3">{{ b.pseudo }}</td>
+                    <td class="font-semibold">{{ b.transactionReference }}</td>
+                    <td class="text-luxe-muted text-xs font-mono">{{ b.vehicle.brand ~ ' ' ~ b.vehicle.model ~ ' ' ~ b.vehicle.year }}</td>
+                    <td class="px-4 py-3">{{ b.numero }}</td>
+                    <td class="px-4 py-3">{{ b.url }}</td>
+                    <td class="px-4 py-3">{{ b.message }}</td>
+                    <td class="text-right px-4">
+                        <div class="inline-flex gap-1 flex-wrap justify-end">
+                            <form method="post" action="{{ path('admin_borderau_delete', {id: b.id}) }}" class="inline" onsubmit="return confirm('Supprimer cet borderau ?')">
+                                <input type="hidden" name="_token" value="{{ csrf_token('borderau_delete_' ~ b.id) }}">
+                                <button class="btn-outline text-xs py-1.5 px-3 text-red-400 border-red-500/40">Suppr.</button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+            {% else %}
+                <tr><td colspan="6" class="px-4 py-8 text-center text-luxe-muted">Aucun borderau ajouté. Cliquez sur "Ajouter" pour commencer.</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

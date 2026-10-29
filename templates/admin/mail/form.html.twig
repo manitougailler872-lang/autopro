@@ -1,0 +1,24 @@
+{% extends 'admin/_layout.html.twig' %}
+{% block title %}{{ 'Générer contrat'}} — Admin{% endblock %}
+{% block body %}
+<h1 class="text-2xl font-display font-bold mb-6">{{'Générer contrat'}}</h1>
+<div class="grid lg:grid-cols-3 gap-6">
+    <div class="lg:col-span-2 card-luxe p-6">
+        {{ form_start(form, {attr: {enctype: 'multipart/form-data', novalidate: 'novalidate'}}) }}
+            <div class="space-y-4">
+                {{ form_errors(form) }}
+                {{ form_row(form._token) }}
+                {{ form_row(form.gender) }}
+                {{ form_row(form.orderNumber) }}
+                {{ form_row(form.dateEtablissementContrat) }}
+                {{ form_row(form.heureContrat) }}
+                {{ form_row(form.minuteContrat) }}
+                {{ form_row(form.cardIdNumber) }}
+            </div>
+            <div class="mt-6 flex gap-3">
+                <button type="submit" class="btn-gold">{{  'Envoyer' }}</button>
+            </div>
+        {{ form_end(form,{render_rest:false}) }}
+    </div>
+</div>
+{% endblock %}

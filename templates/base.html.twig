@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="fr" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}{{ site_setting('company_name') }} — Réservation automobile{% endblock %}</title>
+    <meta name="description" content="{% block meta_description %}Plateforme premium de réservation de véhicules — {{ site_setting('company_name') }}.{% endblock %}">
+    {% block meta_head %}{% endblock %}
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&family=Montserrat:ital,wght@0,100..900;1,100..900&family=Nunito:ital,wght@0,200..1000;1,200..1000&family=Plus+Jakarta+Sans:ital,wght@0,200..800;1,200..800&family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Raleway:ital,wght@0,100..900;1,100..900&family=Space+Grotesk:wght@300..700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ asset('build/app.css') }}">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        body {
+            font-family:'Raleway',sans-serif !important;
+        }
+    </style>
+    <script src="https://unpkg.com/lucide@latest/dist/umd/lucide.js"></script>
+</head>
+<body class="bg-white text-luxe-text antialiased min-h-screen flex flex-col">
+    {% block navbar %}{% include 'components/_navbar.html.twig' %}{% endblock %}
+    {% for label, messages in app.flashes(['success','error','info','warning']) %}
+        {% for msg in messages %}
+            {% include 'components/_flash.html.twig' with {label: label, msg: msg} %}
+        {% endfor %}
+    {% endfor %}
+
+    <main class="flex-1 ">
+        {% block body %}{% endblock %}
+    </main>
+
+    {% block footer %}{% include 'components/_footer.html.twig' %}{% endblock %}
+    <script src="{{ asset('build/app.js') }}" defer></script>
+
+      {% block importmap %}{{ importmap('app') }}{% endblock %}
+
+    {# ========== NOTIFICATION VISITEURS EN LIGNE ========== #}
+{# ========== NOTIFICATION VISITEURS EN LIGNE ========== #}
+<div id="visitor-notif"
+     class="fixed top-6 left-6 z-50 opacity-0 translate-y-4 pointer-events-none mt-2 transition-all duration-500 max-w-xs mx-auto"
+     role="status"
+     aria-live="polite">
+
+    <div class="bg-luxe-card border border-luxe-border rounded-2xl shadow-2xl shadow-black/40 backdrop-blur px-4 py-3 flex items-center gap-3 pointer-events-auto">
+        {# Icône avec pastille verte pulsée #}
+        <div class="relative shrink-0">
+            <div class="w-10 h-10 rounded-full bg-luxe-orange-soft border border-luxe-orange/30 flex items-center justify-center text-luxe-orange">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="w-5 h-5" fill="currentColor" aria-hidden="true">
+                    <path fill-rule="evenodd" clip-rule="evenodd" d="M12 2a5 5 0 100 10 5 5 0 000-10Zm-8 20a8 8 0 1116 0H4Z"/>
+                </svg>
+            </div>
+            <span class="absolute -top-0.5 -right-0.5 flex h-3 w-3">
+                <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75"></span>
+                <span class="relative inline-flex rounded-full h-3 w-3 bg-green-500 border-2 border-luxe-card"></span>
+            </span>
+        </div>
+
+        <div class="min-w-0 flex-1">
+            <div class="text-sm text-luxe-text font-medium leading-tight">
+                <span id="visitor-count" class="text-luxe-orange font-display font-bold text-base">763</span>
+                <span>personnes consultent le site</span>
+            </div>
+            <div class="text-[10px] text-luxe-muted mt-0.5">Mis à jour à l'instant</div>
+        </div>
+
+        <button type="button" onclick="document.getElementById('visitor-notif').dataset.closed='1';document.getElementById('visitor-notif').classList.add('hidden')" class="text-luxe-muted hover:text-luxe-orange transition shrink-0" aria-label="Fermer">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="w-4 h-4" fill="currentColor"><path fill-rule="evenodd" clip-rule="evenodd" d="M5.3 5.3a1 1 0 011.4 0L12 10.6l5.3-5.3a1 1 0 111.4 1.4L13.4 12l5.3 5.3a1 1 0 01-1.4 1.4L12 13.4l-5.3 5.3a1 1 0 01-1.4-1.4L10.6 12 5.3 6.7a1 1 0 010-1.4Z"/></svg>
+        </button>
+    </div>
+</div>
+{% block javascripts %}
+
+
+    <script>
+    const cookieModal = document.getElementById('cookieModal');
+
+    function showCookieModal() {
+        cookieModal.classList.remove('hidden');
+    }
+
+    function closeCookieModal() {
+        cookieModal.classList.add('hidden');
+    }
+
+    function acceptCookies() {
+        localStorage.setItem('cookieConsent', 'accepted');
+        closeCookieModal();
+    }
+
+    function rejectCookies() {
+        localStorage.setItem('cookieConsent', 'rejected');
+        closeCookieModal();
+    }
+
+    function openCookieSettings() {
+        console.log('Paramètres des cookies');
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+
+        const consent = localStorage.getItem('cookieConsent');
+
+        if (!consent) {
+            showCookieModal();
+        }
+
+    });
+</script>
+<script>
+    lucide.createIcons();
+    function toggleSpecs(){
+        const panel = document.getElementById('specsPanel');
+        const chevron = document.getElementById('specsChevron');
+        panel.classList.toggle('hidden');
+        chevron.style.transform = panel.classList.contains('hidden') ? 'rotate(0deg)' : 'rotate(90deg)';
+    }
+</script>
+<script>
+(function () {
+    const notif    = document.getElementById('visitor-notif');
+    const counter  = document.getElementById('visitor-count');
+    if (!notif || !counter) return;
+
+    const START_COUNT   = 763;
+    const INCREMENT     = 4;
+    const INTERVAL_MS   = 10000;   // Cycle 10s
+    const VISIBLE_MS    = 5000;    // Reste visible 5s à chaque cycle
+
+    // Persistance du compteur entre pages
+    let count = parseInt(sessionStorage.getItem('visitorCount') || START_COUNT, 10);
+    counter.textContent = count.toLocaleString('fr-FR');
+
+    function show() {
+        if (notif.dataset.closed === '1') return;
+        notif.classList.remove('opacity-0', 'translate-y-4');
+        notif.classList.add('opacity-100', 'translate-y-0');
+    }
+
+    function hide() {
+        notif.classList.remove('opacity-100', 'translate-y-0');
+        notif.classList.add('opacity-0', 'translate-y-4');
+    }
+
+    function tick() {
+        // 1. Incrémente le compteur
+        count += INCREMENT;
+        sessionStorage.setItem('visitorCount', count.toString());
+
+        // 2. Micro-animation sur le nombre
+        counter.style.transform = 'scale(1.15)';
+        counter.style.transition = 'transform 0.2s ease-out';
+        counter.textContent = count.toLocaleString('fr-FR');
+        setTimeout(() => { counter.style.transform = 'scale(1)'; }, 200);
+
+        // 3. Affiche, puis masque après VISIBLE_MS
+        show();
+        setTimeout(hide, VISIBLE_MS);
+    }
+
+    // Première apparition ~1s après chargement
+    setTimeout(tick, 1000);
+
+    // Puis toutes les 10s
+    setInterval(tick, INTERVAL_MS);
+})();
+</script>
+
+<script>
+(function () {
+  'use strict';
+ 
+  // --- Éléments du DOM ---
+  const section         = document.getElementById('simulateur');
+  const boutonsType      = document.querySelectorAll('.type-btn');
+  const inputMontant      = document.getElementById('montant');
+  const inputDuree        = document.getElementById('duree');
+  const montantAffiche     = document.getElementById('montantAffiche');
+  const dureeAffichee      = document.getElementById('dureeAffichee');
+  const mensualiteEl       = document.getElementById('mensualite');
+  const tauxActuelEl       = document.getElementById('tauxActuel');
+  const montantTotalDuEl   = document.getElementById('montantTotalDu');
+  const coutTotalCreditEl  = document.getElementById('coutTotalCredit');
+  const toggleTableauBtn   = document.getElementById('toggleTableau');
+  const toggleTableauLabel = document.getElementById('toggleTableauLabel');
+  const toggleTableauIcon  = document.getElementById('toggleTableauIcon');
+  const tableauWrapper     = document.getElementById('tableauWrapper');
+  const tableauCorps       = document.getElementById('tableauCorps');
+ 
+ console.log(document.querySelector('.type-btn[data-active="true"]'));
+
+  // --- État ---
+  let tauxActuel = parseFloat(
+    document.querySelector('.type-btn[data-active="true"]').dataset.taux
+  );
+ 
+  // --- Utilitaires ---
+  function formatMontant(valeur) {
+    return Math.round(valeur).toLocaleString('fr-FR');
+  }
+ 
+  function calculerMensualite(capital, tauxAnnuel, dureeMois) {
+    const r = (tauxAnnuel / 100) / 12;
+    if (r === 0) return capital / dureeMois;
+    return capital * r * Math.pow(1 + r, dureeMois) / (Math.pow(1 + r, dureeMois) - 1);
+  }
+ 
+  function genererTableauAmortissement(capital, tauxAnnuel, dureeMois, mensualite) {
+    const r = (tauxAnnuel / 100) / 12;
+    let capitalRestant = capital;
+    const lignes = [];
+ 
+    for (let i = 1; i <= dureeMois; i++) {
+      const interets = capitalRestant * r;
+      const capitalRembourse = mensualite - interets;
+      capitalRestant = Math.max(capitalRestant - capitalRembourse, 0);
+ 
+      lignes.push({
+        numero: i,
+        mensualite: mensualite,
+        capital: capitalRembourse,
+        interets: interets,
+        capitalRestant: capitalRestant,
+      });
+    }
+ 
+    return lignes;
+  }
+ 
+  // --- Rendu ---
+  function mettreAJour() {
+    const montant = parseFloat(inputMontant.value);
+    const duree = parseInt(inputDuree.value, 10);
+ 
+    const mensualite = calculerMensualite(montant, tauxActuel, duree);
+    const montantTotalDu = mensualite * duree;
+    const coutTotalCredit = montantTotalDu - montant;
+ 
+    montantAffiche.textContent = formatMontant(montant);
+    dureeAffichee.textContent = duree;
+    tauxActuelEl.textContent = tauxActuel.toFixed(1).replace('.', ',');
+    mensualiteEl.textContent = formatMontant(mensualite);
+    montantTotalDuEl.textContent = formatMontant(montantTotalDu);
+    coutTotalCreditEl.textContent = formatMontant(coutTotalCredit);
+ 
+    // Ne régénère le tableau que s'il est visible, pour épargner du travail inutile
+    if (!tableauWrapper.hidden) {
+      genererLignesTableau(montant, duree, mensualite);
+    }
+  }
+ 
+  function genererLignesTableau(montant, duree, mensualite) {
+    const lignes = genererTableauAmortissement(montant, tauxActuel, duree, mensualite);
+ 
+    tableauCorps.innerHTML = lignes.map(function (ligne) {
+      return (
+        '<tr class="border-t border-luxe-border">' +
+          '<td class="px-4 py-2.5 text-luxe-muted font-mono">' + ligne.numero + '</td>' +
+          '<td class="px-4 py-2.5 text-right font-mono text-luxe-text">' + formatMontant(ligne.mensualite) + ' €</td>' +
+          '<td class="px-4 py-2.5 text-right font-mono text-luxe-muted">' + formatMontant(ligne.capital) + ' €</td>' +
+          '<td class="px-4 py-2.5 text-right font-mono text-luxe-muted">' + formatMontant(ligne.interets) + ' €</td>' +
+          '<td class="px-4 py-2.5 text-right font-mono text-luxe-text">' + formatMontant(ligne.capitalRestant) + ' €</td>' +
+        '</tr>'
+      );
+    }).join('');
+  }
+ 
+  // --- Écouteurs ---
+  boutonsType.forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      boutonsType.forEach(function (b) {
+        b.dataset.active = 'false';
+        b.classList.remove('bg-luxe-orange', 'text-luxe-text', 'border-luxe-orange', 'font-medium');
+        b.classList.add('bg-luxe-faint', 'text-red', 'active:text-white', 'text-white', 'border-luxe-orange', 'font-medium');
+      });
+ 
+      btn.dataset.active = 'true';
+      btn.classList.remove('bg-luxe-card', 'text-luxe-muted', 'border-luxe-border');
+      btn.classList.add('bg-luxe-orange', 'text-white', 'border-luxe-orange', 'font-medium');
+ 
+      tauxActuel = parseFloat(btn.dataset.taux);
+      mettreAJour();
+    });
+  });
+ 
+  inputMontant.addEventListener('input', mettreAJour);
+  inputDuree.addEventListener('input', mettreAJour);
+ 
+  toggleTableauBtn.addEventListener('click', function () {
+    const estVisible = !tableauWrapper.hidden;
+ 
+    tableauWrapper.hidden = estVisible;
+    toggleTableauIcon.classList.toggle('rotate-180', !estVisible);
+    toggleTableauLabel.textContent = estVisible
+      ? 'Voir le tableau d’amortissement'
+      : 'Masquer le tableau d’amortissement';
+ 
+    if (!estVisible) {
+      const montant = parseFloat(inputMontant.value);
+      const duree = parseInt(inputDuree.value, 10);
+      const mensualite = calculerMensualite(montant, tauxActuel, duree);
+      genererLignesTableau(montant, duree, mensualite);
+    }
+  });
+ 
+  // --- Calcul initial ---
+  mettreAJour();
+})();
+</script>
+
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+    const faqItems = document.querySelectorAll('.faq-item');
+
+    faqItems.forEach((item) => {
+        const button = item.querySelector('.faq-button');
+        const content = item.querySelector('.faq-content');
+        const icon = item.querySelector('.faq-icon');
+
+        button.addEventListener('click', () => {
+
+            const isOpen = button.getAttribute('aria-expanded') === 'true';
+
+            // Fermer les autres
+            faqItems.forEach((otherItem) => {
+                const otherButton = otherItem.querySelector('.faq-button');
+                const otherContent = otherItem.querySelector('.faq-content');
+                const otherIcon = otherItem.querySelector('.faq-icon');
+
+                otherButton.setAttribute('aria-expanded', 'false');
+                otherContent.classList.add('hidden');
+
+                otherIcon.innerHTML = `
+                    <path d="m5 8 5 5 5-5"/>
+                `;
+
+                otherIcon.classList.remove('rotate-180');
+            });
+
+            // Ouvrir l'élément sélectionné
+            if (!isOpen) {
+                button.setAttribute('aria-expanded', 'true');
+                content.classList.remove('hidden');
+
+                icon.innerHTML = `
+                    <path d="m5 12 5-5 5 5"/>
+                `;
+
+                icon.classList.add('rotate-180');
+            }
+        });
+    });
+});
+</script>
+{# <script>
+  const track = document.getElementById('track');
+  const card = track.querySelector('article');
+  const gap = 16; // gap-4
+  const scrollAmount = card.offsetWidth + gap;
+ 
+  document.getElementById('scrollRight').addEventListener('click', () => {
+    track.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+  });
+  document.getElementById('scrollLeft').addEventListener('click', () => {
+    track.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
+  });
+</script> #}
+{# <script src="//code.tidio.co/azzi1tnmbbilqorbq8zly5rtd03qtenp.js" async></script>
+============================================================
+   Script partagé : à déplacer dans base.html.twig (une seule fois)
+   si cette carte est incluse plusieurs fois sur la même page.
+   Le garde (window.__luxeAuctionInit) évite les doublons.
+   ============================================================ #}
+<script>
+(function () {
+    if (window.__luxeAuctionInit) return;
+    window.__luxeAuctionInit = true;
+
+    function format(diffMs) {
+        if (diffMs <= 0) return null;
+        var totalSec = Math.floor(diffMs / 1000);
+        var days = Math.floor(totalSec / 86400);
+        var hours = Math.floor((totalSec % 86400) / 3600);
+        var minutes = Math.floor((totalSec % 3600) / 60);
+        var seconds = totalSec % 60;
+        var pad = function (n) { return String(n).padStart(2, '0'); };
+
+        if (days > 0) {
+            return days + 'j ' + pad(hours) + ':' + pad(minutes) + ':' + pad(seconds);
+        }
+        return pad(hours) + ':' + pad(minutes) + ':' + pad(seconds);
+    }
+
+    function tick() {
+        document.querySelectorAll('.js-auction-band[data-expired="false"]').forEach(function (band) {
+            var end = new Date(band.dataset.end).getTime();
+            var diff = end - Date.now();
+            var valueEl = band.querySelector('.js-auction-value');
+            var labelEl = band.querySelector('.js-auction-label');
+            var liveEl = band.querySelector('.js-auction-live');
+
+            var formatted = format(diff);
+            if (formatted === null) {
+                band.dataset.expired = 'true';
+                labelEl.textContent = 'Enchère terminée';
+                valueEl.textContent = '00:00:00';
+                if (liveEl) liveEl.remove();
+                return;
+            }
+            valueEl.textContent = formatted;
+        });
+    }
+
+    tick();
+    setInterval(tick, 1000);
+})();
+</script> 
+{% endblock %}
+<script>
+/* =========================================================
+   DATA — remplacer/brancher sur vos entités Symfony (Garage)
+   ========================================================= */
+const GARAGES = [
+  {
+    id: 1,
+    name: "Siège principal",
+    city: "Lagny-sur-Marne",
+    address: "12 Avenue du Général Leclerc",
+    postal: "77400 Lagny-sur-Marne",
+    open: true,
+    lat: 48.8756, lng: 2.7089
+  },
+  {
+    id: 2,
+    name: "Agence Paris Est",
+    city: "Noisy-le-Grand",
+    address: "1 Rue de l'Industrie",
+    postal: "93160 Noisy-le-Grand",
+    open: true,
+    lat: 48.8400, lng: 2.5514
+  },
+  {
+    id: 3,
+    name: "Agence Melun",
+    city: "Melun",
+    address: "ZAC des Deux Rivières",
+    postal: "77000 Melun",
+    open: true,
+    lat: 48.5399, lng: 2.6597
+  }
+];
+
+/* =========================================================
+   RENDER — liste des garages (colonne de gauche)
+   ========================================================= */
+const listEl = document.getElementById('garage-list');
+
+function buildingThumb() {
+  return `
+    <div class="w-20 h-16 rounded-lg flex-shrink-0 bg-gradient-to-br from-slate-800 to-slate-900 flex items-center justify-center overflow-hidden relative">
+      <span class="text-white font-extrabold text-[11px] tracking-wide">AUTO<span class="text-brand">PRO</span></span>
+      <div class="absolute inset-x-0 bottom-0 h-1.5 bg-brand/80"></div>
+    </div>`;
+}
+
+GARAGES.forEach((g, i) => {
+  const row = document.createElement('button');
+  row.type = 'button';
+  row.dataset.id = g.id;
+  row.className = `garage-card w-full text-left flex items-center gap-4 px-3 py-4 transition-colors hover:bg-slate-50 ${i === 0 ? 'is-active' : ''}`;
+  row.innerHTML = `
+    ${buildingThumb()}
+    <div class="flex-1 min-w-0">
+      <p class="font-bold text-navy leading-tight">${g.name}</p>
+      <p class="text-slate-400 text-sm mb-1">${g.city}</p>
+      <p class="text-slate-500 text-sm leading-snug flex gap-1">
+        <svg class="w-4 h-4 text-brand flex-shrink-0 mt-0.5" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5z"/></svg>
+        <span>${g.address}<br>${g.postal}</span>
+      </p>
+      <span class="inline-block mt-2 text-xs font-semibold text-emerald-600 bg-emerald-50 px-2.5 py-1 rounded-full">
+        ${g.open ? 'Ouvert aujourd\'hui' : 'Fermé aujourd\'hui'}
+      </span>
+    </div>
+    <svg class="garage-chevron w-4 h-4 text-slate-300 flex-shrink-0" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></svg>
+  `;
+  row.addEventListener('click', () => selectGarage(g.id, true));
+  listEl.appendChild(row);
+});
+
+/* =========================================================
+   MAP — Leaflet (OpenStreetMap), sans clé API requise
+   ========================================================= */
+const map = L.map('map', { zoomControl: false }).setView([48.78, 2.62], 10);
+
+const planLayer = L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png', {
+  attribution: '&copy; OpenStreetMap contributors &copy; CARTO',
+  subdomains: 'abcd',
+  maxZoom: 19
+}).addTo(map);
+
+const satLayer = L.tileLayer('https://server.arcgisonline.com/ArcGIS/rest/services/World_Imagery/MapServer/tile/{z}/{y}/{x}', {
+  attribution: 'Tiles &copy; Esri',
+  maxZoom: 19
+});
+
+L.control.zoom({ position: 'bottomright' }).addTo(map);
+
+function pinSVG(active) {
+  const fill = active ? '#e6342a' : '#0f1b3d';
+  return `
+    <svg viewBox="0 0 34 44" xmlns="http://www.w3.org/2000/svg">
+      <path d="M17 0C7.6 0 0 7.6 0 17c0 11 17 27 17 27s17-16 17-27C34 7.6 26.4 0 17 0z" fill="${fill}"/>
+      <circle cx="17" cy="17" r="7" fill="white"/>
+    </svg>`;
+}
+
+function makeIcon(active) {
+  return L.divIcon({
+    className: '',
+    html: `<div class="autopro-pin ${active ? 'is-active' : ''}">${pinSVG(active)}</div>`,
+    iconSize: [34, 44],
+    iconAnchor: [17, 44],
+    popupAnchor: [0, -40]
+  });
+}
+
+function popupHTML(g) {
+  return `
+    <div class="font-sans">
+      <div class="h-28 bg-gradient-to-br from-slate-800 to-slate-900 flex items-center justify-center relative">
+        <span class="text-white font-extrabold text-sm tracking-wide">AUTO<span class="text-brand">PRO</span></span>
+      </div>
+      <div class="p-4">
+        <p class="font-bold text-navy leading-tight">${g.name}</p>
+        <p class="text-slate-400 text-sm mb-2">${g.city}</p>
+        <p class="text-slate-500 text-sm flex gap-1 mb-2">
+          <svg class="w-4 h-4 text-brand flex-shrink-0 mt-0.5" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5z"/></svg>
+          <span>${g.address}<br>${g.postal}</span>
+        </p>
+        <span class="inline-block mb-3 text-xs font-semibold text-emerald-600 bg-emerald-50 px-2.5 py-1 rounded-full">Ouvert aujourd'hui</span>
+        <a href="https://www.google.com/maps/dir/?api=1&destination=${g.lat},${g.lng}" target="_blank" rel="noopener"
+           class="flex items-center justify-center gap-2 bg-navy hover:bg-navy/90 text-white text-sm font-semibold rounded-xl py-2.5">
+          <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11l18-8-8 18-2-8-8-2z"/></svg>
+          Itinéraire
+        </a>
+      </div>
+    </div>`;
+}
+
+const markers = {};
+GARAGES.forEach(g => {
+  const marker = L.marker([g.lat, g.lng], { icon: makeIcon(false) }).addTo(map);
+  marker.bindPopup(popupHTML(g), { closeButton: true, autoPan: true });
+  marker.on('click', () => selectGarage(g.id, false));
+  markers[g.id] = marker;
+});
+
+let activeId = GARAGES[0].id;
+
+function selectGarage(id, flyTo) {
+  activeId = id;
+  const g = GARAGES.find(x => x.id === id);
+
+  // list state
+  document.querySelectorAll('.garage-card').forEach(el => {
+    el.classList.toggle('is-active', Number(el.dataset.id) === id);
+  });
+
+  // marker state
+  Object.entries(markers).forEach(([mid, m]) => {
+    m.setIcon(makeIcon(Number(mid) === id));
+  });
+
+  markers[id].openPopup();
+  if (flyTo) map.flyTo([g.lat, g.lng], 12, { duration: 0.6 });
+}
+
+// open first popup by default
+selectGarage(GARAGES[0].id, false);
+map.setView([GARAGES[0].lat, GARAGES[0].lng], 11);
+
+// Plan / Satellite toggle
+const btnPlan = document.getElementById('btn-plan');
+const btnSat = document.getElementById('btn-sat');
+btnPlan.addEventListener('click', () => {
+  map.removeLayer(satLayer); map.addLayer(planLayer);
+  btnPlan.className = 'px-4 py-1.5 rounded-full bg-navy text-white transition';
+  btnSat.className = 'px-4 py-1.5 rounded-full text-slate-500 transition';
+});
+btnSat.addEventListener('click', () => {
+  map.removeLayer(planLayer); map.addLayer(satLayer);
+  btnSat.className = 'px-4 py-1.5 rounded-full bg-navy text-white transition';
+  btnPlan.className = 'px-4 py-1.5 rounded-full text-slate-500 transition';
+});
+</script>
+</body>
+</html>

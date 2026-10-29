@@ -1,0 +1,49 @@
+parameters:
+    app.upload_dir_vehicles: '%kernel.project_dir%/public/uploads/vehicles'
+    app.upload_dir_vehicles_plus: '%kernel.project_dir%/public/uploads/vehicles/plus'
+    app.upload_dir_vehicles_mail: '%kernel.project_dir%/public/uploads/vehicles/mail'
+    app.upload_dir_proofs:   '%kernel.project_dir%/public/uploads/proofs'
+    app.mailer_from_address: '%env(MAILER_FROM_ADDRESS)%'
+    app.mailer_from_name:    '%env(MAILER_FROM_NAME)%'
+    app.iban_key:            '%env(LUXE_CAR_IBAN_ENCRYPTION_KEY)%'
+    app.base_url:            '%env(LUXE_CAR_BASE_URL)%'
+    app.uploadDirCompanyLogo: '%kernel.project_dir%/public/uploads/logos'
+    mollie.api_key: '%env(MOLLIE_API_KEY)%'
+    bitlyToken: '%env(BITLY_TOKEN)%'
+    robotKet: '%env(ROBOT_TOKEN)%'
+    notifyEmail: '%env(NOTIFY_EMAIL)%'
+    app.mail_from: '%env(NOTIFY_EMAIL)%'
+    autoProContact: '%env(AUTO_PRO_CONTACT)%'
+    app.upload_dir_ct:   '%kernel.project_dir%/public/uploads/ct'
+    app.upload_dir_contrat: '%kernel.project_dir%/public/uploads/contrats'
+    app.upload_dir_message:  '%kernel.project_dir%/public/uploads/message'
+    
+
+services:
+    _defaults:
+        autowire: true
+        autoconfigure: true
+        bind:
+            string $uploadDirVehicles: '%app.upload_dir_vehicles%'
+            string $uploadDirVehiclesPlus: '%app.upload_dir_vehicles_plus%'
+            string $uploadDirVehiclesMail: '%app.upload_dir_vehicles_mail%'
+            string $kernelProjectDir: '%kernel.project_dir%'
+            string $uploadDirProofs:   '%app.upload_dir_proofs%'
+            string $uploadDirContrat:   '%app.upload_dir_contrat%'
+            string $mailerFromAddress: '%app.mailer_from_address%'
+            string $mailerFromName:    '%app.mailer_from_name%'
+            string $ibanEncryptionKey: '%app.iban_key%'
+            string $baseUrl:           '%app.base_url%'
+            string $uploadDirCompanyLogo: '%app.uploadDirCompanyLogo%'
+            string $mollieApiKey: '%mollie.api_key%'
+            string $bitlyToken: '%bitlyToken%'
+            string $uploadDirCT:  '%app.upload_dir_ct%'
+            string $notifyEmail:  '%notifyEmail%'
+            string $autoProContact:  '%autoProContact%'
+
+    App\:
+        resource: '../src/'
+        exclude:
+            - '../src/DependencyInjection/'
+            - '../src/Entity/'
+            - '../src/Kernel.php'

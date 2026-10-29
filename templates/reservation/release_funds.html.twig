@@ -1,0 +1,141 @@
+{% extends 'base.html.twig' %}
+{% block title %}Votre demande — AutoPro{% endblock %}
+
+{# Override navbar with a focused header, and hide the footer #}
+{% block navbar %}
+    {% include 'components/_focused_header.html.twig' with {
+        title: 'Votre demande',
+        back_url: path('customer_reservations', {uuid: reservation.uuid})
+    } %}
+{% endblock %}
+{% block footer %}{% endblock %}
+
+{% block body %}
+<div class="min-h-[80vh] flex items-start justify-center px-4 pt-12 md:pt-20">
+    <div class="w-full max-w-xl">
+
+        {# Info card #}
+        <div class="bg-luxe-card border  mt-8 border-luxe-border rounded px-8 py-8 md:py-10 text-center mb-10">
+            <p class="text-luxe-muted rounded-full px-6 text-sm md:text-base leading-relaxed">
+                Si vous êtes entièrement satisfait(e) de votre achat et que vous ne souhaitez pas demander de retour ou de remboursement, merci de nous confirmer votre accord afin que nous puissions procéder à la libération des fonds au profit du vendeur.
+            </p>
+        </div>
+
+        {# 3-step progress with icons + animated fill lines #}
+        <div class="flex items-center gap-3 md:gap-4 mb-10 px-2" role="progressbar" aria-label="Progression">
+            {# Step 1: customer (always highlighted) #}
+            <span class="step-node step-node--active" aria-current="step">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <circle cx="12" cy="8" r="4"/>
+                    <path d="M4 21c0-4 4-6 8-6s8 2 8 6"/>
+                </svg>
+            </span>
+
+            {# Line 1: fills on page load #}
+            <span class="step-line"><span class="step-line-fill" data-line="1"></span></span>
+
+            {# Step 2: bank / escrow #}
+            <span class="step-node step-node--active">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M3 21h18M4 10h16M12 3 3 8h18l-9-5z"/>
+                    <path d="M6 10v8M10 10v8M14 10v8M18 10v8"/>
+                </svg>
+            </span>
+
+            {# Line 2: fills on button click #}
+            <span class="step-line"><span class="step-line-fill" data-line="2"></span></span>
+
+            {# Step 3: seller / delivery #}
+            <span class="step-node step-node--active">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M21 8v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8"/>
+                    <path d="M1 8h22v-4H1z"/>
+                    <path d="M10 12h4"/>
+                </svg>
+            </span>
+        </div>
+
+        {# Release button (form POST) + refund alternative #}
+        <form method="post" action="{{ path('reservation_no_payment', {uuid: reservation.uuid}) }}" id="release-form">
+            <input type="hidden" name="_token" value="{{ csrf_token('release_funds_' ~ reservation.id) }}">
+            <button type="submit" id="release-btn"
+                    class="w-full bg-luxe-orange rounded-full hover:bg-luxe-orange-dark text-white font-semibold uppercase tracking-wide  px-6 py-4 transition-all duration-150 active:scale-[0.99] shadow-lg shadow-luxe-orange/20 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-luxe-orange disabled:opacity-70 disabled:cursor-progress">
+                Je libère les fonds au vendeur
+            </button>
+        </form>
+
+        <a href="{{ path('refund_request', {uuid: reservation.uuid}) }}"
+           class="mt-4 w-full block text-center rounded-full bg-luxe-card hover:border-luxe-orange border border-luxe-border text-luxe-text font-semibold uppercase tracking-wide  px-6 py-4 transition">
+            Je demande un remboursement
+        </a>
+    </div>
+</div>
+
+<style>
+    /* Step nodes */
+    .step-node {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 3rem; height: 3rem;
+        border-radius: 9999px;
+        background: rgba(59, 130, 246, 0.12);   /* blue-500 / 12 */
+        border: 1px solid rgba(59, 130, 246, 0.55);
+        color: #60a5fa;                          /* blue-400 */
+        flex-shrink: 0;
+    }
+    .step-node--active { color: #60a5fa; }
+
+    /* Progress line: gray track + animated fill */
+    .step-line {
+        position: relative;
+        flex: 1;
+        height: 3px;
+        border-radius: 9999px;
+        background: rgba(255, 255, 255, 0.08);
+        overflow: hidden;
+    }
+    .step-line-fill {
+        position: absolute;
+        inset: 0 auto 0 0;
+        width: 0%;
+        background: #3b82f6;                    /* blue-500 */
+        border-radius: 9999px;
+        transition: width 1.4s ease-out;
+    }
+    .step-line-fill.is-filled { width: 100%; }
+</style>
+
+<script>
+(function () {
+    const btn        = document.getElementById('release-btn');
+    const form       = document.getElementById('release-form');
+    const line1      = document.querySelector('[data-line="1"]');
+    const line2      = document.querySelector('[data-line="2"]');
+    const reduced    = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    // Step 1 fills on page load (small delay to catch the transition)
+    if (reduced) {
+        line1.classList.add('is-filled');
+    } else {
+        requestAnimationFrame(() => {
+            setTimeout(() => line1.classList.add('is-filled'), 250);
+        });
+    }
+
+    // On click: animate step 2, disable button, submit form after ~2 s
+    form.addEventListener('submit', (e) => {
+        if (btn.dataset.submitting === '1') return; // let the real submit through
+        e.preventDefault();
+        btn.dataset.submitting = '1';
+        btn.disabled = true;
+        btn.textContent = 'Libération en cours…';
+
+        line2.classList.add('is-filled');
+
+        const delay = reduced ? 300 : 2000;
+        setTimeout(() => form.submit(), delay);
+    });
+})();
+</script>
+{% endblock %}

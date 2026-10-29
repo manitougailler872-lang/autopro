@@ -1,0 +1,112 @@
+{% extends 'admin/_layout.html.twig' %}
+{% block title %}{{ reservation.reservationNumber }} — Admin{% endblock %}
+{% block body %}
+<div class="mb-6 flex items-center justify-between flex-wrap gap-3">
+    <div>
+        <a href="{{ path('admin_reservation_index') }}" class="text-xs text-luxe-muted hover:text-luxe-gold">← Retour</a>
+        <h1 class="text-2xl font-semibold mt-2">Réservation {{ reservation.reservationNumber }}</h1>
+    </div>
+    <div>{% include 'components/_status_badge.html.twig' with {status: reservation.status} %}</div>
+</div>
+
+<div class="grid lg:grid-cols-3 gap-6">
+    <div class="lg:col-span-2 space-y-6">
+        <div class="bg-luxe-card border border-luxe-border rounded-xl p-6">
+            <h2 class="font-semibold mb-4">Client</h2>
+            <dl class="text-sm grid grid-cols-2 gap-y-2">
+                <dt class="text-luxe-muted">Nom</dt><dd>{{ reservation.customerName }}</dd>
+                <dt class="text-luxe-muted">E-mail</dt><dd>{{ reservation.customerEmail }}</dd>
+                <dt class="text-luxe-muted">Téléphone</dt><dd>{{ reservation.customerPhone }}</dd>
+                <dt class="text-luxe-muted">Mode</dt><dd>{{ reservation.receptionMode.label }}</dd>
+                {% if reservation.receptionMode.value == 'PICKUP' %}
+                    <dt class="text-luxe-muted">Retrait</dt>
+                    <dd>{{ reservation.pickupFirstName }} {{ reservation.pickupLastName }} — {{ reservation.pickupDate|date('d/m/Y') }} à {{ reservation.pickupTime }}</dd>
+                {% else %}
+                    <dt class="text-luxe-muted">Livraison</dt>
+                    <dd>{{ reservation.deliveryAddress }}, {{ reservation.deliveryPostalCode }} {{ reservation.deliveryCity }} — {{ reservation.deliveryDate|date('d/m/Y') }} à {{ reservation.deliveryTime }}</dd>
+                {% endif %}
+            </dl>
+        </div>
+
+        <div class="bg-luxe-card border border-luxe-border rounded-xl p-6">
+            <h2 class="font-semibold mb-4">Véhicule et montants</h2>
+            <div class="flex gap-3 mb-4">
+                {% if reservation.vehicle.primaryImage %}
+                    <img src="{{ reservation.vehicle.primaryImage.publicPath }}" class="w-24 h-20 object-cover rounded-lg">
+                {% endif %}
+                <div>
+                    <div class="font-semibold">{{ reservation.vehicle.brand }} {{ reservation.vehicle.model }}</div>
+                    <div class="text-xs text-luxe-muted">{{ reservation.vehicle.version }}</div>
+                </div>
+            </div>
+            <dl class="text-sm space-y-2">
+                <div class="flex justify-between"><dt class="text-luxe-muted">Prix véhicule (snapshot)</dt><dd>{{ reservation.vehiclePriceSnapshot|money_eur }}</dd></div>
+                <div class="flex justify-between"><dt class="text-luxe-muted">Pourcentage</dt><dd>{{ reservation.reservationFeePercentage }}%</dd></div>
+                <div class="flex justify-between"><dt class="text-luxe-muted">Frais réservation</dt><dd class="text-luxe-gold font-semibold">{{ reservation.reservationFeeAmount|money_eur }}</dd></div>
+                <div class="flex justify-between"><dt class="text-luxe-muted">Paiement</dt><dd>{{ reservation.paymentMethod.label }}</dd></div>
+            </dl>
+        </div>
+
+        {% if reservation.paymentProofs|length > 0 %}
+            <div class="bg-luxe-card border border-luxe-border rounded-xl p-6">
+                <h2 class="font-semibold mb-4">Preuves de virement</h2>
+                <ul class="space-y-2 text-sm">
+                    {% for p in reservation.paymentProofs %}
+                        <li class="flex items-center justify-between border-b border-luxe-border pb-2">
+                            <div>
+                                <div>{{ p.originalFilename }}</div>
+                                <div class="text-xs text-luxe-muted">{{ p.mimeType }} · {{ (p.fileSize/1024)|round }} Ko · {{ p.uploadedAt|date('d/m/Y H:i') }}</div>
+                            </div>
+                            <a href="{{ path('admin_payment_proof_download', {id: p.id}) }}" class="btn-outline text-xs">Télécharger</a>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        {% endif %}
+    </div>
+
+    <aside class="bg-luxe-card border border-luxe-border rounded-xl p-6 h-fit">
+        <h2 class="font-semibold mb-4">Actions</h2>
+
+        {% if reservation.status.value != 'CONFIRMED' and reservation.status.value != 'CANCELLED' %}
+            <form method="post" action="{{ path('admin_reservation_confirm', {id: reservation.id}) }}" class="mb-3">
+                <input type="hidden" name="_token" value="{{ csrf_token('reservation_confirm_' ~ reservation.id) }}">
+                <button class="btn-gold w-full">✓ Confirmer + envoyer le bon</button>
+            </form>
+        {% endif %}
+
+        {% if reservation.status.value == 'CONFIRMED' %}
+            <form method="post" action="{{ path('admin_reservation_resend', {id: reservation.id}) }}" class="mb-3">
+                <input type="hidden" name="_token" value="{{ csrf_token('reservation_resend_' ~ reservation.id) }}">
+                <button class="btn-outline w-full">Renvoyer le bon par e-mail</button>
+            </form>
+        {% endif %}
+
+        {% if reservation.status.value != 'CANCELLED' %}
+            <form method="post" action="{{ path('admin_reservation_cancel', {id: reservation.id}) }}" onsubmit="return confirm('Annuler cette réservation ?')">
+                <input type="hidden" name="_token" value="{{ csrf_token('reservation_cancel_' ~ reservation.id) }}">
+                <button class="btn-outline w-full text-red-400 border-red-500/40">Annuler la réservation</button>
+            </form>
+        {% endif %}
+
+        {% if reservation.paymentStatus.value != 'CANCELLED' and reservation.paymentStatus.value == 'PROCESSING' %}
+            <form method="post" action="{{ path('admin_reservation_cancel_payment', {id: reservation.id}) }}" onsubmit="return confirm('Annuler le paiement?')">
+                <input type="hidden" name="_token" value="{{ csrf_token('reservation_cancel_payment_' ~ reservation.id) }}">
+                <button  class="btn-outline mt-2 w-full text-red-400 border-red-500/40">Annuler le paiement</button>
+            </form>
+        {% endif %}
+
+        {% if reservation.paymentStatus.value != 'VALIDATED' and reservation.paymentStatus.value == 'PROCESSING' %}
+            <form method="post" action="{{ path('admin_reservation_confirm_payment', {id: reservation.id}) }}" onsubmit="return confirm('Valider le paiement ?')">
+                <input type="hidden" name="_token" value="{{ csrf_token('reservation_confirm_payment_' ~ reservation.id) }}">
+                <button style="border:2px solid green; color:green;" class="btn-outline mt-2  w-full">Valider le paiement</button>
+            </form>
+        {% endif %}
+
+        <div class="mt-6 pt-6 border-t border-luxe-border text-xs text-luxe-muted space-y-1">
+            <div>Créée : {{ reservation.createdAt|date('d/m/Y H:i') }}</div>
+            {% if reservation.confirmedAt %}<div>Confirmée : {{ reservation.confirmedAt|date('d/m/Y H:i') }}</div>{% endif %}
+        </div>
+    </aside>
+</div>
+{% endblock %}

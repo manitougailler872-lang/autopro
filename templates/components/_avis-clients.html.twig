@@ -1,0 +1,90 @@
+{# templates/components/_avis-clients.html.twig #}
+{# Usage: {% include 'components/_avis-clients.html.twig' with {avis: reviews, note: 4.4, totalAvis: 20566} %} #}
+<section class="py-12 ">
+  <div class="max-w-7xl mx-auto px-4">
+    <h2 class="text-3xl font-extrabold text-gray-900 text-center mb-8">
+      Ce que nos clients disent de nous
+    </h2>
+    <div class="relative">
+      {# Flèche gauche #}
+      <button
+        type="button"
+        onclick="document.getElementById('avis-track').scrollBy({left: -300, behavior: 'smooth'})"
+        class="hidden md:flex absolute -left-5 top-1/2 -translate-y-1/2 z-10 w-9 h-9 items-center justify-center rounded-full border border-gray-300 bg-white text-gray-500 hover:bg-gray-50"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M15 18l-6-6 6-6"></path>
+        </svg>
+      </button>
+      {# Piste des avis #}
+      <div id="avis-track" class="flex gap-4 overflow-x-auto scroll-smooth snap-x snap-mandatory pb-2 scrollbar-hide">
+        {% for a in avis|default([
+          {auteur: 'LCA', date: 'Il y a 2 heures', note: 4, titre: 'Personnes très réactives', texte: "Personnes très réactives : j'avais avancé le rv, essai d..."},
+          {auteur: 'Khiat', date: 'Il y a 3 heures', note: 5, titre: "Vente d'une voiture", texte: 'Tope 👍 merci'},
+          {auteur: 'Alain Nahmani', date: 'Il y a 7 heures', note: 4, titre: 'En confiance', texte: "L'acheteur était confiant en cherchant un véhicule sur l..."},
+          {auteur: 'Nassim CHIB...', date: 'Il y a 7 heures', note: 5, titre: 'Vente de véhicule', texte: 'Superbe!!!'},
+          {auteur: 'Q F', date: 'Il y a 11 heures', note: 5, titre: 'Vente rapide et confor...', texte: "Vente rapide Sérieux de l'acheteur"},
+        ]) %}
+          <div class="snap-start shrink-0 w-64 bg-gray-50 border border-gray-200 rounded-xl p-5">
+
+            <div class="flex items-center gap-2 mb-3">
+              <div class="flex gap-0.5">
+                {% for i in 1..5 %}
+                  <span class="w-4 h-4 flex items-center justify-center {{ i <= a.note ? 'bg-green-500' : 'bg-gray-300' }}">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" class="w-3 h-3 fill-white">
+                      <path d="M10 15.27l-5.18 3.05 1.4-5.97L1.5 7.97l6.09-.52L10 2l2.41 5.45 6.09.52-4.72 4.38 1.4 5.97z"/>
+                    </svg>
+                  </span>
+                {% endfor %}
+              </div>
+              <span class="inline-flex items-center gap-1 text-xs text-gray-500">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5 text-gray-400" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                  <circle cx="12" cy="12" r="10"></circle>
+                  <path d="M9 12l2 2 4-4"></path>
+                </svg>
+                Vérifié
+              </span>
+            </div>
+
+            <p class="font-bold text-gray-900 text-sm mb-1">{{ a.titre }}</p>
+            <p class="text-gray-600 text-sm mb-6 line-clamp-3">{{ a.texte }}</p>
+
+            <p class="text-xs text-gray-500">
+              <span class="font-medium text-gray-700">{{ a.auteur }}</span>, {{ a.date }}
+            </p>
+          </div>
+        {% endfor %}
+      </div>
+      {# Flèche droite #}
+      <button
+        type="button"
+        onclick="document.getElementById('avis-track').scrollBy({left: 300, behavior: 'smooth'})"
+        class="hidden md:flex absolute -right-5 top-1/2 -translate-y-1/2 z-10 w-9 h-9 items-center justify-center rounded-full border border-gray-300 bg-white text-gray-500 hover:bg-gray-50"
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M9 18l6-6-6-6"></path>
+        </svg>
+      </button>
+    </div>
+    {# Résumé note globale #}
+    <div class="text-center mt-6">
+      <p class="text-sm text-gray-700">
+        Une note de <span class="font-bold">{{ note|default('4.4') }}</span> sur 5 sur la base de
+        <a href="#" class="underline font-medium">{{ totalAvis|default('20 566')|number_format(0, ',', ' ') }} avis</a>.
+        Nos avis 4 et 5 étoiles.
+      </p>
+      <div class="flex items-center justify-center gap-1.5 mt-2 text-sm font-semibold text-gray-800">
+        <span class="w-4 h-4 flex items-center justify-center bg-green-500">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" class="w-3 h-3 fill-white">
+            <path d="M10 15.27l-5.18 3.05 1.4-5.97L1.5 7.97l6.09-.52L10 2l2.41 5.45 6.09.52-4.72 4.38 1.4 5.97z"/>
+          </svg>
+        </span>
+        Avis clients vérifiés
+      </div>
+    </div>
+  </div>
+</section>
+<style>
+  .scrollbar-hide::-webkit-scrollbar { display: none; }
+  .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+</style>

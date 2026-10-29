@@ -1,0 +1,37 @@
+{% extends 'base.html.twig' %}
+{% block title %}Nous contacter — AutoPro{% endblock %}
+
+{% block body %}
+<section class="max-w-7xl mx-auto px-5 pt-16 pb-10">
+    <div class="max-w-2xl">
+        <span class="text-luxe-orange text-xs font-extrabold uppercase tracking-widest">Contact</span>
+        <h1 class="mt-4 text-5xl font-extrabold">Parlons de votre projet automobile.</h1>
+        <p class="mt-4 text-luxe-muted text-lg">
+            Une question sur un véhicule, une réservation, une reprise ou un financement ? Notre équipe vous
+            répond.
+        </p>
+    </div>
+    <div class="grid lg:grid-cols-3 gap-8 mt-12">
+       {{ form_start(form, {attr: {enctype: 'multipart/form-data','class':'lg:col-span-2 border border-luxe-border rounded-xl p-8 grid md:grid-cols-2 gap-5'}}) }}
+                {{ form_row(form._token) }}
+                {{ form_row(form.firstname) }}
+                {{ form_row(form.lastname) }}
+                {{ form_row(form.email) }}
+                {{ form_row(form.phone) }}
+                {{ form_row(form.asking) }}
+                {{ form_row(form.message) }}
+                {{ form_row(form.file) }}
+                <button class="md:col-span-2 bg-luxe-orange hover:bg-luxe-orange-dark text-white rounded-xl px-6 py-3 font-bold">
+                    Envoyer ma demande
+                </button>
+        {{ form_end(form,{render_rest:false}) }}
+        <aside class="bg-luxe-black-alt rounded-xl p-8">
+            <h2 class="font-extrabold text-xl">AUTOPRO EXPRESS</h2>
+            <p class="mt-5 text-sm leading-7">
+                <b>Téléphone</b><br />{{ site_setting('company_phone') }}<br /><br /><b>E-mail</b
+                ><br />{{ site_setting('company_email') }}<br /><br /><b>Adresse</b><br />{{ site_setting('company_address') }}<br /><br /><b>Horaires</b><br /> {{ site_setting('open_hour') }}
+            </p>
+        </aside>
+    </div>
+</section>
+{% endblock %}

@@ -1,0 +1,776 @@
+<!doctype html>
+<html lang="fr">
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <title>Procès-verbal de contrôle technique</title>
+        <style>
+            @page {
+                size: A4;
+                margin: 8mm;
+            }
+            * {
+                box-sizing: border-box;
+            }
+            body {
+                margin: 0;
+                background: #d7d7d7;
+                font-family: Arial, Helvetica, sans-serif;
+                color: #111;
+            }
+            .paper {
+                position: relative;
+                width: 210mm;
+                min-height: 297mm;
+                margin: 20px auto;
+                padding: 7mm;
+                overflow: hidden;
+                background: linear-gradient(
+                        14deg,
+                        rgba(0, 0, 0, 0.05) 0 1px,
+                        transparent 1px 48%,
+                        rgba(255, 255, 255, 0.55) 49%,
+                        transparent 51%
+                    ),
+                    linear-gradient(
+                        103deg,
+                        transparent 0 45%,
+                        rgba(0, 0, 0, 0.035) 46%,
+                        rgba(255, 255, 255, 0.55) 48%,
+                        transparent 50%
+                    ),
+                    radial-gradient(ellipse at 28% 18%, rgba(0, 0, 0, 0.055), transparent 26%),
+                    radial-gradient(ellipse at 70% 42%, rgba(255, 255, 255, 0.7), transparent 28%),
+                    radial-gradient(ellipse at 36% 74%, rgba(0, 0, 0, 0.04), transparent 25%), #f4f2eb;
+                box-shadow: 0 8px 24px rgba(0, 0, 0, 0.28);
+            }
+            .paper:before,
+            .paper:after {
+                content: "";
+                position: absolute;
+                inset: -10%;
+                pointer-events: none;
+            }
+            .paper:before {
+                background: linear-gradient(
+                        79deg,
+                        transparent 0 36%,
+                        rgba(0, 0, 0, 0.06) 37%,
+                        rgba(255, 255, 255, 0.72) 38.5%,
+                        transparent 40%
+                    ),
+                    linear-gradient(
+                        165deg,
+                        transparent 0 54%,
+                        rgba(0, 0, 0, 0.05) 55%,
+                        rgba(255, 255, 255, 0.6) 56.5%,
+                        transparent 58%
+                    ),
+                    linear-gradient(
+                        8deg,
+                        transparent 0 67%,
+                        rgba(0, 0, 0, 0.045) 68%,
+                        rgba(255, 255, 255, 0.55) 69.4%,
+                        transparent 71%
+                    );
+                opacity: 0.75;
+                mix-blend-mode: multiply;
+            }
+            .paper:after {
+                background: radial-gradient(
+                        ellipse at 54% 48%,
+                        transparent 0 12%,
+                        rgba(0, 0, 0, 0.025) 14%,
+                        transparent 17%
+                    ),
+                    radial-gradient(ellipse at 20% 86%, transparent 0 10%, rgba(0, 0, 0, 0.03) 12%, transparent 16%);
+            }
+
+            .top {
+                display: grid;
+                grid-template-columns: 1fr 1.7fr 1fr;
+                align-items: start;
+                gap: 6px;
+                position: relative;
+                z-index: 1;
+            }
+            .barcode-wrap {
+                font-size: 10px;
+            }
+            .barcode {
+                width: 48mm;
+                height: 12mm;
+                margin: 0 auto 2mm;
+                background: repeating-linear-gradient(
+                    90deg,
+                    #111 0 1px,
+                    transparent 1px 2px,
+                    #111 2px 4px,
+                    transparent 4px 6px,
+                    #111 6px 7px,
+                    transparent 7px 10px
+                );
+            }
+            .title {
+                text-align: center;
+                font-weight: 700;
+                letter-spacing: 0.5px;
+                font-size: 18px;
+                line-height: 1.15;
+                margin-top: 6mm;
+            }
+            .brand {
+                text-align: right;
+                font-weight: 900;
+                font-size: 20px;
+                letter-spacing: 1px;
+                margin-top: 1mm;
+            }
+            .brand span {
+                display: inline-block;
+                color: #111;
+            }
+            .brand b {
+                color: #f0a400;
+            }
+            .brand small {
+                display: block;
+                font-size: 10px;
+                font-weight: 700;
+                letter-spacing: 0.6px;
+                margin-top: 2px;
+            }
+
+            .row3 {
+                display: grid;
+                grid-template-columns: 1.2fr 1.2fr 1fr;
+                margin-top: 5px;
+            }
+            .row3 > div {
+                border: 1px solid #222;
+                background: #faf9f4;
+                padding: 4px 7px;
+                min-height: 33px;
+                text-align: center;
+            }
+            .row3 .cap {
+                display: block;
+                margin: -4px -7px 3px;
+                padding: 2px 5px;
+                background: #f3e49c;
+                font-size: 8px;
+                font-weight: 800;
+            }
+
+            .main {
+                display: grid;
+                grid-template-columns: 43% 57%;
+
+                margin-top: 0;
+                position: relative;
+                z-index: 1;
+            }
+            .left,
+            .right {
+
+            }
+            .right .box, .right .box-title {
+                  border-radius: 10px 10px 0 0;
+            }
+            
+            .box-title {
+                background: #f0df8a;
+                text-align: center;
+                font-weight: 800;
+                font-size: 9px;
+                padding: 3px 5px;
+                border-bottom: 1px solid #222;
+            }
+            .floutter {
+                filter: blur(8px);
+            }
+            .box-title.orange {
+                background: #ee7b17;
+            }
+            .content {
+                padding: 5px 7px;
+                font-size: 9.5px;
+                line-height: 1.35;
+            }
+            .center {
+                text-align: center;
+            }
+            .big {
+                font-size: 12px;
+                font-weight: 700;
+            }
+            .minor {
+                min-height: 160px;
+            }
+            .minor strong {
+                display: block;
+                margin-bottom: 5px;
+            }
+            .field-grid {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 4px 6px;
+            }
+            .f {
+                border: 1px solid #b6b6b6;
+                border-radius: 6px;
+                min-height: 29px;
+                padding: 4px 6px;
+                background: rgba(255, 255, 255, 0.55);
+            }
+            .f label {
+                display: block;
+                font-size: 8px;
+                font-weight: 600;
+                color: #000;
+                margin-bottom: 2px;
+            }
+            .masquer-info {
+                filter: blur(6px);
+                opacity: 0.75;
+                user-select: none;
+                pointer-events: none;
+            }
+            .vehicle {
+                display: grid;
+                grid-template-columns: 1fr 1fr 1fr;
+                gap: 4px;
+            }
+            .span2 {
+                grid-column: span 2;
+            }
+            .span3 {
+                grid-column: span 3;
+            }
+            .km {
+                font-size: 13px;
+                font-weight: 700;
+                text-align: center;
+                padding: 14px 0;
+            }
+            .measures {
+
+                bottom: 0;
+                min-height: 250px;
+            }
+            .measures table {
+                width: 100%;
+                border-collapse: collapse;
+                font-size: 8.5px;
+            }
+            .measures th,
+            .measures td {
+                padding: 2px 3px;
+                text-align: center;
+            }
+            .measures td:first-child,
+            .measures th:first-child {
+                text-align: left;
+            }
+            .footer-space {
+                min-height: 115px;
+                border: 1px solid #222;
+                border-top: 0;
+                position: relative;
+                z-index: 1;
+            }
+            .stamp {
+                position: absolute;
+                left: 51mm;
+                bottom: 22mm;
+                width: 30mm;
+                height: 26mm;
+                border: 3px solid #888;
+                border-radius: 5px;
+                background: linear-gradient(135deg, #d9c74d, #efe190);
+                opacity: 0.55;
+                box-shadow: 0 0 0 5px rgba(90, 90, 90, 0.13);
+            }
+            .fold {
+                position: absolute;
+                left: 0;
+                right: 0;
+                top: 51%;
+                height: 8px;
+                background: linear-gradient(
+                    to bottom,
+                    rgba(0, 0, 0, 0.07),
+                    rgba(255, 255, 255, 0.5),
+                    rgba(0, 0, 0, 0.035)
+                );
+                opacity: 0.65;
+                pointer-events: none;
+                z-index: 2;
+            }
+            @media print {
+                body {
+                    background: #fff;
+                }
+                .paper {
+                    margin: 0;
+                    box-shadow: none;
+                }
+            }
+
+            /* ===== Disposition fidèle à la capture ===== */
+            .left .box {
+                margin: 0;
+                border-left: 0;
+                border-right: 0;
+                border-radius: 10px 10px 0 0;
+            }
+            .left .box-title {
+                height: 14px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                padding: 1px 4px;
+                font-size: 8px;
+                line-height: 1;
+                border: 1px solid #222;
+                border-radius: 10px 10px 0 0;
+                background: #f0df8a;
+            }
+            .left .box-title.orange {
+                background: #ee7b17;
+            }
+            .left .box > .content,
+            .left .box > .km {
+                margin-top: -1px;
+                border-left: 1px solid #222;
+                border-right: 1px solid #222;
+                border-bottom: 1px solid #222;
+                border-radius: 0 0 10px 10px;
+                background: rgba(250, 249, 244, 0.78);
+            }
+            .left .center.big {
+                min-height: 34px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 11px;
+                padding: 6px;
+            }
+            .left .nature-next {
+                min-height: 58px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                text-align: center;
+                font-weight: 700;
+                font-size: 10px;
+            }
+            .centre-content {
+                min-height: 112px;
+                padding: 7px 8px 5px !important;
+                line-height: 1.45;
+            }
+            .centre-row {
+                display: grid;
+                grid-template-columns: 95px 1fr;
+                align-items: baseline;
+                margin-bottom: 3px;
+            }
+            .centre-row .lbl,
+            .controller-row .lbl {
+                font-size: 7.5px;
+                font-weight: 700;
+            }
+            .centre-row b,
+            .controller-row b {
+                font-size: 8.5px;
+            }
+            .centre-address {
+                text-align: center;
+                font-weight: 700;
+                margin-top: 8px;
+                margin-bottom: 5px;
+            }
+            .centre-phone {
+                text-align: center;
+                font-size: 8.5px;
+            }
+            .controller-content {
+                min-height: 78px;
+                display: grid;
+                grid-template-columns: 58% 42%;
+                padding: 6px 8px !important;
+            }
+            .controller-info {
+                display: flex;
+                flex-direction: column;
+                gap: 4px;
+            }
+            .controller-row {
+                display: grid;
+                grid-template-columns: 88px 1fr;
+                align-items: baseline;
+            }
+            .controller-signature {
+                min-height: 55px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                overflow: hidden;
+            }
+            .controller-signature .fake-signature {
+                font-family: "Brush Script MT", "Segoe Script", cursive;
+                font-size: 24px;
+                transform: rotate(-5deg);
+                white-space: nowrap;
+            }
+            .vehicle-content {
+                padding: 5px !important;
+            }
+            .vehicle {
+                grid-template-columns: 1fr 1fr 1fr;
+                gap: 3px;
+            }
+            .vehicle .f {
+                min-height: 36px;
+                padding: 3px 4px;
+                border-radius: 6px;
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                text-align: center;
+                background: rgba(255, 255, 255, 0.28);
+            }
+            .vehicle .f label {
+                font-size: 6.8px;
+                line-height: 1.05;
+                margin-bottom: 4px;
+                text-align: center;
+            }
+            .vehicle .f b {
+                font-size: 8.5px;
+                line-height: 1.05;
+            }
+            .left .km {
+                min-height: 47px;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                padding: 8px 0;
+                font-size: 11px;
+            }
+            .left .adverse-info {
+                height: 44px;
+                padding: 0 !important;
+            }
+
+            /* ===== Labels véhicule hors des cadres ===== */
+            .vehicle {
+                display: grid;
+                grid-template-columns: 1fr 1fr 1fr;
+                gap: 4px;
+            }
+
+            .vehicle-item {
+                display: flex;
+                flex-direction: column;
+                min-width: 0;
+            }
+
+            .vehicle-item.span2 {
+                grid-column: span 2;
+            }
+
+            .vehicle-item.span3 {
+                grid-column: span 2;
+            }
+
+            .vehicle-item > label {
+                display: block;
+                min-height: 14px;
+                margin: 0 0 2px;
+                font-size: 6.5px;
+                line-height: 1;
+                font-weight: 800;
+                color: #000;
+                text-align: center;
+            }
+
+            .vehicle-item .f {
+                min-height: 30px;
+                padding: 3px 4px;
+                border: 1px solid #b6b6b6;
+                border-radius: 6px;
+                background: rgba(255, 255, 255, 0.32);
+                font-weight: 800;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+
+                text-align: center;
+                overflow: hidden;
+            }
+
+            .vehicle-item .f b,
+            .vehicle-item .f .value {
+                font-size: 8.5px;
+                line-height: 1.05;
+                font-weight: 800;
+                word-break: break-word;
+            }
+
+            .vehicle-item .f.document {
+                min-height: 36px;
+                font-size: 8px;
+                font-weight: 400;
+            }
+
+            /* Neutralise l'ancien label interne si une occurrence subsiste */
+            .vehicle .f > label {
+                display: none !important;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="paper">
+            <div class="fold"></div>
+
+            <div class="top">
+                <div class="barcode-wrap">
+                    <div class="barcode"></div>
+                    N° d'imprimé : <span class="masquer-info">D&nbsp;&nbsp;103731421</span>
+                </div>
+                <div class="title">PROCÈS-VERBAL<br />DE CONTRÔLE TECHNIQUE</div>
+                <div class="brand">
+                    <span>
+                        <img src="data:image/png;base64,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
+                        " alt="logo" style="width:100%;height:80px;overflow:hidden;">
+                    </span>
+                </div>
+            </div>
+
+            <div class="row3">
+                <div><span class="cap">NATURE DU CONTRÔLE</span><b>Contrôle technique périodique</b></div>
+                <div><span class="cap">(3) DATE DU CONTRÔLE</span><b>{{vehicle.controlDate}}</b></div>
+                <div><span class="cap">N° DU PROCÈS-VERBAL</span><b class="masquer-info">20002614</b></div>
+            </div>
+
+            <div class="main">
+                <div class="left">
+                    <div class="box">
+                        <div class="box-title orange">(7) RÉSULTAT DU CONTRÔLE</div>
+                        <div class="content center big">Favorable</div>
+                    </div>
+
+                    <div class="box">
+                        <div class="box-title">(8) LIMITE DE VALIDITÉ DU CONTRÔLE RÉALISÉ</div>
+                        <div class="content center big">{{vehicle.limitValiditeControl}}</div>
+                    </div>
+
+                    <div class="box">
+                        <div class="box-title">NATURE DU PROCHAIN CONTRÔLE</div>
+                        <div class="content nature-next">Contrôle technique périodique</div>
+                    </div>
+
+                    <div class="box ">
+                        <div class="box-title">IDENTIFICATION DU CENTRE DE CONTRÔLE</div>
+                        <div class="content centre-content masquer-info">
+                            <div class="centre-row"><span class="lbl">N° D'AGRÉMENT :</span><b>S084D144</b></div>
+                            <div class="centre-row">
+                                <span class="lbl">(9) RAISON SOCIALE :</span><b>SORGUES CONTROLE</b>
+                            </div>
+                            <div class="centre-row">
+                                <span class="lbl">(3) COORDONNÉES :</span><b>1171, Route d'Entraigues</b>
+                            </div>
+                            <div class="centre-address">84700 SORGUES</div>
+                            <div class="centre-phone">Tél : <b>04.90.16.04.73</b>&nbsp;&nbsp;&nbsp;&nbsp; Fax :</div>
+                        </div>
+                    </div>
+
+                    <div class="box">
+                        <div class="box-title">(9) IDENTIFICATION DU CONTRÔLEUR</div>
+                        <div class="content controller-content masquer-info">
+                            <div class="controller-info">
+                                <div class="controller-row">
+                                    <span class="lbl">NOM ET PRÉNOM :</span><b>MHIMDAT SOUFIAN</b>
+                                </div>
+                                <div class="controller-row">
+                                    <span class="lbl">N° D'AGRÉMENT :</span><b>084D1125</b>
+                                </div>
+                                <div class="controller-row"><span class="lbl">SIGNATURE :</span><span></span></div>
+                            </div>
+                            <div class="controller-signature"><span class="fake-signature">S. Mhimdat</span></div>
+                        </div>
+                    </div>
+
+                    <div class="box">
+                        <div class="box-title">IDENTIFICATION DU VÉHICULE</div>
+                        <div class="content vehicle-content">
+                            <div class="vehicle">
+                                <div class="vehicle-item">
+                                    <label>(2) Immatriculation et pays</label>
+                                    <div class="f"><b>{{vehicle.immatriculation}} (F)</b></div>
+                                </div>
+
+                                <div class="vehicle-item">
+                                    <label>Date d'immatriculation</label>
+                                    <div class="f"><b>{{vehicle.firstImmatriculationDate}}</b></div>
+                                </div>
+
+                                <div class="vehicle-item">
+                                    <label>Date de 1ère mise en circulation</label>
+                                    <div class="f"><b>{{vehicle.datePremiereMiseEnCirculation}}</b></div>
+                                </div>
+
+                                <div class="vehicle-item">
+                                    <label>Marque</label>
+                                    <div class="f"><b>{{vehicle.version}}</b></div>
+                                </div>
+
+                                <div class="vehicle-item span2">
+                                    <label>Désignation commerciale</label>
+                                    <div class="f"><b>{{site_setting('company_name')}}</b></div>
+                                </div>
+
+                                <div class="vehicle-item span2 ">
+                                    <label>(1) N° dans la série du type</label>
+                                    <div class="f"><b class="masquer-info"> {{ mask_vin(vehicle.vim) }}</b></div>
+                                </div>
+
+                                <div class="vehicle-item">
+                                    <label>(5) Catégorie internationale</label>
+                                    <div class="f"><b>{{vehicle.genreV}}</b></div>
+                                </div>
+
+                                <div class="vehicle-item">
+                                    <label>Genre</label>
+                                    <div class="f"><b>{{vehicle.genreVGC}}</b></div>
+                                </div>
+
+                                <div class="vehicle-item span2">
+                                    <label>Type/CNIT</label>
+                                    <div class="f"><b>{{vehicle.cnit}}</b></div>
+                                </div>
+
+                                <div class="vehicle-item">
+                                    <label>Énergie</label>
+                                    <div class="f"><b>{{vehicle.classeEnvironnementale}}</b></div>
+                                </div>
+
+                                <div class="vehicle-item span2">
+                                    <label>Document(s) présenté(s)</label>
+                                    <div class="f document">Certificat d'immatriculation</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="box">
+                        <div class="box-title">(4) KILOMÉTRAGE RELEVÉ</div>
+                        <div class="km">{{vehicle.kilometrageReleve}}</div>
+                    </div>
+
+                    <div class="box">
+                        <div class="box-title">INFORMATIONS SUR LE CONTRÔLE TECHNIQUE DÉFAVORABLE</div>
+                        <div class="content adverse-info"></div>
+                    </div>
+                </div>
+
+                <div class="right" style="position: relative !important">
+                    <div class="box minor"style="border-radius:  10px 10px 10px 10px;height:85%;border:1px solid black;  ">
+                        <div class="box-title orange">(6) DÉFAILLANCES ET NIVEAUX DE GRAVITÉ</div>
+                        <div class="content">
+                            <strong>DÉFAILLANCE(S) MINEURE(S):</strong>
+                            <b>3.5.1.a.1. LAVE-GLACE DU PARE-BRISE :</b> Mauvais fonctionnement<br />
+                            <b>8.2.2.2.d.1. OPACITÉ :</b> Connexion impossible sans dysfonctionnement du témoin OBD
+                        </div>
+                    </div>
+
+                    <div class="box measures" style="width: 100%; border-radius:  0 0 10px 10px;border:1px solid black;  ">
+                        <div class="box-title orange">MESURES RÉALISÉES ET VALEURS LIMITES CORRESPONDANTES</div>
+                        <div class="content">
+                        <table>
+    <tr>
+        <th></th>
+        <th colspan="2">AVANT</th>
+        <th colspan="2">ARRIÈRE</th>
+    </tr>
+    <tr>
+        <th></th>
+        <th>G</th>
+        <th>D</th>
+        <th>G</th>
+        <th>D</th>
+    </tr>
+
+    <tr>
+        <td>Ripage (-8 à +8 m/km)</td>
+        <td>-0,8 m/km</td>
+        <td></td>
+        <td></td>
+        <td></td>
+    </tr>
+
+    <tr>
+        <td>Dissymétrie suspension (≤30%)</td>
+        <td>6 %</td>
+        <td></td>
+        <td>5 %</td>
+        <td></td>
+    </tr>
+
+    <tr>
+        <td>Forces verticales</td>
+        <td>715 daN</td>
+        <td></td>
+        <td>510 daN</td>
+        <td></td>
+    </tr>
+
+    <tr>
+        <td>Forces de freinage</td>
+        <td>286 daN</td>
+        <td>278 daN</td>
+        <td>194 daN</td>
+        <td>188 daN</td>
+    </tr>
+
+    <tr>
+        <td>Déséquilibre (&lt;20%)</td>
+        <td></td>
+        <td>3 %</td>
+        <td></td>
+        <td>3 %</td>
+    </tr>
+
+    <tr>
+        <td>Taux d'efficacité globale (≥50%)</td>
+        <td colspan="4">76 %</td>
+    </tr>
+
+    <tr>
+        <td>Feux de croisement</td>
+        <td>-1,0 %</td>
+        <td>-1,1 %</td>
+        <td></td>
+        <td></td>
+    </tr>
+
+    <tr>
+        <td>Feux de brouillard avant</td>
+        <td>-1,5 %</td>
+        <td>-1,6 %</td>
+        <td></td>
+        <td></td>
+    </tr>
+</table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="footer-space"></div>
+            <div class="stamp"></div>
+        </div>
+    </body>
+</html>

@@ -1,0 +1,49 @@
+{% extends 'base.html.twig' %}
+{% block title %}{{vehicle.brand}}  — Photos supplémentaires{% endblock %}
+
+{% block body %}
+    <div class="max-w-6xl mx-auto px-6 py-8">
+        <nav class="text-xs text-luxe-muted mb-4">
+            <a href="{{ path('home') }}" class="hover:text-luxe-orange transition">Accueil</a>
+            <span class="mx-1">/</span>
+            <a href="{{ path('vehicle_detail', {slug: vehicle.slug}) }}" class="hover:text-luxe-orange transition">{{vehicle.brand}}</a>
+            <span class="mx-1">/</span>
+            <span>Photos supplémentaires</span>
+        </nav>
+        <h1 class="text-2xl font-display font-bold mb-1">Photos supplémentaires - {{vehicle.brand}}</h1>
+
+         {# ============= LEFT: GALLERY + DESCRIPTION ============= #}
+        <div  class="mt-10">
+            {% set imgs = vehicle.images %}
+            {% set imgsPlus = vehicle.imagesPlus %}
+            <div class="card-luxe overflow-hidden mb-3">
+                {% if imgs|length > 0 %}
+                    <img id="mainImg" src="{{ imgs[0].publicPath }}" alt="{{ vehicle.fullName }}" class="w-full object-cover">
+                {% else %}
+                    <div class="aspect-[3/2] flex items-center justify-center text-6xl text-luxe-muted">🚗</div>
+                {% endif %}
+            </div>
+            {% if imgs|length > 1 %}
+                <div class="grid grid-cols-4 gap-2 mb-6">
+                    {% for img in imgs|slice(0, 10) %}
+                        <button type="button" onclick="document.getElementById('mainImg').src='{{ img.publicPath }}'"
+                                class="card-luxe overflow-hidden aspect-video hover:border-luxe-orange transition thumb-btn {{ loop.first ? 'border-luxe-orange!important' : '' }}"
+                                data-index="{{ loop.index0 }}">
+                            <img src="{{ img.publicPath }}" alt="" class="w-full h-full object-cover" loading="lazy">
+                        </button>
+                    {% endfor %}
+                    {% for img in imgsPlus|slice(0, 10) %}
+                        <button type="button" onclick="document.getElementById('mainImg').src='{{ img.publicPath }}'"
+                                class="card-luxe overflow-hidden aspect-video hover:border-luxe-orange transition thumb-btn {{ loop.first ? 'border-luxe-orange!important' : '' }}"
+                                data-index="{{ loop.index0 }}">
+                            <img src="{{ img.publicPath }}" alt="" class="w-full h-full object-cover" loading="lazy">
+                        </button>
+                    {% endfor %}
+                </div>
+            {% endif %}
+    </div>
+
+    </div>
+
+
+{% endblock %}

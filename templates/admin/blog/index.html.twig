@@ -1,0 +1,63 @@
+{% extends 'admin/_layout.html.twig' %}
+{% block title %}Actualités — Admin{% endblock %}
+{% block body %}
+<div class="flex justify-between items-center mb-6">
+    <h1 class="text-2xl font-display font-bold">Actualités</h1>
+    <a href="{{ path('admin_blog_new') }}" class="btn-gold">+ Ajouter</a>
+</div>
+
+<div class="card-luxe overflow-x-auto">
+    <table class="w-full text-sm">
+        <thead class="text-luxe-muted uppercase text-xs tracking-widest">
+            <tr>
+                <th class="text-left">Logo</th>
+                <th class="text-left">Libellé</th>
+                <th>Courte Description</th>
+                <th>Public</th>
+                <th>Active</th>
+                <th class="text-right px-4">Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for b in blogs %}
+                <tr class="border-t border-luxe-border">
+                   <td>
+                        {% if b.frontImage %}
+                            <img src="{{ asset('uploads/blogs/' ~ b.frontImage) }}" alt="" class="w-14 h-14 object-contain rounded-lg bg-white/5 p-1">
+                        {% else %}
+                            <div class="w-14 h-14 rounded-lg bg-luxe-black-alt flex items-center justify-center text-luxe-muted text-xs">—</div>
+                        {% endif %}
+                    </td>
+                    <td class="font-semibold">{{ b.name }}</td>
+                    <td class="font-semibold">{{ b.shortDescription }}</td>
+                    <td>
+                        {% if b.showInFront %}
+                            <span class="text-green-400 text-xs">● Active</span>
+                        {% else %}
+                            <span class="text-luxe-muted text-xs">○ Inactive</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if b.active %}
+                            <span class="text-green-400 text-xs">● Active</span>
+                        {% else %}
+                            <span class="text-luxe-muted text-xs">○ Inactive</span>
+                        {% endif %}
+                    </td>
+                    <td class="text-right px-4">
+                        <div class="inline-flex gap-1 flex-wrap justify-end">
+                            <a href="{{ path('admin_blog_edit', {id: b.id}) }}" class="btn-outline text-xs py-1.5 px-3">Éditer</a>
+                            <form method="post" action="{{ path('admin_blog_delete', {id: b.id}) }}" class="inline" onsubmit="return confirm('Supprimer cette marque ?')">
+                                <input type="hidden" name="_token" value="{{ csrf_token('blog_delete_' ~ b.id) }}">
+                                <button class="btn-outline text-xs py-1.5 px-3 text-red-400 border-red-500/40">Suppr.</button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+            {% else %}
+                <tr><td colspan="6" class="px-4 py-8 text-center text-luxe-muted">Aucune actualités. Cliquez sur "Ajouter" pour commencer.</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

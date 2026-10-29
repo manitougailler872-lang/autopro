@@ -1,0 +1,16 @@
+
+{% set _size = size|default('md') %}
+{% set _dim = _size == 'sm' ? 'w-6 h-6' : (_size == 'lg' ? 'w-10 h-10' : 'w-8 h-8') %}
+{% set _text = _size == 'sm' ? 'text-sm' : (_size == 'lg' ? 'text-2xl' : 'text-lg') %}
+<nav class="bg-luxe-black border-b border-luxe-border sticky top-0 z-40 backdrop-blur" x-data="{open:false}">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+        <a href="{{ path('home') }}">
+             {% set logo =  site_setting('company_logo') %}
+                <img 
+                    src="{{ asset('uploads/logos/' ~ logo) }}" 
+                    alt="AUTOPRO" 
+                class="w-64 h-auto object-contain"
+                >
+            </a>
+    </div>
+</nav>

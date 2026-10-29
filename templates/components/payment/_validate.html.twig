@@ -1,0 +1,25 @@
+<!-- Étape 2a : paiement validé -->
+<div class="w-full max-w-[300px] hidden flex-col items-center" id="tdsSuccess">
+    <div
+        class="w-full bg-luxe-card border border-luxe-border rounded-2xl p-6 text-center shadow-[0_16px_40px_rgba(0,0,0,.16)]"
+    >
+        <div class="w-16 h-16 mx-auto mb-3.5 text-luxe-green-dark">
+            <svg viewBox="0 0 80 80" fill="none" class="w-full h-full">
+                <circle class="tds-check-circle" cx="40" cy="40" r="36" stroke="currentColor" stroke-width="4" />
+                <path
+                    class="tds-check-mark"
+                    d="M24 41 L35 52 L57 28"
+                    stroke="currentColor"
+                    stroke-width="5"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                />
+            </svg>
+        </div>
+        <div class="font-display font-extrabold text-lg mb-1.5">Paiement validé</div>
+        <div class="text-[13px] text-luxe-muted mb-5 leading-relaxed">
+            Votre réservation est confirmée.<br />{{ reservation.reservationFeeAmount|money_eur }} ont été débités avec
+            succès.
+        </div>
+    </div>
+</div>

@@ -1,0 +1,31 @@
+{% extends 'admin/_layout.html.twig' %}
+{% block title %}{{ is_new ? 'Nouvelle marque' : 'Éditer marque' }} — Admin{% endblock %}
+{% block body %}
+<h1 class="text-2xl font-display font-bold mb-6">{{ is_new ? 'Nouvelle marque' : brand.name }}</h1>
+
+<div class="grid lg:grid-cols-3 gap-6">
+    <div class="lg:col-span-2 card-luxe p-6">
+        {{ form_start(form, {attr: {enctype: 'multipart/form-data', novalidate: 'novalidate'}}) }}
+            <div class="space-y-4">
+                 {{ form_row(form._token) }}
+                {{ form_row(form.name) }}
+                {{ form_row(form.position) }}
+                {{ form_row(form.active) }}
+                {{ form_row(form.forPiece) }}
+                {{ form_row(form.isModel) }}
+                {{ form_row(form.logo) }}
+                {% if not is_new and brand.logoPath %}
+                    <div class="pt-2">
+                        <p class="text-xs text-luxe-muted mb-2">Logo actuel :</p>
+                        <img src="{{ brand.logoPath }}" alt="" class="w-24 h-24 object-contain rounded-lg bg-white/5 p-2">
+                    </div>
+                {% endif %}
+            </div>
+            <div class="mt-6 flex gap-3">
+                <button type="submit" class="btn-gold">{{ is_new ? 'Créer' : 'Enregistrer' }}</button>
+                <a href="{{ path('admin_brand_index') }}" class="btn-outline">Annuler</a>
+            </div>
+        {{ form_end(form,{render_rest:false}) }}
+    </div>
+</div>
+{% endblock %}

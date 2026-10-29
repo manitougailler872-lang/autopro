@@ -1,0 +1,73 @@
+{% extends 'base.html.twig' %}
+{% block title %}A propos — AutoPro{% endblock %}
+
+{% block body %}
+    <section class="bg-luxe-black-alt">
+        <div class="max-w-7xl mx-auto px-5  py-20 grid lg:grid-cols-2 gap-12 items-center">
+            <div class="mb-3">
+                <span class="text-luxe-orange text-xs font-extrabold uppercase tracking-widest">À propos</span>
+                <h1 class="mt-4 text-5xl font-extrabold">L’automobile, plus simple avec AUTOPRO EXPRESS.</h1>
+                <p class="mt-6 text-lg text-luxe-muted leading-8">
+                    Nous sélectionnons des véhicules d’occasion avec soin et vous accompagnons de la recherche
+                    jusqu’à la livraison, avec des solutions de reprise et de financement adaptées.
+                </p>
+                <div class="mt-8 flex gap-3">
+                    <a
+                        class="bg-luxe-orange hover:bg-luxe-orange-dark text-white px-6 py-3 rounded-xl font-bold"
+                        href="#"
+                        >Voir nos véhicules</a
+                    ><a class="border px-6 py-3 rounded-xl font-bold" href="{{path('contact')}}">Nous contacter</a>
+                </div>
+            </div>
+            <div class="bg-luxe-text text-white rounded-3xl p-10">
+                <div class="grid grid-cols-2 gap-8">
+                    <div class="bg-black p-4 rounded-xl">
+                        <div class="text-4xl font-extrabold">7000+</div>
+                        <p class="text-luxe-faint">véhicules disponibles chaque semaine</p>
+                    </div>
+                     <div class="bg-black p-4 rounded-xl">
+                        <div class="text-4xl font-extrabold">6–12</div>
+                        <p class="text-luxe-faint">mois de garantie selon véhicule</p>
+                    </div>
+                    <div class="bg-black p-4 rounded-xl">
+                        <div class="text-4xl font-extrabold">14 j</div>
+                        <p class="text-luxe-faint">de rétractation selon conditions</p>
+                    </div>
+                      <div class="bg-black p-4 rounded-xl">
+                        <div class="text-4xl font-extrabold">France</div>
+                        <p class="text-luxe-faint">livraison disponible</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="max-w-7xl mx-auto px-5 py-16">
+        <h2 class="text-3xl font-extrabold">Notre expertise à votre service</h2>
+        <div class="grid md:grid-cols-4 gap-5 mt-8">
+            <div class="border border-luxe-border rounded-2xl p-6">
+                <b>Le meilleur prix</b>
+                <p class="mt-2 text-sm text-luxe-muted">
+                    Une analyse objective des prix des véhicules pour vous aider.
+                </p>
+            </div>
+            <div class="border border-luxe-border rounded-2xl p-6">
+                <b>En toute sérénité</b>
+                <p class="mt-2 text-sm text-luxe-muted">
+                    Une visibilité complète sur l'historique du véhicule.
+                </p>
+            </div>
+            <div class="border border-luxe-border rounded-2xl p-6">
+                <b>Adapté à votre budget</b>
+                <p class="mt-2 text-sm text-luxe-muted">
+                    Un budget maîtrisé avec notre simulateur de financement.
+                </p>
+            </div>
+            <div class="border border-luxe-border rounded-2xl p-6">
+                <b>Vous conseiller</b>
+                <p class="mt-2 text-sm text-luxe-muted">
+                    Une projection claire sur les futurs entretiens à prévoir.
+                </p>
+            </div>
+        </div>
+    </section>
+{% endblock %}

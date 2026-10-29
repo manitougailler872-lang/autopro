@@ -1,0 +1,269 @@
+{% extends 'base_simple.html.twig' %}
+
+{% block title %}{{ vehicle.fullName }} — AutoPro{% endblock %}
+
+{% block meta_head %}
+    <link rel="canonical" href="{{ url('vehicle_detail', {slug: vehicle.slug}) }}">
+    <meta property="og:title" content="{{ vehicle.fullName }} — {{ vehicle.price|money_eur }}">
+    <meta property="og:description" content="{{ vehicle.description ? vehicle.description|slice(0,180) : '' }}">
+    {% if vehicle.primaryImage %}<meta property="og:image" content="{{ absolute_url(vehicle.primaryImage.publicPath) }}">{% endif %}
+{% endblock %}
+
+{% block body %}
+<div class="max-w-4xl relative mx-auto px-6 py-6">
+     {% if vehicle.vehicleType == 'CAR' %}
+        <a href="{{ path('find') }}" class="inline-flex items-center gap-2 text-xs text-luxe-muted hover:text-luxe-orange transition mb-6">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="w-4 h-4" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" clip-rule="evenodd" d="M14.7 5.3a1 1 0 010 1.4L9.4 12l5.3 5.3a1 1 0 01-1.4 1.4l-6-6a1 1 0 010-1.4l6-6a1 1 0 011.4 0Z"/></svg>
+            Retour à la recherche
+        </a>
+    {% else %}
+        <a href="{{ path('find') }}" class="inline-flex items-center gap-2 text-xs text-luxe-muted hover:text-luxe-orange transition mb-6">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="w-4 h-4" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" clip-rule="evenodd" d="M14.7 5.3a1 1 0 010 1.4L9.4 12l5.3 5.3a1 1 0 01-1.4 1.4l-6-6a1 1 0 010-1.4l6-6a1 1 0 011.4 0Z"/></svg>
+            Retour à la recherche
+        </a>
+    {% endif %}
+    <div class="grid  gap-6 mt-6">
+        {# ============= LEFT: GALLERY + DESCRIPTION ============= #}
+        <div>
+            {# PhoneCall Information #}
+            <div class="card-luxe p-6 mb-4">
+                <h2 class="font-display font-semibold mb-3">Message d'Appel</h2>
+                <p class="text-md text-muted leading-relaxed whitespace-pre-line">
+                   <b> "Premier message lorsque le client Appel"</b>
+                    Société <b class="text-luxe-text">AUTO PRO</b>, Bonjour, Mme Isabelle à l'écoute. 
+                    Que puis-je pour vous?
+                    Pourriez-vous me communiquer la réference de l'annonce s'il vous plait?
+
+                    <b>Une fois la référence communiquez par le client, répondre ceci:</b>
+                    Gardez l'écoute le temps que je vérifie la disponibilité du véhicule.
+
+                    <b>Une fois le véhicule trouvé, dire ceci au client:</b>
+                    Oui le véhicule est toujours disponible à la vente. Un acheteur potentiel avait initié une demande de réservation mais n'a toujours pas confirmé, donc le véhicule est disponible.
+                    Il est en parfait état,  la carroserie est en bonne état et l'entretien a été réalisé le mois dernier. 
+                    Les papiers du véhicule sont également à jour.
+
+                    Nous avons beaucoup de demandes concernant le véhicule.
+                    Si vous etes vraiment interessé, nous pouvons vous envoyer dans votre boite mail toutes les informations  le concernant,
+                    y comprit les photos supplémentaires ainsi qu'un rapport d'entretien sans oublier le controle technique à jour.
+
+                    De là vous pouvez réservez le véhicule si cela répond à vos critères.
+
+                    <b>Si le client demande s'il peut venir au garage? Répondez ceci</b>
+                    <p>Oui, vous pouvez passer au garage sans problème mais la réservation doit etre faite avant. Cela nous permet d'etre sur que l'acheteur est sérieux
+                        et nous évite de perdre du temps car il y en a qui viennent juste visiter pour le plaisir. Merci pour votre compréhension.
+                    </p>
+                </p>
+            </div>
+            {% set imgs = vehicle.images %}
+            <div class="card-luxe overflow-hidden mb-3">
+                {% if imgs|length > 0 %}
+                    <img id="mainImg" src="{{ imgs[0].publicPath }}" alt="{{ vehicle.fullName }}" class="w-full object-cover">
+                {% else %}
+                    <div class="aspect-[3/2] flex items-center justify-center text-6xl text-luxe-muted">🚗</div>
+                {% endif %}
+            </div>
+            {% if imgs|length > 1 %}
+                <div class="grid grid-cols-4 gap-2 mb-6">
+                    {% for img in imgs|slice(0, 10) %}
+                        <button type="button" onclick="document.getElementById('mainImg').src='{{ img.publicPath }}'"
+                                class="card-luxe overflow-hidden aspect-video hover:border-luxe-orange transition thumb-btn {{ loop.first ? 'border-luxe-orange!important' : '' }}"
+                                data-index="{{ loop.index0 }}">
+                            <img src="{{ img.publicPath }}" alt="" class="w-full h-full object-cover" loading="lazy">
+                        </button>
+                    {% endfor %}
+                </div>
+            {% endif %}
+            <div>
+                <div class="flex items-start justify-between gap-3 mb-1">
+                    <h1 class="text-2xl font-display font-bold">{{ vehicle.brand }} {{ vehicle.model }}</h1>
+                    {% if vehicle.rating %}
+                        {% include 'components/_stars.html.twig' with {rating: vehicle.rating} %}
+                    {% endif %}
+                </div>
+                <p class="text-sm text-luxe-muted mb-4">{{ vehicle.version }}</p>
+                <div class="text-luxe-orange text-3xl font-display font-bold mb-6">{{ vehicle.price|money_eur }}</div>
+               
+                <dl class="text-sm space-y-3 mb-6">
+                    {% if vehicle.immatriculation %}<div class="flex justify-between"><dt class="text-luxe-muted">Immatriculation</dt><dd> {{ vehicle.immatriculation }}</dd></div>{% endif %}
+                    {% if vehicle.vim %}<div class="flex justify-between"><dt class="text-luxe-muted">Vin</dt><dd> {{ mask_vin(vehicle.vim) }}</dd></div>{% endif %}
+                    {% if vehicle.datePremiereMiseEnCirculation %}<div class="flex justify-between"><dt class="text-luxe-muted">Date de prémière mise en circulation</dt><dd> {{ vehicle.datePremiereMiseEnCirculation }}</dd></div>{% endif %}
+                    {% if vehicle.vehicleType == 'CAR' %}
+                        <div class="flex justify-between"><dt class="text-luxe-muted">Année</dt><dd>{{ vehicle.year }}</dd></div>
+                        <div class="flex justify-between"><dt class="text-luxe-muted">Kilométrage</dt><dd>{{ vehicle.mileage|mileage }}</dd></div>
+                        <div class="flex justify-between"><dt class="text-luxe-muted">Carburant</dt><dd>{{ vehicle.fuel.label }}</dd></div>
+                    {% endif %}
+                    {% if vehicle.transmission %}<div class="flex justify-between"><dt class="text-luxe-muted">Boîte</dt><dd>{{ vehicle.transmission }}</dd></div>{% endif %}
+                    {% if vehicle.power %}<div class="flex justify-between"><dt class="text-luxe-muted">Puissance ch</dt><dd>{{ vehicle.power }} ch</dd></div>{% endif %}
+                    {% if vehicle.powerCv %}<div class="flex justify-between"><dt class="text-luxe-muted">Puissance cv</dt><dd>{{ vehicle.powerCv }} cv</dd></div>{% endif %}
+                    {% if vehicle.color %}<div class="flex justify-between"><dt class="text-luxe-muted">Couleur</dt><dd>{{ vehicle.color }}</dd></div>{% endif %}
+                    {% if vehicle.doors %}<div class="flex justify-between"><dt class="text-luxe-muted">Nombre  de portes</dt><dd>{{ vehicle.doors }}</dd></div>{% endif %}
+                    {% if vehicle.places %}<div class="flex justify-between"><dt class="text-luxe-muted">Nombre de places</dt><dd>{{ vehicle.places }} cv</dd></div>{% endif %}
+                    {% if vehicle.category %}<div class="flex justify-between"><dt class="text-luxe-muted">Catégorie</dt><dd>{{ vehicle.category }}</dd></div>{% endif %}
+                    {% if vehicle.category %}<div class="flex justify-between"><dt class="text-luxe-muted">Catégorie</dt><dd>{{ vehicle.category }}</dd></div>{% endif %}
+                </dl>
+                {% if vehicle.vehicleType == 'CAR' %}
+                    {% include 'components/_garanties.html.twig' with {
+                        months: 12
+                    } only %}
+                {% else %}
+                    <div class="flex mb-4 items-start gap-1.5 text-sm text-luxe-muted">
+                        <i data-lucide="calendar-check" class="w-4 h-4 text-emerald-400 mt-0.5"></i>
+                        <span class="text-emerald-400">
+                            Livraison gratuite sous 1 ou 2 jours<br>
+                        </span>
+                    </div>
+                {% endif %}
+            </div>
+            {# Description #}
+            <div class="card-luxe p-6 mb-4">
+                <h2 class="font-display font-semibold mb-3">Description</h2>
+                <p class="text-sm text-muted leading-relaxed whitespace-pre-line">
+                    {{ vehicle.description ?: 'Très belle ' ~ vehicle.brand ~ ' ' ~ vehicle.model ~ ' en excellent état général. Entretien suivi, aucun frais à prévoir. Véhicule non fumeur.' }}
+                </p>
+            </div>
+            {% if vehicle.equipments is not empty %}
+                <div class="card-luxe bg-white p-6 mb-4">
+                    <h2 class="text-2xl font-bold text-neutral-900 mb-6">
+                        Equipements &amp; Options
+                    </h2>
+                    {% set equipments = vehicle.equipments|split(';') %}
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                        {% for eq in equipments %}
+                            <div class="flex items-center gap-3  rounded-lg px-4 py-1">
+                                <span class="w-5 h-5 shrink-0 rounded-full bg-luxe-orange flex items-center justify-center">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="m5 13 4 4L19 7" />
+                                    </svg>
+                                </span>
+                                <span class="text-neutral-700 text-[15px]">{{eq}}</span>
+                            </div>
+                    {% endfor  %}
+                    </div>
+                </div>
+             {% endif %}
+             {% if vehicle.interior is not empty or vehicle.exterior is not empty %}
+                <div class="card-luxe bg-white p-6 mb-4">
+                    <h2 class="text-2xl font-bold text-neutral-900 mb-6">
+                        Intérieur &amp; Extérieur
+                    </h2>
+                    {% set interiors = vehicle.interior|split(';') %}
+                    {% set exteriors = vehicle.exterior|split(';') %}
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                        {% for eq in interiors %}
+                            <div class="flex items-center gap-3  rounded-lg px-4 py-1">
+                                <span class="w-5 h-5 shrink-0 rounded-full bg-luxe-orange flex items-center justify-center">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="m5 13 4 4L19 7" />
+                                    </svg>
+                                </span>
+                                <span class="text-neutral-700 text-[15px]">{{eq}}</span>
+                            </div>
+                       {% endfor  %}
+                       {% for eq in exteriors %}
+                            <div class="flex items-center gap-3  rounded-lg px-4 py-1">
+                                <span class="w-5 h-5 shrink-0 rounded-full bg-luxe-orange flex items-center justify-center">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="m5 13 4 4L19 7" />
+                                    </svg>
+                                </span>
+                                <span class="text-neutral-700 text-[15px]">{{eq}}</span>
+                            </div>
+                       {% endfor  %}
+                    </div>
+                </div>
+             {% endif %}
+             {% if vehicle.security is not empty %}
+                <div class="card-luxe bg-white p-6 mb-4">
+                    <h2 class="text-2xl font-bold text-neutral-900 mb-6">
+                        Sécurité 
+                    </h2>
+                    {% set securitys = vehicle.security|split(';') %}
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                        {% for eq in securitys %}
+                            <div class="flex items-center gap-3  rounded-lg px-4 py-1">
+                                <span class="w-5 h-5 shrink-0 rounded-full bg-luxe-orange flex items-center justify-center">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="w-3.5 h-3.5 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="3">
+                                        <path stroke-linecap="round" stroke-linejoin="round" d="m5 13 4 4L19 7" />
+                                    </svg>
+                                </span>
+                                <span class="text-neutral-700 text-[15px]">{{eq}}</span>
+                            </div>
+                    {% endfor  %}
+                    </div>
+                </div>
+             {% endif %}
+           
+        </div>
+
+    </div>
+</div>
+
+{# ============= LIGHTBOX / ZOOM VIEWER ============= #}
+<div id="lightbox" class="fixed inset-0 bg-black/95 z-50 hidden items-center justify-center p-4" onclick="closeLightbox(event)">
+    <button type="button" class="absolute top-4 right-4 w-12 h-12 rounded-full bg-luxe-card border border-luxe-border text-white flex items-center justify-center hover:border-luxe-orange transition z-10" onclick="closeLightbox()" aria-label="Fermer">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="w-6 h-6" fill="currentColor"><path fill-rule="evenodd" clip-rule="evenodd" d="M5.3 5.3a1 1 0 011.4 0L12 10.6l5.3-5.3a1 1 0 111.4 1.4L13.4 12l5.3 5.3a1 1 0 01-1.4 1.4L12 13.4l-5.3 5.3a1 1 0 01-1.4-1.4L10.6 12 5.3 6.7a1 1 0 010-1.4Z"/></svg>
+    </button>
+    <div class="absolute top-4 left-4 flex gap-2 z-10">
+        <button type="button" class="w-10 h-10 rounded-full bg-luxe-card border border-luxe-border text-white flex items-center justify-center hover:border-luxe-orange transition" onclick="lightboxZoom(1.25)" aria-label="Agrandir">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="w-5 h-5" fill="currentColor"><path d="M10.75 4.5a6.25 6.25 0 104.44 10.65l4.28 4.28a.75.75 0 101.06-1.06l-4.28-4.28A6.25 6.25 0 0010.75 4.5Zm3 6.25h-2.25V8.5a.75.75 0 00-1.5 0v2.25H7.75a.75.75 0 000 1.5h2.25v2.25a.75.75 0 001.5 0v-2.25h2.25a.75.75 0 000-1.5Z"/></svg>
+        </button>
+        <button type="button" class="w-10 h-10 rounded-full bg-luxe-card border border-luxe-border text-white flex items-center justify-center hover:border-luxe-orange transition" onclick="lightboxZoom(0.8)" aria-label="Réduire">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="w-5 h-5" fill="currentColor"><path d="M10.75 4.5a6.25 6.25 0 104.44 10.65l4.28 4.28a.75.75 0 101.06-1.06l-4.28-4.28A6.25 6.25 0 0010.75 4.5Zm3 6.25H7.75a.75.75 0 000 1.5h6a.75.75 0 000-1.5Z"/></svg>
+        </button>
+        <button type="button" class="w-10 h-10 rounded-full bg-luxe-card border border-luxe-border text-white flex items-center justify-center hover:border-luxe-orange transition" onclick="lightboxRotate()" aria-label="Rotation 360">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="w-5 h-5" fill="currentColor"><path fill-rule="evenodd" clip-rule="evenodd" d="M12 4V2.75a.75.75 0 011.28-.53l3 3a.75.75 0 010 1.06l-3 3A.75.75 0 0112 8.75V7.5a4.5 4.5 0 00-4.5 4.5.75.75 0 01-1.5 0A6 6 0 0112 6V5.5V4Zm0 16v1.25a.75.75 0 01-1.28.53l-3-3a.75.75 0 010-1.06l3-3a.75.75 0 011.28.53V16.5a4.5 4.5 0 004.5-4.5.75.75 0 011.5 0 6 6 0 01-6 6V18v2Z"/></svg>
+        </button>
+    </div>
+    <img id="lightboxImg" src="" alt="" class="max-w-full max-h-full transition-transform duration-300 cursor-grab" style="transform: scale(1) rotate(0deg);" onclick="event.stopPropagation()">
+</div>
+
+<style>
+    .thumb-btn { border: 2px solid #2a2a2e; }
+    .thumb-btn.is-active { border-color: #ec5a13 !important; }
+    #lightbox.is-open { display: flex; }
+</style>
+
+<script>
+document.querySelectorAll('.thumb-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+        document.querySelectorAll('.thumb-btn').forEach(b => b.classList.replace('border-luxe-orange', 'border-luxe-border'));
+        btn.classList.replace('border-luxe-border', 'border-luxe-orange');
+    });
+});
+// ============ Gallery ============
+function swapMain(src, btn) {
+    document.getElementById('mainImg').src = src;
+    document.querySelectorAll('.thumb-btn').forEach(b => b.classList.remove('is-active'));
+    btn.classList.add('is-active');
+}
+
+document.querySelectorAll('#reception-mode input[type=radio]').forEach(r => {
+    r.addEventListener('change', () => r.closest('form').submit());
+});
+// ============ Lightbox / Zoom ============
+let _zoom = 1, _rotate = 0;
+function openLightbox(src) {
+    const lb = document.getElementById('lightbox');
+    const img = document.getElementById('lightboxImg');
+    _zoom = 1; _rotate = 0;
+    img.src = src;
+    img.style.transform = 'scale(1) rotate(0deg)';
+    lb.classList.add('is-open');
+    document.body.style.overflow = 'hidden';
+}
+function closeLightbox(e) {
+    if (e && e.target.tagName === 'IMG') return;
+    document.getElementById('lightbox').classList.remove('is-open');
+    document.body.style.overflow = '';
+}
+function lightboxZoom(factor) {
+    _zoom = Math.max(0.5, Math.min(4, _zoom * factor));
+    document.getElementById('lightboxImg').style.transform = `scale(${_zoom}) rotate(${_rotate}deg)`;
+}
+function lightboxRotate() {
+    _rotate = (_rotate + 90) % 360;
+    document.getElementById('lightboxImg').style.transform = `scale(${_zoom}) rotate(${_rotate}deg)`;
+}
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeLightbox(); });
+</script>
+{% endblock %}

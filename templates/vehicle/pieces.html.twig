@@ -1,0 +1,116 @@
+{% extends 'base.html.twig' %}
+{% block title %}Notre collection — AUTO PRO{% endblock %}
+
+{% block body %}
+    <div class="max-w-7xl mx-auto px-6 py-10">
+        <nav class="text-xs text-luxe-muted mb-4">
+            <a href="{{ path('home') }}" class="hover:text-luxe-orange transition">Accueil</a>
+            <span class="mx-1">/</span>
+            <span>Pièces Autos</span>
+        </nav>
+
+        <h1 class="text-3xl font-display font-bold mb-6">Pièces Autos</h1>
+
+        {# ================= SEARCH + FILTERS ON ONE LINE ================= #}
+        <form method="get" class="card-luxe p-3 mb-6">
+            <div class="flex flex-col lg:flex-row lg:items-center gap-2">
+                <input type="number" name="price_min" value="{{ price_min }}" placeholder="Prix min" class="input-luxe lg:w-28">
+                <input type="number" name="price_max" value="{{ price_max }}" placeholder="Prix max" class="input-luxe lg:w-28">
+
+                <button type="submit" class="btn-gold shrink-0">Rechercher</button>
+            </div>
+        </form>
+
+        <div class="grid grid-cols-1 lg:grid-cols-[280px_1fr] gap-6">
+            {# ============= SIDEBAR CATEGORIES + SORT ============= #}
+            <aside class="card-luxe p-6 h-fit lg:sticky lg:top-24">
+                <h2 class="text-xs font-display font-semibold uppercase tracking-widest mb-5">FILTRES</h2>
+                <form method="get" id="filter-form">
+                    {% if q %}<input type="hidden" name="q" value="{{ q }}">{% endif %}
+                    {% if price_min %}<input type="hidden" name="price_min" value="{{ price_min }}">{% endif %}
+                    {% if price_max %}<input type="hidden" name="price_max" value="{{ price_max }}">{% endif %}
+                   {# <div class="pb-5 mb-5 border-b border-luxe-border">
+                        <h3 class="text-xs uppercase tracking-wider text-luxe-muted mb-3">
+                            Catégorie
+                        </h3>
+                        <div class="space-y-3">
+                            {% for cat in ['Citadine', 'Berline', 'SUV', '4x4', 'Utilitaire'] %}
+                                <label class="flex items-center justify-between gap-3 cursor-pointer group">
+                                    <span class="text-sm text-luxe-muted group-hover:text-white transition-colors">
+                                        {{ cat }}
+                                    </span>
+                                <span class="relative inline-flex items-center">
+                                <input
+                                    type="checkbox"
+                                    name="categories[]"
+                                    value="{{ cat }}"
+                                    {{ (categories ?? [])|filter(c => c == cat)|length > 0 ? 'checked' : '' }}
+                                    onchange="this.form.submit()"
+                                    class="peer sr-only"
+                                >
+
+                    #}{# Switch #}{#
+                    <span class="
+                        relative
+                        h-5 w-9
+                        rounded-full
+                        bg-white/10
+                        ring-1 ring-white/15
+                        transition-all duration-200
+
+                        peer-checked:bg-luxe-orange
+                        peer-checked:ring-luxe-orange
+
+                        peer-focus-visible:ring-2
+                        peer-focus-visible:ring-luxe-orange/50
+
+                        after:content-['']
+                        after:absolute
+                        after:left-[2px]
+                        after:top-[2px]
+                        after:h-4
+                        after:w-4
+                        after:rounded-full
+                        after:bg-white
+                        after:shadow-sm
+                        after:transition-transform
+                        after:duration-200
+
+                        peer-checked:after:translate-x-4
+                    "></span>
+                </span>
+
+                                </label>
+                            {% endfor %}
+                        </div>
+                    </div>#}
+                    <div>
+                        <h3 class="text-xs uppercase tracking-wider text-luxe-muted mb-3">Trier par</h3>
+                        <select name="sort" onchange="this.form.submit()" class="input-luxe">
+                            <option value="newest"     {{ sort == 'newest' ? 'selected' }}>Plus récent</option>
+                            <option value="price_asc"  {{ sort == 'price_asc' ? 'selected' }}>Prix croissant</option>
+                            <option value="price_desc" {{ sort == 'price_desc' ? 'selected' }}>Prix décroissant</option>
+                            <option value="rating"     {{ sort == 'rating' ? 'selected' }}>Meilleures notes</option>
+                        </select>
+                    </div>
+                    <a href="{{ path('vehicle_list') }}" class="btn-outline w-full text-center mt-6">Réinitialiser</a>
+                </form>
+            </aside>
+            {# ============= LISTING ============= #}
+            <div>
+                {% if vehicles|length == 0 %}
+                    <div class="text-center py-20 card-luxe">
+                        <p class="text-luxe-muted">Aucun pièces ne correspond à vos critères.</p>
+                        <a href="{{ path('vehicle_list') }}" class="text-luxe-orange text-sm hover:underline mt-2 inline-block">Réinitialiser les filtres</a>
+                    </div>
+                {% else %}
+                    <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-3 gap-4">
+                        {% for v in vehicles %}
+                         {% include 'components/_piece_card_v2.html.twig'  with {vehicle: v, cta: 'Réservez'} %}
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

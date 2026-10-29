@@ -1,0 +1,43 @@
+{% set img = vehicle.primaryImage %}
+{% set _cta = cta|default('Voir détails') %}
+<!-- Carte produit (à dupliquer) -->
+<article class="snap-start rounded-md  bg-white shrink-0 border border-gray-200 flex flex-col hover:shadow-md transition">
+    <!-- Image produit -->
+    <div class="h-50 flex items-center justify-center mb-3 relative">
+        {% if img %}
+            <img src="{{ img.publicPath }}" alt="{{ vehicle.fullName }}" class="w-full rounded-md  h-full object-cover group-hover:scale-105 transition-transform duration-500">
+        {% else %}
+            <img src="{{ asset('images/default_img.png') }}" alt="{{ vehicle.fullName }}" 
+            class="w-full h-full object-cover group-hover:scale-105 rounded-md transition-transform duration-500">
+        {% endif %}
+    </div>
+
+   <span class="p-4 d-block">
+    <!-- Nom produit -->
+    <h3 class="text-sm text-gray-800 font-medium leading-snug mb-1">
+       {{ vehicle.fullName }}
+    </h3>
+    <div class="text-xs text-gray-400 mb-2">Réf : {{ vehicle.originNumber}} </div>
+
+    <!-- Badges caractéristiques -->
+    <div class="flex items-center gap-1 mb-3 flex-wrap">
+        <span class="text-[10px] p-2 font-bold bg-gray-900 text-white px-1.5 py-0.5 rounded">C</span>
+        <span class="text-[10px] p-2 font-bold bg-gray-100 text-gray-600 px-1.5 py-0.5 rounded">67 dB</span>
+    </div>
+
+    <!-- Prix -->
+    <div class="text-xl font-bold text-gray-900">
+        {{vehicle.price|money_eur  }}
+    </div>
+    <div class="text-xs text-gray-500 mb-1">Prix par pièce</div>
+    <div class="text-xs text-gray-400 leading-snug mb-3">
+        Prix (20 % de TVA inclus), Hors
+        <a href="#" class="text-blue-600 hover:underline">frais de livraison</a>
+    </div>
+
+{# <!-- Bouton panier -->
+<button class="mt-auto mb-2 mx-2  bg-black text-white rounded-md py-2.5 flex items-center justify-center transition hover:bg-white hover:text-black hover:border hover:border-black-2">
+    Achetez
+</button> #}
+   </span>
+</article>

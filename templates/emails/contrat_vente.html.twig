@@ -1,0 +1,270 @@
+{#
+    templates/contract/contrat_vente.html.twig
+
+    Contrat de vente de véhicule d'occasion (vente à distance, vendeur pro -> consommateur), prévu pour être converti en PDF.
+    HTML simple à base de tableaux et de CSS 2.1 : compatible Dompdf, wkhtmltopdf et Chromium (pas de flex ni de grid).
+
+    Variables attendues (à adapter à tes entités) :
+      contract    : number, date, [balanceTerms, deliveryFees, registrationFees, legalGuaranteeYears,
+                     commercialGuaranteeMonths, returnCostsBy, refundDays]
+      reservation : number, date, deposit, depositRate, [deliveryMode ('delivery'|'pickup'), deliveryAddress]
+      vehicle     : reference, brand, model, category, plate, vin, firstRegistration, mileage, energy, gearbox,
+                    body, color, powerKw, powerHp, fiscalHp, price
+      customer    : firstName, lastName, address, postalCode, city, phone, email
+      seller      : name, legalForm, capital, rcs, vat, address, phone, email, representative, city,
+                    [dataEmail, mediator]
+#}
+{% macro money(v) %}{{ v|number_format(2, ',', ' ')|replace({' ': '&nbsp;'})|raw }}&nbsp;€{% endmacro %}
+{% import _self as fmt %}
+
+{% set v = vehicle %}
+{% set c = customer %}
+{% set s = seller %}
+{% set price = v.price %}
+{% set deposit = reservation.deposit %}
+{% set balance = price - deposit %}
+{% set depositRate = reservation.depositRate|default(20) %}
+{% set pickup = reservation.deliveryMode|default('delivery') == 'pickup' %}
+{% set deliveryAddress = reservation.deliveryAddress|default(c.address ~ ', ' ~ c.postalCode ~ ' ' ~ c.city) %}
+{% set contractDate = (contract.date|default('now'))|date('d/m/Y') %}
+{% set customerName = c.firstName ~ ' ' ~ c.lastName %}
+{% set sellerFooter = s.name ~ ', ' ~ s.legalForm ~ ' au capital de ' ~ s.capital ~ ' € | RCS ' ~ s.rcs ~ ' | ' ~ s.address %}
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>Contrat de vente n° {{ contract.number }}</title>
+    <style>
+        @page { margin: 26mm 18mm 20mm 18mm; }
+        * { box-sizing: border-box; }
+        body { margin: 0; font-family: "DejaVu Sans", Verdana, sans-serif; font-size: 8.2pt; line-height: 1.5; color: #000000; }
+
+        /* En-tête et pied de page répétés sur chaque page */
+        #topbar { position: fixed; top: -26mm; left: -18mm; right: -18mm; height: 5mm; background: #ED1719; }
+        #header { position: fixed; top: -19mm; left: 0; right: 0; height: 8mm; border-bottom: 0.6pt solid #E6E3DC; }
+        #header table { width: 100%; }
+        #header .logo { font-size: 13pt; font-weight: bold; color: #000000; }
+        #header .logo span { color: #ED1719; }
+        #header .ref { text-align: right; font-size: 7.5pt; color: #555555; vertical-align: bottom; }
+        #footer { position: fixed; bottom: -14mm; left: 0; right: 0; height: 8mm; border-top: 0.6pt solid #E6E3DC; font-size: 6.8pt; color: #555555; }
+        #footer table { width: 100%; }
+        #footer .page { text-align: right; }
+        .pagenum:before { content: counter(page); }
+
+        h1 { margin: 0 0 2pt; font-size: 17pt; line-height: 1.25; }
+        .subtitle { margin: 0 0 8pt; font-size: 8.5pt; color: #555555; }
+        p { margin: 0 0 4pt; text-align: justify; }
+        .lab { display: block; font-size: 7pt; color: #555555; }
+        .val { display: block; font-size: 8.4pt; font-weight: bold; }
+
+        /* Titres d'articles */
+        h2 { margin: 12pt 0 5pt; padding: 0 0 3pt; font-size: 9.6pt; line-height: 1.3; border-bottom: 0.6pt solid #E6E3DC; page-break-after: avoid; }
+        h2 span { color: #ED1719; }
+
+        /* Tableaux */
+        table { border-collapse: collapse; }
+        table.meta, table.grid, table.price, table.parties, table.sign { width: 100%; }
+        table.meta td { width: 25%; padding: 6pt 8pt; background: #F5F7F9; border: 0.6pt solid #E6E3DC; vertical-align: top; }
+        table.parties td { width: 50%; padding: 8pt 9pt 9pt; border: 0.6pt solid #E6E3DC; vertical-align: top; line-height: 1.6; }
+        table.parties h3 { margin: 0 0 3pt; font-size: 9pt; }
+        table.grid td { width: 50%; padding: 5pt 7pt; border: 0.6pt solid #E6E3DC; vertical-align: top; }
+        table.price td { padding: 6pt 9pt; border: 0.6pt solid #E6E3DC; }
+        table.price td.amount { width: 30%; text-align: right; font-weight: bold; }
+        table.price tr.total td { background: #F5F7F9; }
+        table.price tr.total td.amount { font-size: 10pt; color: #ED1719; }
+        table.sign td { width: 50%; padding: 8pt 9pt; border: 0.6pt solid #E6E3DC; vertical-align: top; }
+        table.sign .zone { height: 46pt; }
+        .muted { color: #555555; font-size: 7.4pt; }
+        .keep { page-break-inside: avoid; }
+        .annex { page-break-before: always; }
+        table.line { width: 100%; margin-bottom: 12pt; }
+        table.line td { padding: 0; vertical-align: bottom; }
+        table.line td.fill { border-bottom: 0.6pt solid #555555; }
+    </style>
+</head>
+<body>
+
+    <div id="topbar"></div>
+    <div id="header">
+        <table>
+            <tr>
+                <td class="logo">AUTO<span>PRO</span></td>
+                <td class="ref">Contrat de vente n° {{ contract.number }}</td>
+            </tr>
+        </table>
+    </div>
+    <div id="footer">
+        <table>
+            <tr>
+                <td>{{ sellerFooter }}</td>
+                <td class="page">Page <span class="pagenum"></span></td>
+            </tr>
+        </table>
+    </div>
+
+    <h1>Contrat de vente de véhicule d'occasion</h1>
+    <p class="subtitle">Vente conclue à distance entre un vendeur professionnel et un consommateur</p>
+
+    <table class="meta">
+        <tr>
+            <td><span class="lab">Contrat n°</span><span class="val">{{ contract.number }}</span></td>
+            <td><span class="lab">Date</span><span class="val">{{ contractDate }}</span></td>
+            <td><span class="lab">Bon de réservation</span><span class="val">{{ reservation.number }}</span></td>
+            <td><span class="lab">Réf. véhicule</span><span class="val">{{ v.reference }}</span></td>
+        </tr>
+    </table>
+
+    <div style="height: 10pt;"></div>
+
+    {# ===== PARTIES ===== #}
+    <table class="parties">
+        <tr>
+            <td>
+                <h3>Le Vendeur</h3>
+                <b>{{ s.name }}</b><br>
+                {{ s.legalForm }} au capital de {{ s.capital }} €<br>
+                RCS {{ s.rcs }} | TVA {{ s.vat }}<br>
+                {{ s.address }}<br>
+                {{ s.phone }} | {{ s.email }}<br>
+                Représentée par {{ s.representative }}
+            </td>
+            <td>
+                <h3>L'Acheteur</h3>
+                <b>{{ customerName }}</b><br>
+                {{ c.address }}, {{ c.postalCode }} {{ c.city }}<br>
+                {{ c.phone }}<br>
+                {{ c.email }}<br>
+                Agissant en qualité de consommateur
+            </td>
+        </tr>
+    </table>
+
+    {# ===== ARTICLE 1 ===== #}
+    <h2><span>Article 1</span>&nbsp;&nbsp;Désignation du véhicule</h2>
+    <p>Le Vendeur vend à l'Acheteur, qui l'accepte, le véhicule d'occasion suivant :</p>
+    <table class="grid">
+        <tr>
+            <td><span class="lab">Marque et modèle</span><span class="val">{{ v.brand }} {{ v.model }}</span></td>
+            <td><span class="lab">Catégorie</span><span class="val">{{ v.category }}</span></td>
+        </tr>
+        <tr>
+            <td><span class="lab">Immatriculation</span><span class="val">{{ v.plate }}</span></td>
+            <td><span class="lab">N° de série (VIN)</span><span class="val">{{ v.vin }}</span></td>
+        </tr>
+        <tr>
+            <td><span class="lab">Première mise en circulation</span><span class="val">{{ v.firstRegistration|date('d/m/Y') }}</span></td>
+            <td><span class="lab">Kilométrage au compteur</span><span class="val">{{ v.mileage|number_format(0, ',', ' ')|replace({' ': '&nbsp;'})|raw }} km</span></td>
+        </tr>
+        <tr>
+            <td><span class="lab">Énergie</span><span class="val">{{ v.energy }}</span></td>
+            <td><span class="lab">Boîte de vitesses</span><span class="val">{{ v.gearbox }}</span></td>
+        </tr>
+        <tr>
+            <td><span class="lab">Carrosserie</span><span class="val">{{ v.body }}</span></td>
+            <td><span class="lab">Couleur</span><span class="val">{{ v.color }}</span></td>
+        </tr>
+        <tr>
+            <td><span class="lab">Puissance</span><span class="val">{{ v.powerKw }} kW / {{ v.powerHp }} ch / {{ v.fiscalHp }} cv</span></td>
+            <td><span class="lab">Référence AutoPro</span><span class="val">{{ v.reference }}</span></td>
+        </tr>
+    </table>
+    <p style="margin-top: 4pt;">Le kilométrage est celui relevé au compteur à la date de signature du présent contrat. Le rapport d'entretien et, le cas échéant, le procès-verbal du contrôle technique sont remis à l'Acheteur.</p>
+
+    {# ===== ARTICLE 2 ===== #}
+    <h2><span>Article 2</span>&nbsp;&nbsp;Prix et modalités de paiement</h2>
+    <table class="price">
+        <tr><td>Prix de vente TTC</td><td class="amount">{{ fmt.money(price) }}</td></tr>
+        <tr><td>Acompte versé à la réservation ({{ depositRate }} %)</td><td class="amount">{{ fmt.money(deposit) }}</td></tr>
+        <tr class="total"><td><b>Solde à payer</b></td><td class="amount">{{ fmt.money(balance) }}</td></tr>
+    </table>
+    <p style="margin-top: 5pt;">2.1 L'acompte est réglé par virement bancaire aux coordonnées indiquées dans le bon de réservation. Il garantit l'intention d'achat de l'Acheteur, réserve le véhicule à son nom jusqu'à sa visite ou sa livraison, et est déduit du prix total.</p>
+    <p>2.2 Le solde est payable {{ contract.balanceTerms|default("avant la remise du véhicule") }}, par virement bancaire, selon les modalités communiquées par le Vendeur.</p>
+    <p>2.3 Frais de livraison : {{ contract.deliveryFees|default("inclus dans le prix") }}. Frais d'établissement du certificat d'immatriculation : {{ contract.registrationFees|default("à la charge de l'Acheteur") }}.</p>
+
+    {# ===== ARTICLE 3 ===== #}
+    <h2><span>Article 3</span>&nbsp;&nbsp;Livraison et remise du véhicule</h2>
+    {% if pickup %}
+        <p>3.1 Le véhicule est retiré par l'Acheteur à l'adresse suivante : {{ s.address }}, sur rendez-vous convenu avec le Vendeur.</p>
+    {% else %}
+        <p>3.1 Le véhicule est livré à l'adresse suivante : {{ deliveryAddress }}. Le délai moyen de livraison est de 3 jours à compter de la commande, sur un créneau d'une heure convenu avec le transporteur. À défaut de date convenue, la livraison intervient au plus tard 30 jours après la conclusion du contrat.</p>
+    {% endif %}
+    <p>3.2 L'Acheteur contrôle le véhicule à la remise des clés. Les éventuelles réserves sont consignées sur le procès-verbal de livraison, signé par les deux parties (ou par le transporteur pour le compte du Vendeur).</p>
+    <p>3.3 Les risques sont transférés à l'Acheteur à la remise du véhicule. La propriété lui est transférée après paiement intégral du prix.</p>
+
+    {# ===== ARTICLE 4 ===== #}
+    <h2><span>Article 4</span>&nbsp;&nbsp;Documents remis</h2>
+    <p>Le Vendeur remet à l'Acheteur : le certificat d'immatriculation, le certificat de cession, le certificat de situation administrative, le rapport d'entretien, le procès-verbal de contrôle technique de moins de 6 mois (lorsqu'il est exigé) et le certificat de garantie commerciale. L'Acheteur effectue la demande de changement de titulaire du certificat d'immatriculation dans le délai d'un mois suivant la remise du véhicule.</p>
+
+    {# ===== ARTICLE 5 ===== #}
+    <h2><span>Article 5</span>&nbsp;&nbsp;Garanties</h2>
+    <p>5.1 <b>Garantie légale de conformité</b> (articles L.217-3 et suivants du Code de la consommation) : l'Acheteur bénéficie de cette garantie pour les défauts existant à la délivrance, pendant {{ contract.legalGuaranteeYears|default(2) }} {{ contract.legalGuaranteeYears|default(2) > 1 ? 'ans' : 'an' }} à compter de la délivrance.</p>
+    <p>5.2 <b>Garantie des vices cachés</b> (articles 1641 et suivants du Code civil) : elle s'applique dans les conditions prévues par la loi.</p>
+    <p>5.3 <b>Garantie commerciale</b> : le véhicule bénéficie d'une garantie de {{ contract.commercialGuaranteeMonths|default(12) }} mois, dans les conditions du certificat de garantie remis avec le véhicule. Elle s'ajoute aux garanties légales et ne les remplace pas.</p>
+
+    {# ===== ARTICLE 6 ===== #}
+    <h2><span>Article 6</span>&nbsp;&nbsp;Droit de rétractation</h2>
+    <p>6.1 Le contrat étant conclu à distance, l'Acheteur dispose d'un délai de <b>14 jours à compter de la réception du véhicule</b> pour se rétracter, sans avoir à justifier de motif. Il notifie sa décision au Vendeur par le formulaire joint en annexe ou par toute déclaration dénuée d'ambiguïté (courrier, e-mail).</p>
+    <p>6.2 Le Vendeur rembourse toutes les sommes versées dans un délai de 14 jours à compter de la rétractation. Les frais de renvoi du véhicule sont à la charge de {{ contract.returnCostsBy|default("l'Acheteur") }}.</p>
+
+    {# ===== ARTICLE 7 ===== #}
+    <h2><span>Article 7</span>&nbsp;&nbsp;Remboursement de l'acompte</h2>
+    <p>En cas de non-conclusion de la vente, l'acompte versé est remboursé intégralement à l'Acheteur, par virement, dans un délai de {{ contract.refundDays|default(14) }} jours.</p>
+
+    {# ===== ARTICLE 8 ===== #}
+    <h2><span>Article 8</span>&nbsp;&nbsp;Données personnelles</h2>
+    <p>Les données de l'Acheteur sont traitées par le Vendeur pour l'exécution du présent contrat et le respect de ses obligations légales. L'Acheteur dispose d'un droit d'accès, de rectification, d'effacement, d'opposition et de portabilité, qu'il peut exercer à l'adresse {{ s.dataEmail|default(s.email) }}. Pour en savoir plus, consulter la politique de confidentialité disponible sur le site www.autopro-reservation.fr.</p>
+
+    {# ===== ARTICLE 9 ===== #}
+    <h2><span>Article 9</span>&nbsp;&nbsp;Médiation et droit applicable</h2>
+    <p>Le présent contrat est soumis au droit français. En cas de litige, l'Acheteur peut saisir gratuitement le médiateur de la consommation : {{ s.mediator|default("[nom, adresse et site du médiateur]") }}, après avoir adressé une réclamation écrite au Vendeur. À défaut de solution amiable, les tribunaux compétents sont ceux prévus par la loi.</p>
+
+    {# ===== SIGNATURES ===== #}
+    <div class="keep" style="margin-top: 14pt;">
+        <p style="font-weight: bold;">Fait à {{ s.city|default('__________') }}, le {{ contractDate }}, en deux exemplaires originaux.</p>
+        <table class="sign">
+            <tr>
+                <td>
+                    <b>Le Vendeur</b><br>
+                    <span class="muted">{{ s.name }}, représenté par {{ s.representative }}</span><br><br>
+                    <span class="muted">Signature précédée de la mention manuscrite « Lu et approuvé, bon pour accord »</span>
+                    <div class="zone"></div>
+                </td>
+                <td>
+                    <b>L'Acheteur</b><br>
+                    <span class="muted">{{ customerName }}</span><br><br>
+                    <span class="muted">Signature précédée de la mention manuscrite « Lu et approuvé, bon pour accord »</span>
+                    <div class="zone"></div>
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    {# ===== ANNEXE : FORMULAIRE DE RETRACTATION ===== #}
+    <div class="annex">
+        <h1>Annexe : formulaire de rétractation</h1>
+        <p class="subtitle">À compléter et renvoyer uniquement si vous souhaitez vous rétracter du contrat.</p>
+
+        <p><b>À l'attention de :</b> {{ s.name }}, {{ s.address }}, {{ s.email }}</p>
+        <p>Je vous notifie par la présente ma rétractation du contrat portant sur la vente du véhicule ci-dessous :</p>
+        <table class="grid">
+            <tr>
+                <td><span class="lab">Contrat n°</span><span class="val">{{ contract.number }}</span></td>
+                <td><span class="lab">Immatriculation</span><span class="val">{{ v.plate }}</span></td>
+            </tr>
+            <tr>
+                <td><span class="lab">Commandé le</span><span class="val">{{ (reservation.date|default(contract.date|default('now')))|date('d/m/Y') }}</span></td>
+                <td><span class="lab">Reçu le</span><span class="val">____ / ____ / ________</span></td>
+            </tr>
+        </table>
+
+        <div style="height: 14pt;"></div>
+        <table class="line"><tr><td style="width: 52mm;">Nom du consommateur :</td><td class="fill">&nbsp;</td></tr></table>
+        <table class="line"><tr><td style="width: 52mm;">Adresse du consommateur :</td><td class="fill">&nbsp;</td></tr></table>
+        <table class="line"><tr><td style="width: 52mm;">Date :</td><td class="fill">&nbsp;</td></tr></table>
+        <table class="line"><tr><td style="width: 52mm;">Signature :</td><td class="fill">&nbsp;</td></tr></table>
+        <p class="muted">(signature uniquement en cas de notification du présent formulaire sur papier)</p>
+    </div>
+
+</body>
+</html>

@@ -1,0 +1,239 @@
+{% extends 'admin/_layout.html.twig' %}
+{% block title %}{{ is_new ? 'Nouveau véhicule' : 'Éditer véhicule' }} — Admin{% endblock %}
+{% block body %}
+<div class="flex items-center justify-between mb-6 flex-wrap gap-3">
+    <h1 class="text-2xl font-display font-bold">{{ is_new ? 'Nouveau véhicule' : vehicle.brand ~ ' ' ~ vehicle.model }}</h1>
+    {% if not is_new %}
+        <div class="text-sm flex items-center gap-2 flex-wrap">
+            <span class="text-luxe-muted text-xs">Lien public :</span>
+            <code class="text-luxe-orange text-xs font-mono">{{ url('vehicle_detail', {slug: vehicle.slug}) }}</code>
+            <button type="button" onclick="navigator.clipboard.writeText('{{ url('vehicle_detail', {slug: vehicle.slug})|e('js') }}');this.textContent='✓ Copié';setTimeout(()=>this.textContent='Copier lien',1500);" class="btn-outline text-xs py-1 px-3">Copier lien</button>
+            <a href="{{ path('vehicle_detail', {slug: vehicle.slug}) }}" target="_blank" class="btn-outline text-xs py-1 px-3">Ouvrir</a>
+        </div>
+    {% endif %}
+</div>
+
+<div class="grid lg:grid-cols-3 gap-6">
+    <div class="lg:col-span-2 card-luxe p-6">
+        {{ form_start(form, {attr: {enctype: 'multipart/form-data', novalidate: 'novalidate'}}) }}
+            {{ form_row(form._token) }}
+            {{ form_row(form.vehicleType) }}
+            <h3 class="text-xs uppercase tracking-widest text-luxe-orange mb-4">Identification</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                <div>{{ form_row(form.brand) }}</div>
+                {% if form.vehicleType is defined and form.vehicleType.vars.value == 'CAR' %}
+                    <div>{{ form_row(form.model) }}</div>
+                    <div>{{ form_row(form.version) }}</div>
+                    <div>{{ form_row(form.category) }}</div>
+                    <div>{{ form_row(form.vim) }}</div>
+                    <div>{{ form_row(form.immatriculation) }}</div>
+                    <div>{{ form_row(form.firstImmatriculationDate) }}</div>
+                    <div>{{ form_row(form.datePremiereMiseEnCirculation) }}</div>
+                {% else %}
+                    <div>{{ form_row(form.ean) }}</div>
+                    <div>{{ form_row(form.wvaNumber) }}</div>
+                    <div>{{ form_row(form.garnitureMaterial) }}</div>
+                    <div>{{ form_row(form.width) }}</div>
+                    <div>{{ form_row(form.widthTwo) }}</div>
+                    <div>{{ form_row(form.height) }}</div>
+                    <div>{{ form_row(form.heightTwo) }}</div>
+                    <div>{{ form_row(form.systemDeFreinage) }}</div>
+                    <div class="md:col-span-2">{{ form_row(form.originNumber) }}</div>
+                {% endif %}
+                <div class="md:col-span-2">{{ form_row(form.description) }}</div>
+            </div>
+            <h3 class="text-xs uppercase tracking-widest text-luxe-orange mb-4">Caractéristiques techniques</h3>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                {% if form.vehicleType is defined and form.vehicleType.vars.value == 'CAR' %}
+                    <div>{{ form_row(form.year) }}</div>
+                    <div>{{ form_row(form.mileage) }}</div>
+                    <div>{{ form_row(form.fuel) }}</div>
+                    <div>{{ form_row(form.power) }}</div>
+                    <div>{{ form_row(form.powerCv) }}</div>
+                    <div>{{ form_row(form.color) }}</div>
+                    <div>{{ form_row(form.doors) }}</div>
+                    <div>{{ form_row(form.places) }}</div>
+                    <div>{{ form_row(form.transmission) }}</div>
+                    <div>{{ form_row(form.equipments) }}</div>
+                    <div>{{ form_row(form.interior) }}</div>
+                    <div>{{ form_row(form.exterior) }}</div>
+                    <div>{{ form_row(form.security) }}</div>
+                    <div>{{ form_row(form.financialPrice) }}</div>
+                    <div>{{ form_row(form.emissionClass) }}</div>
+                    <div class="md:col-span-2">{{ form_row(form.history) }}</div>
+                    <div>{{ form_row(form.nbOwner) }}</div>
+                {% endif %}
+                <div>{{ form_row(form.rating) }}</div>
+            </div>
+            <h3 class="text-xs uppercase tracking-widest text-luxe-orange mb-4">Prix & publication</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                <div>{{ form_row(form.price) }}</div>
+                <div class="flex items-end pb-2">{{ form_row(form.published) }}</div>
+                <div class="flex items-end pb-2">{{ form_row(form.isAvailable) }}</div>
+                 <div class="flex items-end pb-2">{{ form_row(form.showInFirst) }}</div>
+                {% if form.vehicleType is defined and form.vehicleType.vars.value == 'CAR' %}
+                    <div class="flex items-end pb-2">{{ form_row(form.bestDeal) }}</div>
+                {% endif %}
+                <div class="flex items-end pb-2">{{ form_row(form.reserved) }}</div>
+                {% if form.vehicleType is defined and form.vehicleType.vars.value == 'CAR' %}
+                    <div>{{ form_row(form.bestDealPercent) }}</div>
+                {% endif %}
+                {# <div class="flex items-end pb-2">{{ form_row(form.isMinPrice) }}</div>
+                <div class="flex items-end pb-2">{{ form_row(form.isNewCollection) }}</div> #}
+            </div>
+            <h3 class="text-xs uppercase tracking-widest text-luxe-orange mb-4">Informations complémentaires</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                <div>{{ form_row(form.isAuction) }}</div>
+                <div class="flex items-end pb-2">{{ form_row(form.interiorMail) }}</div>
+                <div class="flex items-end pb-2">{{ form_row(form.exteriorMail) }}</div>
+                <div class="flex items-end pb-2">{{ form_row(form.securityMail) }}</div>
+                <div class="flex items-end pb-2">{{ form_row(form.historiqueMail) }}</div>
+            </div>
+            <h3 class="text-xs uppercase tracking-widest text-luxe-orange mb-4">Rapport d'entretien</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                <div class="flex pb-2">{{ form_row(form.dateEntretien) }}</div>
+                <div class="flex pb-2">{{ form_row(form.heureEntretien) }}</div>
+                <div class="flex pb-2">{{ form_row(form.rapportEntretien) }}</div>
+            </div>
+            <br/>
+            <h3 class="text-xs uppercase tracking-widest text-luxe-orange mb-4">Controle Technique</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 mb-6">
+                <div class="flex pb-2">{{ form_row(form.controlDate) }}</div>
+                <div class="flex pb-2">{{ form_row(form.limitValiditeControl) }}</div>
+                <div class="flex pb-2">{{ form_row(form.kilometrageReleve) }}</div>
+                <div class="flex pb-2">{{ form_row(form.cnit) }}</div>
+                <div class="flex pb-2">{{ form_row(form.genreV) }}</div>
+                <div class="flex pb-2">{{ form_row(form.genreVGC) }}</div>
+                <div class="flex pb-2">{{ form_row(form.tvv) }}</div>
+                <div class="flex pb-2">{{ form_row(form.normeEuro) }}</div>
+                <div class="flex pb-2">{{ form_row(form.genreVEuro) }}</div>
+                <div class="flex pb-2">{{ form_row(form.codeMoteur) }}</div>
+                <div class="flex pb-2">{{ form_row(form.cylinder) }}</div>
+                <div class="flex pb-2">{{ form_row(form.classeEnvironnementale) }}</div>
+            </div>
+            <br/>
+            {% if not is_new %}
+                <hr class="border-luxe-border mb-6">
+                <h3 class="text-xs uppercase tracking-widest text-luxe-orange mb-4">Photos</h3>
+                <div>
+                    <label class="form-label">Ajouter des photos (max {{ 10 - vehicle.images|length }} de plus)</label>
+                    <input type="file" name="images[]" multiple accept="image/jpeg,image/png,image/webp">
+                    <p class="text-xs text-luxe-muted mt-2">Toutes les images sont redimensionnées automatiquement à 1200×800 (3:2).</p>
+                </div>
+                <hr class="border-luxe-border mb-6">
+                <h3 class="text-xs uppercase tracking-widest text-luxe-orange mb-4">Photos Supplémentaires</h3>
+                <div>
+                    <label class="form-label">Ajouter des photos supplémentaires (max {{ 10 - vehicle.imagesPlus|length }} de plus)</label>
+                    <input type="file" name="imagesPlus[]" multiple accept="image/jpeg,image/png,image/webp">
+                    <p class="text-xs text-luxe-muted mt-2">Toutes les images sont redimensionnées automatiquement à 1200×800 (3:2).</p>
+                </div>
+                <hr class="border-luxe-border mb-6">
+                <h3 class="text-xs uppercase tracking-widest text-luxe-orange mb-4">Photos Mails</h3>
+                <div>
+                    <label class="form-label">Ajouter des photos mails (max {{ 6 - vehicle.imagesMail|length }} de plus)</label>
+                    <input type="file" name="imagesMail[]" multiple accept="image/jpeg,image/png,image/webp">
+                    <p class="text-xs text-luxe-muted mt-2">Toutes les images sont redimensionnées automatiquement à 1200×800 (3:2).</p>
+                </div>
+                <div>
+                    <label class="form-label">Controle Technique</label>
+                    {{ form_row(form.ctFile) }}
+                </div>
+            {% endif %}
+            <div class="mt-6 flex gap-3">
+                <button type="submit" class="btn-gold">{{ is_new ? 'Créer le véhicule' : 'Enregistrer' }}</button>
+                <a href="{{ path('admin_vehicle_index') }}" class="btn-outline">Annuler</a>
+            </div>
+            
+        {{ form_end(form,{render_rest: false}) }}
+    </div>
+
+    {% if not is_new %}
+        <aside class="card-luxe p-6 h-fit">
+            <h2 class="font-display font-semibold mb-4">Photos ({{ vehicle.images|length }}/10)</h2>
+            {% if vehicle.images|length == 0 %}
+                <p class="text-sm text-luxe-muted">Aucune photo pour l'instant.</p>
+            {% else %}
+                <div class="grid grid-cols-2 gap-3">
+                    {% for img in vehicle.images %}
+                        <div class="relative bg-luxe-black-alt border {{ img.primaryImage ? 'border-luxe-orange' : 'border-luxe-border' }} rounded-xl overflow-hidden">
+                            <img src="{{ img.publicPath }}" alt="" class="w-full aspect-[3/2] object-cover">
+                            {% if img.primaryImage %}
+                                <span class="absolute top-1 left-1 text-[10px] bg-luxe-orange text-white px-2 py-0.5 rounded-full">★ Principale</span>
+                            {% endif %}
+                            <div class="p-2 flex gap-1">
+                                {% if not img.primaryImage %}
+                                    <form method="post" action="{{ path('admin_vehicle_image_primary', {id: img.id,which:'default'}) }}" class="flex-1">
+                                        <input type="hidden" name="_token" value="{{ csrf_token('image_primary_' ~ img.id) }}">
+                                        <button class="btn-outline text-xs w-full py-1">★</button>
+                                    </form>
+                                {% endif %}
+                                <form method="post" action="{{ path('admin_vehicle_image_delete', {id: img.id,which:'default'}) }}" class="flex-1" onsubmit="return confirm('Supprimer cette photo ?')">
+                                    <input type="hidden" name="_token" value="{{ csrf_token('image_delete_' ~ img.id) }}">
+                                    <button class="btn-outline text-xs w-full py-1 text-red-400 border-red-500/40">×</button>
+                                </form>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+ <br/>  <br/> 
+            <h2 class="font-display font-semibold mb-4">Photos Plus ({{ vehicle.imagesPlus|length }}/10)</h2>
+            {% if vehicle.imagesPlus|length == 0 %}
+                <p class="text-sm text-luxe-muted">Aucune photo suplémentaire pour l'instant.</p>
+            {% else %}
+                <div class="grid grid-cols-2 gap-3">
+                    {% for img in vehicle.imagesPlus %}
+                        <div class="relative bg-luxe-black-alt border {{ img.primaryImage ? 'border-luxe-orange' : 'border-luxe-border' }} rounded-xl overflow-hidden">
+                            <img src="{{ img.publicPath }}" alt="" class="w-full aspect-[3/2] object-cover">
+                            {% if img.primaryImage %}
+                                <span class="absolute top-1 left-1 text-[10px] bg-luxe-orange text-white px-2 py-0.5 rounded-full">★ Principale</span>
+                            {% endif %}
+                            <div class="p-2 flex gap-1">
+                                {% if not img.primaryImage %}
+                                    <form method="post" action="{{ path('admin_vehicle_image_primary', {id: img.id,which:'plus'}) }}" class="flex-1">
+                                        <input type="hidden" name="_token" value="{{ csrf_token('image_primary_' ~ img.id) }}">
+                                        <button class="btn-outline text-xs w-full py-1">★</button>
+                                    </form>
+                                {% endif %}
+                                <form method="post" action="{{ path('admin_vehicle_image_delete', {id: img.id,which:'plus'}) }}" class="flex-1" onsubmit="return confirm('Supprimer cette photo ?')">
+                                    <input type="hidden" name="_token" value="{{ csrf_token('image_delete_' ~ img.id) }}">
+                                    <button class="btn-outline text-xs w-full py-1 text-red-400 border-red-500/40">×</button>
+                                </form>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+ <br/>  <br/> 
+             <h2 class="font-display font-semibold mb-4">Photos Mail ({{ vehicle.imagesPlus|length }}/10)</h2>
+            {% if vehicle.imagesMail|length == 0 %}
+                <p class="text-sm text-luxe-muted">Aucune photo mail pour l'instant.</p>
+            {% else %}
+                <div class="grid grid-cols-2 gap-3">
+                    {% for img in vehicle.imagesMail %}
+                        <div class="relative bg-luxe-black-alt border {{ img.primaryImage ? 'border-luxe-orange' : 'border-luxe-border' }} rounded-xl overflow-hidden">
+                            <img src="{{ img.publicPath }}" alt="" class="w-full aspect-[3/2] object-cover">
+                            {% if img.primaryImage %}
+                                <span class="absolute top-1 left-1 text-[10px] bg-luxe-orange text-white px-2 py-0.5 rounded-full">★ Principale</span>
+                            {% endif %}
+                            <div class="p-2 flex gap-1">
+                                {% if not img.primaryImage %}
+                                    <form method="post" action="{{ path('admin_vehicle_image_primary', {id: img.id,which:'mail'}) }}" class="flex-1">
+                                        <input type="hidden" name="_token" value="{{ csrf_token('image_primary_' ~ img.id) }}">
+                                        <button class="btn-outline text-xs w-full py-1">★</button>
+                                    </form>
+                                {% endif %}
+                                <form method="post" action="{{ path('admin_vehicle_image_delete', {id: img.id,which:'mail'}) }}" class="flex-1" onsubmit="return confirm('Supprimer cette photo ?')">
+                                    <input type="hidden" name="_token" value="{{ csrf_token('image_delete_' ~ img.id) }}">
+                                    <button class="btn-outline text-xs w-full py-1 text-red-400 border-red-500/40">×</button>
+                                </form>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+        </aside>
+ 
+    {% endif %}
+</div>
+{% endblock %}

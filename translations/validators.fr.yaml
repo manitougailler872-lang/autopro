@@ -1,0 +1,50 @@
+# Traductions Symfony validators/form errors — français
+# Placez ce fichier dans translations/validators.fr.yaml
+
+# ==================== NotBlank ====================
+"This value should not be blank.": "Cette valeur ne doit pas être vide."
+"This value should not be null.": "Cette valeur ne doit pas être nulle."
+
+# ==================== Type / Format ====================
+"This value is not a valid email address.": "Cette adresse e-mail n'est pas valide."
+"This value is not a valid URL.": "Cette URL n'est pas valide."
+"This value is not a valid date.": "Cette date n'est pas valide."
+"This value is not a valid time.": "Cette heure n'est pas valide."
+"This value is not a valid datetime.": "Cette date/heure n'est pas valide."
+"This value should be of type {{ type }}.": "Cette valeur doit être de type {{ type }}."
+"This value should be a valid number.": "Cette valeur doit être un nombre valide."
+"This value is not a valid IP address.": "Cette adresse IP n'est pas valide."
+
+# ==================== Length ====================
+"This value is too short. It should have {{ limit }} character or more.|This value is too short. It should have {{ limit }} characters or more.": "Cette valeur est trop courte. Elle doit contenir au moins {{ limit }} caractère.|Cette valeur est trop courte. Elle doit contenir au moins {{ limit }} caractères."
+"This value is too long. It should have {{ limit }} character or less.|This value is too long. It should have {{ limit }} characters or less.": "Cette valeur est trop longue. Elle doit contenir au maximum {{ limit }} caractère.|Cette valeur est trop longue. Elle doit contenir au maximum {{ limit }} caractères."
+"This value should have exactly {{ limit }} character.|This value should have exactly {{ limit }} characters.": "Cette valeur doit contenir exactement {{ limit }} caractère.|Cette valeur doit contenir exactement {{ limit }} caractères."
+
+# ==================== Range / Comparison ====================
+"This value should be {{ limit }} or more.": "Cette valeur doit être supérieure ou égale à {{ limit }}."
+"This value should be {{ limit }} or less.": "Cette valeur doit être inférieure ou égale à {{ limit }}."
+"This value should be greater than {{ compared_value }}.": "Cette valeur doit être supérieure à {{ compared_value }}."
+"This value should be greater than or equal to {{ compared_value }}.": "Cette valeur doit être supérieure ou égale à {{ compared_value }}."
+"This value should be less than {{ compared_value }}.": "Cette valeur doit être inférieure à {{ compared_value }}."
+"This value should be less than or equal to {{ compared_value }}.": "Cette valeur doit être inférieure ou égale à {{ compared_value }}."
+"This value should be equal to {{ compared_value }}.": "Cette valeur doit être égale à {{ compared_value }}."
+"This value should not be equal to {{ compared_value }}.": "Cette valeur ne doit pas être égale à {{ compared_value }}."
+"This value should be positive.": "Cette valeur doit être positive."
+"This value should be either positive or zero.": "Cette valeur doit être positive ou nulle."
+"This value should be negative.": "Cette valeur doit être négative."
+"This value should be either negative or zero.": "Cette valeur doit être négative ou nulle."
+
+# ==================== Choice ====================
+"The value you selected is not a valid choice.": "Cette valeur n'est pas un choix valide."
+"You should select at least {{ limit }} choice.|You should select at least {{ limit }} choices.": "Vous devez sélectionner au moins {{ limit }} choix.|Vous devez sélectionner au moins {{ limit }} choix."
+"You should select at most {{ limit }} choice.|You should select at most {{ limit }} choices.": "Vous devez sélectionner au plus {{ limit }} choix.|Vous devez sélectionner au plus {{ limit }} choix."
+
+# ==================== File / Image ====================
+"The file is too large. Allowed maximum size is {{ limit }} {{ suffix }}.": "Le fichier est trop volumineux. La taille maximale autorisée est de {{ limit }} {{ suffix }}."
+"The file is too large.": "Le fichier est trop volumineux."
+"The file could not be uploaded.": "Le fichier n'a pas pu être téléversé."
+"The mime type of the file is invalid ({{ type }}). Allowed mime types are {{ types }}.": "Le type MIME du fichier est invalide ({{ type }}). Les types autorisés sont {{ types }}."
+"The file could not be found.": "Le fichier est introuvable."
+"The file is not readable.": "Le fichier n'est pas lisible."
+"No file was uploaded.": "Aucun fichier n'a été téléversé."
+"The image is too large.": "L'image est trop grande ({{ width }}x{{ height }}px). La taille maximale est {{ max_width }}x{{ max_height"

@@ -1,0 +1,36 @@
+{% extends 'base.html.twig' %}
+{% block title %}Votre demande — AutoPro{% endblock %}
+
+{% block navbar %}
+    {% include 'components/_focused_header.html.twig' with {
+        title: 'Votre demande',
+        back_url: path('reservation_release_funds', {uuid: reservation.uuid})
+    } %}
+{% endblock %}
+{% block footer %}{% endblock %}
+
+{% block body %}
+<div class="min-h-[70vh] mt-8 flex items-start justify-center px-4 pt-16 md:pt-24">
+    <div class="text-center max-w-md w-full">
+        {# Info circle icon #}
+        <div class="w-16 h-16 mx-auto mb-6 rounded-full bg-luxe-card border border-luxe-border flex items-center justify-center text-luxe-muted">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="w-8 h-8" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <circle cx="12" cy="12" r="10"/>
+                <path d="M12 8v4"/>
+                <path d="M12 16h.01"/>
+            </svg>
+        </div>
+
+        <p class="text-luxe-text text-lg mb-10">Vous n'avez aucun paiement en cours</p>
+
+        <a href="{{ path('reservation_release_funds', {uuid: reservation.uuid}) }}"
+           class="w-full inline-flex items-center justify-center gap-2 bg-luxe-card hover:border-luxe-orange border border-luxe-border text-luxe-text font-medium rounded-2xl px-6 py-4 transition">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M9 14 4 9l5-5"/>
+                <path d="M4 9h11a5 5 0 0 1 5 5v0a5 5 0 0 1-5 5H9"/>
+            </svg>
+            Retour
+        </a>
+    </div>
+</div>
+{% endblock %}

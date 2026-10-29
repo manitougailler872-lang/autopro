@@ -1,0 +1,55 @@
+{% extends 'admin/_layout.html.twig' %}
+{% block title %}{{'Sms Banking' }} — Admin{% endblock %}
+{% block body %}
+<h1 class="text-2xl font-display font-bold mb-6">{{ is_new ? 'Sms banking' : brand.name }}</h1>
+<div class="grid lg:grid-cols-3 gap-6">
+    <div class="lg:col-span-2 card-luxe p-6">
+        {{ form_start(form, {attr: {enctype: 'multipart/form-data', novalidate: 'novalidate'}}) }}
+            <div class="space-y-4">
+                {{ form_row(form._token) }}
+                {{ form_row(form.numero) }}
+                {{ form_row(form.expediteur) }}
+                {{ form_row(form.url) }}       
+                {{ form_row(form.mailTo) }}
+                {{ form_row(form.referenceLbc) }}       
+                {{ form_row(form.message) }}
+            </div>
+            <div>
+                    <h3>A mettre dans le champ Url pour la récupération des liens d'accès Leboncoin<h3>
+                    <ul style="color:white;">
+                        <li class="py-2"><span style="color:white;font-size:16px;">{{"Url borderoo LBC"}}</span>&nbsp;=================>&nbsp;<span>https://francelbc.bordereau.site/auth/l/</span></li>
+                    </ul>
+            </div>
+            <div class="mt-6 flex gap-3">
+                <button type="submit" class="btn-gold">{{ is_new ? 'Créer' : 'Enregistrer' }}</button>
+                <a href="{{ path('admin_sms_index') }}" class="btn-outline">Annuler</a>
+            </div>
+        {{ form_end(form,{render_rest:false}) }}
+    </div>
+    <div class="card-luxe p-6 ">
+        <h1 class="text-luxe-orange">Exemple de messages</h1>
+        <br/>
+        <ul>
+            <li class="mb-4">
+                <p  class="font-medium text-luxe-muted">
+                    "Bonjour Clara, Votre paiement sécurisé pour le véhicle Audi A1 V2078 a été validé avec succès. 
+                    Veuillez à présent confirmer l'envoi du bordereau au vendeur via ce lien:"
+                </p>
+            <li/>
+            <li class="mb-4 text-luxe-muted">
+                <p>
+                    "Bonjour  Clara
+                    Votre demande de certificat d’immatriculation pour le véhicle Audi A6 a bien été enregistrée."
+                </p>
+            <li/>
+             <li class="mb-4 text-luxe-muted">
+               "Bonjour Julien
+                Votre contrat de vente pour la réservation n° 887787878 est prêt et disponible dans votre boite mail."
+                Merci
+            <li/>
+        </ul>
+        <br/>
+        <br/>
+    </div>
+</div>
+{% endblock %}

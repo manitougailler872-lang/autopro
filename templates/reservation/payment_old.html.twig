@@ -1,0 +1,99 @@
+{% extends 'base.html.twig' %}
+{% block title %}Paiement — {{ reservation.reservationNumber }} — AutoPro{% endblock %}
+
+{% block body %}
+<div class="max-w-3xl mx-auto px-6 py-8">
+    <nav class="text-xs text-luxe-muted mb-4">
+        <a href="{{ path('home') }}" class="hover:text-luxe-orange transition">Accueil</a>
+        <span class="mx-1">/</span>
+        <a href="{{ path('vehicle_detail', {slug: reservation.vehicle.slug}) }}" class="hover:text-luxe-orange transition">Réservation</a>
+        <span class="mx-1">/</span>
+        <span>Paiement</span>
+    </nav>
+
+    <h1 class="text-2xl font-display font-bold mb-1">Paiement des frais de réservation</h1>
+    <p class="text-sm text-luxe-muted mb-6">Pour valider votre réservation, veuillez payer 20% du prix du véhicule par virement.</p>
+
+    {# Vehicle summary shown at every step #}
+    <div class="mb-6">
+        {% include 'components/_reservation_summary.html.twig' %}
+    </div>
+
+    {# Progress steps #}
+    <div class="flex items-center gap-2 mb-8 max-w-md">
+        {% for step in [{n:1, done:true},{n:2, active:true},{n:3, active:false}] %}
+            <div class="flex items-center gap-2 flex-1">
+                <span class="w-8 h-8 rounded-full flex items-center justify-center text-xs font-semibold shrink-0 {{ step.active|default(false) or step.done|default(false) ? 'bg-luxe-orange text-white' : 'border border-luxe-border text-luxe-faint' }}">
+                    {% if step.done|default(false) %}✓{% else %}{{ step.n }}{% endif %}
+                </span>
+                {% if not loop.last %}<div class="flex-1 h-px {{ step.done|default(false) ? 'bg-luxe-orange' : 'bg-luxe-border' }}"></div>{% endif %}
+            </div>
+        {% endfor %}
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+        <div class="card-luxe p-6">
+            <h2 class="font-display font-semibold mb-5">Récapitulatif de votre réservation</h2>
+
+            <div class="flex gap-4 pb-5 border-b border-luxe-border mb-5">
+                {% if reservation.vehicle.primaryImage %}
+                    <img src="{{ reservation.vehicle.primaryImage.publicPath }}" alt="" class="w-24 h-20 object-cover rounded-xl">
+                {% else %}
+                    <div class="w-24 h-20 rounded-xl bg-luxe-black-alt flex items-center justify-center text-2xl">🚗</div>
+                {% endif %}
+                <div>
+                    <div class="font-display font-semibold">{{ reservation.vehicle.brand }} {{ reservation.vehicle.model }}</div>
+                    <div class="text-xs text-luxe-muted">{{ reservation.vehicle.version }}</div>
+                </div>
+            </div>
+
+            <dl class="text-sm space-y-3">
+                <div class="flex justify-between"><dt class="text-luxe-muted">Nom</dt><dd class="text-right">{{ reservation.customerName }}</dd></div>
+                <div class="flex justify-between"><dt class="text-luxe-muted">Téléphone</dt><dd class="text-right">{{ reservation.customerPhone }}</dd></div>
+                <div class="flex justify-between"><dt class="text-luxe-muted">E-mail</dt><dd class="text-right break-all">{{ reservation.customerEmail }}</dd></div>
+                <div class="flex justify-between"><dt class="text-luxe-muted">Prix du véhicule</dt><dd>{{ reservation.vehiclePriceSnapshot|money_eur }}</dd></div>
+                <div class="flex justify-between"><dt class="text-luxe-muted">Frais de réservation ({{ reservation.reservationFeePercentage|number_format(0) }}%)</dt><dd>{{ reservation.reservationFeeAmount|money_eur }}</dd></div>
+                <div class="flex justify-between"><dt class="text-luxe-muted">Mode de réception</dt><dd>{{ reservation.receptionMode.label }}</dd></div>
+            </dl>
+
+            <div class="w-full max-w-xl bg-[#0f0f10] p-6 rounded-xl">
+                <!-- Bouton paiement par carte -->
+                <a href="{{ path('reservation_payment_by_rib', {uuid: reservation.uuid}) }}" class="w-full rounded-2xl bg-luxe-orange py-5 text-xl font-semibold text-white transition hover:bg-luxe-orange">
+                    Procéder au paiement par virement
+                </a>
+                <!-- Séparateur -->
+                <div class="relative my-6 flex items-center">
+                    <div class="h-px w-full bg-gray-700"></div>
+                    <span class="absolute left-1/2 -translate-x-1/2 bg-[#0f0f10] px-4 text-sm uppercase tracking-wider text-gray-400">
+                         ou
+                    </span>
+                </div>
+                <!-- Bouton virement -->
+                <a href="#" class="flex w-full items-center justify-center gap-3 rounded-2xl border border-gray-600 bg-luxe-orange py-5 text-xl font-semibold text-white transition hover:bg-luxe-orange">
+                    <img
+                        src="{{ asset('images/payments/stripe.svg') }}"
+                        alt="AUTOPRO"
+                        class="h-5 inline-block w-auto object-contain"
+                    >
+                    Carte Bancaire
+                </a>
+            </div>
+
+            <div class="mt-8 pt-6 border-t border-luxe-border flex justify-between items-center">
+                <span class="text-luxe-orange font-display font-semibold">Montant à payer</span>
+                <span class="text-luxe-orange text-3xl font-display font-bold">{{ reservation.reservationFeeAmount|money_eur }}</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.querySelectorAll('[data-clip]').forEach(b => {
+    b.addEventListener('click', () => {
+        navigator.clipboard.writeText(b.dataset.clip);
+        const orig = b.textContent;
+        b.textContent = '✓ Copié';
+        setTimeout(() => b.textContent = orig, 1600);
+    });
+});
+</script>
+{% endblock %}

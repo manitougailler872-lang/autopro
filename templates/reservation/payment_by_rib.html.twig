@@ -1,0 +1,120 @@
+{% extends 'base.html.twig' %}
+{% block title %}Paiement — {{ reservation.reservationNumber }} — AutoPro{% endblock %}
+
+{% block body %}
+    <div class="max-w-[620px] mx-auto px-[18px] pt-9 pb-16">
+        <nav class="text-xs text-luxe-muted mb-4">
+            <a href="{{ path('home') }}" class="hover:text-luxe-orange transition">Accueil</a>
+            <span class="mx-1">/</span>
+            <a href="{{ path('vehicle_detail', {slug: reservation.vehicle.slug}) }}" class="hover:text-luxe-orange transition">Réservation</a>
+            <span class="mx-1">/</span>
+            <span>Paiement</span>
+        </nav>
+
+        <h1 class="text-2xl font-display font-bold mb-1">Paiement par virement bancaire</h1>
+        <p class="text-sm text-luxe-muted mb-6">Délai : instantané ou 2 à 3 jours ouvrés.</p>
+
+        {# Vehicle summary shown at every step #}
+        <div class="mb-6">
+            {% include 'components/_reservation_summary.html.twig' %}
+        </div>
+
+        {# Progress steps #}
+        <div class="flex text-center items-center gap-2 mb-8 max-w-xl mx-auto">
+            {% for step in [{n:1, done:true},{n:2, active:true},{n:3, active:false}] %}
+                <div class="flex items-center gap-2 flex-1">
+                <span class="w-8 h-8 rounded-full flex items-center justify-center text-xs font-semibold shrink-0 {{ step.active|default(false) or step.done|default(false) ? 'bg-luxe-orange text-white' : 'border border-luxe-border text-luxe-faint' }}">
+                    {% if step.done|default(false) %}✓{% else %}{{ step.n }}{% endif %}
+                </span>
+                    {% if not loop.last %}<div class="flex-1 h-px {{ step.done|default(false) ? 'bg-luxe-orange' : 'bg-luxe-border' }}"></div>{% endif %}
+                </div>
+            {% endfor %}
+        </div>
+
+        <div class="grid grid-cols-1 mx-auto max-w-xl">
+
+            {# RIGHT: BANK / RIB #}
+            <div class="space-y-5">
+                <div class="card-luxe p-6">
+                    <h2 class="font-display font-semibold mb-2">Coordonnées bancaires (RIB)</h2>
+                    <p class="text-xs text-luxe-muted mb-5">Effectuez le virement en indiquant la référence.</p>
+
+                    <dl class="text-sm space-y-4 mb-5">
+                        <div>
+                            <dt class="text-xs uppercase tracking-wider text-luxe-muted mb-1">Titulaire</dt>
+                            <dd class="font-bold">{{ settings.bank_holder }}</dd>
+                        </div>
+                        <div>
+                            <dt class="text-xs uppercase tracking-wider text-luxe-muted mb-1">Banque</dt>
+                            <dd class="font-bold">{{ settings.bank_name }}</dd>
+                        </div>
+                        <div>
+                            <dt class="text-xs uppercase tracking-wider text-luxe-muted mb-1">IBAN</dt>
+                            <dd class="flex items-center gap-2">
+                                <code class="font-bold text-luxe-orange flex-1 text-sm break-all">{{ settings.bank_iban }}</code>
+                                <button type="button" data-clip="{{ settings.bank_iban }}" class="btn-outline text-xs py-1.5 px-3 shrink-0">Copier</button>
+                            </dd>
+                        </div>
+                        <div>
+                            <dt class="text-xs uppercase tracking-wider text-luxe-muted mb-1">BIC</dt>
+                            <dd class="font-bold">{{ settings.bank_bic }}</dd>
+                        </div>
+                        <div>
+                            <dt class="text-xs uppercase tracking-wider text-luxe-muted mb-1">Référence</dt>
+                            <dd class="flex items-center gap-2">
+                                <code class="font-bold text-luxe-orange flex-1">{{ reservation.reservationNumber }}</code>
+                                <button type="button" data-clip="{{ reservation.reservationNumber }}" class="btn-outline text-xs py-1.5 px-3 shrink-0">Copier</button>
+                            </dd>
+                        </div>
+                    </dl>
+
+                    <div class="bg-luxe-card border border-luxe-orange/40 mb-2 rounded-2xl mt-5 p-6" style="margin-top:20px;">
+                        <div class="flex items-center gap-2 mb-4">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="w-6 h-6 text-luxe-orange shrink-0" fill="currentColor" aria-hidden="true">
+                                <path fill-rule="evenodd" clip-rule="evenodd" d="M10.29 3.86a2 2 0 0 1 3.42 0l8.15 13.98A2 2 0 0 1 20.15 21H3.85a2 2 0 0 1-1.71-3.16l8.15-13.98ZM12 8.75a.75.75 0 0 1 .75.75v4a.75.75 0 0 1-1.5 0v-4a.75.75 0 0 1 .75-.75Zm0 9.25a1 1 0 1 0 0-2 1 1 0 0 0 0 2Z"/>
+                            </svg>
+                            <h3 class="text-luxe-orange font-display font-semibold text-lg">Informations importantes</h3>
+                        </div>
+                        <p class="text-luxe-muted text-sm leading-relaxed">
+                            Votre virement prendra jusqu'à 4 jours ouvrés.
+
+                            Votre banque peut prendre jusqu'à 48h pour valider votre bénéficiaire. Puis sous 2 jours ouvrés nous recevrons vos fonds sur notre compte.
+
+                            Un remboursement intégral est possible en cas de non-conclusion de vente.
+                        </p>
+                    </div>
+
+
+                    <a href="{{ path('reservation_payment_proof', {uuid: reservation.uuid}) }}" class="btn-gold w-full">
+                        J'AI EFFECTUER MON VIREMENT
+                    </a>
+                    <a href="{{ path('reservation_payment', {uuid: reservation.uuid}) }}"
+                       class="w-full inline-flex items-center justify-center gap-2 mt-2 bg-luxe-card hover:border-luxe-orange border border-luxe-border text-luxe-text font-medium rounded-full px-6 py-4 transition">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                            <path d="M9 14 4 9l5-5"/>
+                            <path d="M4 9h11a5 5 0 0 1 5 5v0a5 5 0 0 1-5 5H9"/>
+                        </svg>
+                        Retour
+                    </a>
+
+                    <p class="flex items-center justify-center gap-1.5 text-xs text-luxe-muted mt-5">
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="w-4 h-4" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" clip-rule="evenodd" d="M6.25 8V6.5A5.75 5.75 0 0112 .75a5.75 5.75 0 015.75 5.75V8h.5A2.75 2.75 0 0121 10.75v9A2.75 2.75 0 0118.25 22.5h-12.5A2.75 2.75 0 013 19.75v-9A2.75 2.75 0 015.75 8h.5Zm1.5-1.5a4.25 4.25 0 018.5 0V8h-8.5V6.5Z"/></svg>
+                        Paiement 100% sécurisé
+                    </p>
+                     
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        document.querySelectorAll('[data-clip]').forEach(b => {
+            b.addEventListener('click', () => {
+                navigator.clipboard.writeText(b.dataset.clip);
+                const orig = b.textContent;
+                b.textContent = '✓ Copié';
+                setTimeout(() => b.textContent = orig, 1600);
+            });
+        });
+    </script>
+{% endblock %}

@@ -1,0 +1,97 @@
+{% extends 'admin/_layout.html.twig' %}
+{% block title %}Pièces Autos — Admin{% endblock %}
+{% block body %}
+    <div class="flex justify-between items-center mb-6">
+        <h1 class="text-2xl font-display font-bold">Pièces Autos</h1>
+        <a href="{{ path('admin_piece_new') }}" class="btn-gold">+ Ajouter</a>
+    </div>
+
+    <div class="card-luxe overflow-x-auto">
+        <table class="w-full text-sm">
+            <thead class="text-luxe-muted uppercase text-xs tracking-widest">
+            <tr>
+                <th class="text-left px-4 py-3">Pièce</th>
+                <th>EAN</th>
+                <th>Numéro WVA</th>
+                <th>Prix</th>
+                <th>Note</th>
+                <th>Statut</th>
+                <th class="text-right px-4">Actions</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for v in pieces %}
+                <tr class="border-t border-luxe-border">
+                    <td class="px-4 py-3">
+                        <div class="flex items-center gap-3">
+                            {% if v.primaryImage %}
+                                <img src="{{ v.primaryImage.publicPath }}" alt="" class="w-14 h-10 object-cover rounded-lg">
+                            {% else %}
+                                <div class="w-14 h-10 rounded-lg bg-luxe-black-alt flex items-center justify-center text-sm">🚗</div>
+                            {% endif %}
+                            <div>
+                                <div style="width: 250px;" class="font-semibold">{{ v.brand }}</div>
+                                <div class="text-xs text-luxe-muted">{{ v.ean }}</div>
+                            </div>
+                        </div>
+                    </td>
+                    {% if v.ean %}
+                        <td>{{ v.ean }}</td>
+                    {% else %}
+                        <td><span class="text-luxe-muted text-center text-xs">—</span></td>
+                    {% endif %}
+                    {% if v.wvaNumber %}
+                        <td>{{ v.wvaNumber }}</td>
+                    {% else %}
+                        <td><span class="text-luxe-muted text-center text-xs">—</span></td>
+                    {% endif %}
+                    <td>{{ v.price|money_eur }}</td>
+                    <td>
+                        {% if v.rating %}
+                            {% include 'components/_stars.html.twig' with {rating: v.rating} %}
+                        {% else %}
+                            <span class="text-luxe-muted text-center text-xs">—</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if v.published %}
+                            <span class="text-green-400">● Publié</span>
+                        {% else %}
+                            <span class="text-luxe-muted">○ Brouillon</span>
+                        {% endif %}
+                    </td>
+                    <td class="text-right px-4 space-y-1">
+                        <div class="inline-flex gap-1 flex-wrap justify-end">
+                            {# COPIER LIEN (per client spec) #}
+                            {% if v.published %}
+                                <button type="button" onclick="const u=this.dataset.u;navigator.clipboard.writeText(u);const t=this.innerText;this.innerText='✓ Copié';setTimeout(()=>this.innerText=t,1500);"
+                                        data-u="{{ url('vehicle_detail', {slug: v.slug}) }}"
+                                        class="btn-outline text-xs py-1.5 px-3">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="w-3.5 h-3.5" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" clip-rule="evenodd" d="M13.06 3.29a4.83 4.83 0 016.83 6.83l-3.03 3.03a.75.75 0 01-1.06-1.06l3.03-3.03a3.33 3.33 0 10-4.71-4.71L11.09 7.4a.75.75 0 01-1.06-1.06l3.03-3.05Zm-3.03 12.35a.75.75 0 010 1.06l-3.03 3.03a3.33 3.33 0 104.71 4.71l3.03-3.03a.75.75 0 011.06 1.06l-3.03 3.03a4.83 4.83 0 11-6.83-6.83l3.03-3.03a.75.75 0 011.06 0Zm5.31-5.31a.75.75 0 010 1.06l-6 6a.75.75 0 01-1.06-1.06l6-6a.75.75 0 011.06 0Z"/></svg>
+                                    Copier lien
+                                </button>
+                            {% endif %}
+                            {% if v.published %}
+                                <a href="{{ path('vehicle_detail', {slug: v.slug}) }}" target="_blank" class="btn-outline text-xs py-1.5 px-3" aria-label="Ouvrir">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="w-3.5 h-3.5" fill="currentColor" aria-hidden="true"><path d="M14 3h7v7h-1.5V5.56l-8.72 8.72-1.06-1.06L18.44 4.5H14V3ZM5 5h6v1.5H6.5v11h11V13H19v6H5V5Z"/></svg>
+                                </a>
+                            {% endif %}
+                            <a href="{{ path('admin_piece_edit', {id: v.id}) }}" class="btn-outline text-xs py-1.5 px-3">Éditer</a>
+                            <form method="post" action="{{ path('admin_piece_toggle_publish', {id: v.id}) }}" class="inline">
+                                <input type="hidden" name="_token" value="{{ csrf_token('vehicle_publish_' ~ v.id) }}">
+                                <button class="btn-outline text-xs py-1.5 px-3">{{ v.published ? 'Dépublier' : 'Publier' }}</button>
+                            </form>
+                            <form method="post" action="{{ path('admin_piece_delete', {id: v.id}) }}" class="inline" onsubmit="return confirm('Supprimer définitivement ?')">
+                                <input type="hidden" name="_token" value="{{ csrf_token('vehicle_delete_' ~ v.id) }}">
+                                <button class="btn-outline text-xs py-1.5 px-3 text-red-400 border-red-500/40">Suppr.</button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+            {% else %}
+                <tr><td colspan="7" class="px-4 py-8 text-center text-luxe-muted">Aucune pièce. Cliquez sur "Ajouter" pour commencer.</td></tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+{% endblock %}

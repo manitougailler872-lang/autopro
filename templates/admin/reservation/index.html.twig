@@ -1,0 +1,45 @@
+{% extends 'admin/_layout.html.twig' %}
+{% block title %}Réservations — Admin{% endblock %}
+{% block body %}
+<h1 class="text-2xl font-semibold mb-6">Réservations</h1>
+
+<form method="get" class="flex flex-wrap gap-3 mb-6">
+    <input type="search" name="q" value="{{ q }}" placeholder="Numéro, nom, e-mail..." class="input-luxe flex-1 min-w-[220px]">
+    <select name="status" class="input-luxe">
+        <option value="">Tous statuts</option>
+        {% for s in ['PENDING_PAYMENT','PAYMENT_PROOF_RECEIVED','UNDER_REVIEW','CONFIRMED','CANCELLED','REFUNDED'] %}
+            <option value="{{ s }}" {{ status == s ? 'selected' }}>{{ s }}</option>
+        {% endfor %}
+    </select>
+    <button class="btn-gold">Filtrer</button>
+</form>
+
+<div class="bg-luxe-card border border-luxe-border rounded-xl overflow-x-auto">
+    <table class="w-full text-sm">
+        <thead class="text-luxe-muted uppercase text-xs tracking-widest">
+            <tr>
+                <th class="text-left px-4 py-3">N°</th>
+                <th>Client</th><th>Véhicule</th><th>Date</th><th>Montant</th><th>Statut</th><th></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for r in reservations %}
+                <tr class="border-t border-luxe-border hover:bg-luxe-black-alt/40 transition">
+                    <td class="px-4 py-3 text-luxe-gold font-mono text-xs">{{ r.reservationNumber }}</td>
+                    <td>
+                        <div>{{ r.customerName }}</div>
+                        <div class="text-xs text-luxe-muted">{{ r.customerEmail }}</div>
+                    </td>
+                    <td style="width: 250px;">{{ r.vehicle.brand }} {{ r.vehicle.model }}</td>
+                    <td>{{ r.createdAt|date('d/m/Y') }}</td>
+                    <td>{{ r.reservationFeeAmount|money_eur }}</td>
+                    <td>{% include 'components/_status_badge.html.twig' with {status: r.status} %}</td>
+                    <td class="text-right px-4"><a href="{{ path('admin_reservation_show', {id: r.id}) }}" class="btn-outline text-xs">Voir</a></td>
+                </tr>
+            {% else %}
+                <tr><td colspan="8" class="px-4 py-8 text-center text-luxe-muted">Aucune réservation trouvée.</td></tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

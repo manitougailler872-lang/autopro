@@ -1,0 +1,894 @@
+<!doctype html>
+<html lang="fr">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <meta name="color-scheme" content="light only" />
+        <title>{{vehicle.brand}} - AUTO PRO RESERVATION</title>
+        <style>
+            @keyframes pulseButton {
+                0% {
+                    box-shadow: 0 0 0 0 rgba(227, 6, 19, 0.65);
+                    transform: scale(1);
+                }
+
+                50% {
+                    box-shadow: 0 0 0 12px rgba(227, 6, 19, 0);
+                    transform: scale(1.03);
+                }
+
+                100% {
+                    box-shadow: 0 0 0 0 rgba(227, 6, 19, 0);
+                    transform: scale(1);
+                }
+            }
+
+            .pulse-button {
+                animation: pulseButton 1.4s infinite;
+            }
+
+            @media only screen and (max-width: 600px) {
+                .email-container {
+                    width: 100% !important;
+                }
+
+                .email-content {
+                    padding: 24px 18px !important;
+                }
+
+                .vehicle-table td {
+                    display: block !important;
+                    width: 100% !important;
+                    text-align: left !important;
+                }
+
+                .history-table {
+                    font-size: 10px !important;
+                }
+            }
+        </style>
+    </head>
+
+    <body
+        style="
+            margin: 0;
+            padding: 0;
+            background: #f3f4f6;
+            font-family: Verdana, Geneva, Arial, sans-serif;
+            color: #252525;
+        "
+    >
+        <table
+            width="100%"
+            cellpadding="0"
+            cellspacing="0"
+            border="0"
+            role="presentation"
+            style="
+                width: 100%;
+                background: #f3f4f6;
+                margin: 0;
+                padding: 0;
+                font-family: Verdana, Geneva, Arial, sans-serif;
+            "
+        >
+            <tr>
+                <td align="center" style="padding: 30px 12px">
+                    <table
+                        class="email-container"
+                        width="700"
+                        cellpadding="0"
+                        cellspacing="0"
+                        border="0"
+                        role="presentation"
+                        style="
+                            width: 100%;
+                            max-width: 700px;
+                            background: #ffffff;
+                            border: 1px solid #e5e7eb;
+                            border-radius: 10px;
+                            overflow: hidden;
+                        "
+                    >
+                        <!-- HEADER -->
+                        <tr>
+                            <td align="center" style="padding: 22px 30px; background: #111111; color: #ffffff">
+                                <div
+                                    style="font-size: 29px; line-height: 36px; font-weight: bold; letter-spacing: -1px"
+                                >
+                                    AUTO
+                                    <span style="color: #e30613"> PRO </span>
+                                </div>
+
+                                <div
+                                    style="
+                                        margin-top: 5px;
+                                        font-size: 10px;
+                                        line-height: 18px;
+                                        letter-spacing: 2px;
+                                        color: #d1d5db;
+                                    "
+                                >
+                                    AUTO PRO RESERVATION
+                                </div>
+                            </td>
+                        </tr>
+
+                        <!-- IMAGE AUTO PRO -->
+                        <tr>
+                            <td style="padding: 0; margin: 0; line-height: 0; background: #ffffff">
+                                <img
+                                    src="{{site_setting('company_site') }}/images/bg-hero-pro.png"
+                                    alt="AUTO PRO Express"
+                                    width="700"
+                                    style="
+                                        display: block;
+                                        width: 100%;
+                                        max-width: 700px;
+                                        height: auto;
+                                        border: 0;
+                                        outline: none;
+                                    "
+                                />
+                            </td>
+                        </tr>
+
+                        <!-- CONTENT -->
+                        <tr>
+                            <td
+                                class="email-content"
+                                style="padding: 35px; font-family: Verdana, Geneva, Arial, sans-serif"
+                            >
+                                <!-- INTRO -->
+                                <p style="margin: 0 0 18px; font-size: 14px; line-height: 24px; color: #222222">
+                                    Bonjour {{gender}},
+                                </p>
+
+                                <p style="margin: 0 0 18px; font-size: 14px; line-height: 24px; color: #333333">
+                                    Suite aux échanges téléphoniques au sujet de la
+                                    <strong style="color: #111111">{{vehicle.brand}}</strong
+                                    >, veuillez trouver ci-joint les photos supplémentaires, les caractéristiques et
+                                    options ainsi que le rapport d'entretien du véhicule.
+                                </p>
+
+                                <p style="margin: 0 0 30px; font-size: 14px; line-height: 24px; color: #333333">
+                                    Cordialement,
+                                </p>
+
+                                <!-- VEHICLE CARD -->
+                                <table
+                                    width="100%"
+                                    cellpadding="0"
+                                    cellspacing="0"
+                                    border="0"
+                                    role="presentation"
+                                    style="
+                                        width: 100%;
+                                        background: #f7f7f7;
+                                        border: 1px solid #e5e5e5;
+                                        border-radius: 8px;
+                                    "
+                                >
+                                    <tr>
+                                        <td style="padding: 22px 24px">
+                                            <div
+                                                style="
+                                                    font-size: 20px;
+                                                    line-height: 28px;
+                                                    font-weight: bold;
+                                                    color: #111111;
+                                                "
+                                            >
+                                                {{vehicle.brand}}
+                                            </div>
+
+                                            <div
+                                                style="
+                                                    margin-top: 4px;
+                                                    font-size: 13px;
+                                                    line-height: 20px;
+                                                    color: #777777;
+                                                "
+                                            >
+                                                {{vehicle.model}}
+                                            </div>
+
+                                            <div
+                                                style="
+                                                    margin-top: 14px;
+                                                    font-size: 27px;
+                                                    line-height: 34px;
+                                                    font-weight: bold;
+                                                    color: #d71920;
+                                                "
+                                            >
+                                                {{vehicle.price}} €
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </table>
+
+
+                                {% if vehicle.imagesMail is not empty and vehicle.imagesMail|length == 6 %}
+                                    <!-- ================================================== -->
+                                    <!-- GALERIE PHOTOS -->
+                                    <!-- ================================================== -->
+                                    <!-- LIGNE 1 -->
+                                    <table
+                                        width="100%"
+                                        cellpadding="0"
+                                        cellspacing="0"
+                                        border="0"
+                                        role="presentation"
+                                        style="width: 100%"
+                                    >
+                                        <tr>
+                                            <td
+                                                class="gallery-cell"
+                                                width="50%"
+                                                valign="top"
+                                                style="width: 50%; padding: 5px"
+                                            >
+                                                <img
+                                                    src="{{site_setting('company_site') }}/uploads/vehicles/mail/{{vehicle.imagesMail[0].filename}}"
+                                                    alt="Audi Q5 - Photo 1"
+                                                    width="300"
+                                                    style="
+                                                        display: block;
+                                                        width: 100%;
+                                                        max-width: 300px;
+                                                        height: auto;
+                                                        border: 0;
+                                                        border-radius: 7px;
+                                                    "
+                                                />
+                                            </td>
+
+                                            <td
+                                                class="gallery-cell"
+                                                width="50%"
+                                                valign="top"
+                                                style="width: 50%; padding: 5px"
+                                            >
+                                                <img
+                                                    src="{{asset('uploads/vehicles/mail/' ~ vehicle.imagesMail[1].filename)}}"
+                                                    alt="Audi Q5 - Photo 2"
+                                                    width="300"
+                                                    style="
+                                                        display: block;
+                                                        width: 100%;
+                                                        max-width: 300px;
+                                                        height: auto;
+                                                        border: 0;
+                                                        border-radius: 7px;
+                                                    "
+                                                />
+                                            </td>
+                                        </tr>
+                                          <tr>
+                                            <td
+                                                class="gallery-cell"
+                                                width="50%"
+                                                valign="top"
+                                                style="width: 50%; padding: 5px"
+                                            >
+                                                <img
+                                                    src="{{site_setting('company_site') }}/uploads/vehicles/mail/{{vehicle.imagesMail[2].filename}}"
+                                                    alt="Audi Q5 - Photo 1"
+                                                    width="300"
+                                                    style="
+                                                        display: block;
+                                                        width: 100%;
+                                                        max-width: 300px;
+                                                        height: auto;
+                                                        border: 0;
+                                                        border-radius: 7px;
+                                                    "
+                                                />
+                                            </td>
+
+                                            <td
+                                                class="gallery-cell"
+                                                width="50%"
+                                                valign="top"
+                                                style="width: 50%; padding: 5px"
+                                            >
+                                                <img
+                                                    src="{{site_setting('company_site') }}/uploads/vehicles/mail/{{vehicle.imagesMail[3].filename}}"
+                                                    alt="Audi Q5 - Photo 2"
+                                                    width="300"
+                                                    style="
+                                                        display: block;
+                                                        width: 100%;
+                                                        max-width: 300px;
+                                                        height: auto;
+                                                        border: 0;
+                                                        border-radius: 7px;
+                                                    "
+                                                />
+                                            </td>
+                                        </tr>
+                                          <tr>
+                                            <td
+                                                class="gallery-cell"
+                                                width="50%"
+                                                valign="top"
+                                                style="width: 50%; padding: 5px"
+                                            >
+                                                <img
+                                                    src="{{site_setting('company_site') }}/uploads/vehicles/mail/{{vehicle.imagesMail[4].filename}}"
+                                                    alt="Audi Q5 - Photo 1"
+                                                    width="300"
+                                                    style="
+                                                        display: block;
+                                                        width: 100%;
+                                                        max-width: 300px;
+                                                        height: auto;
+                                                        border: 0;
+                                                        border-radius: 7px;
+                                                    "
+                                                />
+                                            </td>
+
+                                            <td
+                                                class="gallery-cell"
+                                                width="50%"
+                                                valign="top"
+                                                style="width: 50%; padding: 5px"
+                                            >
+                                                <img
+                                                    src="{{site_setting('company_site') }}/uploads/vehicles/mail/{{vehicle.imagesMail[5].filename}}"
+                                                    alt="Audi Q5 - Photo 2"
+                                                    width="300"
+                                                    style="
+                                                        display: block;
+                                                        width: 100%;
+                                                        max-width: 300px;
+                                                        height: auto;
+                                                        border: 0;
+                                                        border-radius: 7px;
+                                                    "
+                                                />
+                                            </td>
+                                        </tr>
+                                    </table>
+                                {% endif %}
+
+                               <!-- RESERVATION BUTTON -->
+                                <table
+                                    width="100%"
+                                    cellpadding="0"
+                                    cellspacing="0"
+                                    border="0"
+                                    role="presentation"
+                                    style="margin-top: 24px"
+                                >
+                                    <tr>
+                                        <td align="center">
+                                            <a
+                                                href="https://www.autopro-reservation.fr/vehicule/{{vehicle.slug}}"
+                                                class="pulse-button"
+                                                style="
+                                                    display: inline-block;
+                                                    padding: 12px 32px;
+                                                    background: #e30613;
+                                                    color: #ffffff;
+                                                    font-family: Verdana, Geneva, Arial, sans-serif;
+                                                    font-size: 15px;
+                                                    line-height: 20px;
+                                                    font-weight: bold;
+                                                    text-decoration: none;
+                                                    border-radius: 5px;
+                                                    box-shadow: 0 0 0 rgba(227, 6, 19, 0.65);
+                                                "
+                                            >
+                                                RÉSERVER CE VÉHICULE
+                                            </a>
+                                        </td>
+                                    </tr>
+                                </table>
+
+                                <!-- CHARACTERISTICS -->
+                                <h2
+                                    style="
+                                        margin: 35px 0 15px;
+                                        padding-bottom: 10px;
+                                        border-bottom: 2px solid #e30613;
+                                        font-size: 18px;
+                                        line-height: 26px;
+                                        color: #111111;
+                                    "
+                                >
+                                    Caractéristiques du véhicule
+                                </h2>
+
+                                <table
+                                    class="vehicle-table"
+                                    width="100%"
+                                    cellpadding="0"
+                                    cellspacing="0"
+                                    border="0"
+                                    role="presentation"
+                                    style="width: 100%; border-collapse: collapse; font-size: 13px"
+                                >
+                                 
+                                    <tr>
+                                        <td style="padding: 11px; border-bottom: 1px solid #e5e7eb; color: #777777">
+                                            Immatriculation
+                                        </td>
+                                        <td
+                                            align="right"
+                                            style="padding: 11px; border-bottom: 1px solid #e5e7eb; font-weight: bold"
+                                        >
+                                           {{vehicle.immatriculation}}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding: 11px; border-bottom: 1px solid #e5e7eb; color: #777777">
+                                            VIN
+                                        </td>
+                                        <td
+                                            align="right"
+                                            style="padding: 11px; border-bottom: 1px solid #e5e7eb; font-weight: bold"
+                                        >
+                                            {{ mask_vin(vehicle.vim) }}
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding: 11px; border-bottom: 1px solid #e5e7eb; color: #777777">Catégorie</td>
+                                        <td align="right" style="padding: 11px; border-bottom: 1px solid #e5e7eb">{{vehicle.category}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td style="padding: 11px; border-bottom: 1px solid #e5e7eb; color: #777777">
+                                            Mise en circulation
+                                        </td>
+                                        <td align="right" style="padding: 11px; border-bottom: 1px solid #e5e7eb">
+                                           {{vehicle.datePremiereMiseEnCirculation}}
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td style="padding: 11px; border-bottom: 1px solid #e5e7eb; color: #777777">
+                                            Kilométrage
+                                        </td>
+                                        <td align="right" style="padding: 11px; border-bottom: 1px solid #e5e7eb">
+                                             {{vehicle.mileage}} km
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td style="padding: 11px; border-bottom: 1px solid #e5e7eb; color: #777777">
+                                            Énergie
+                                        </td>
+                                        <td align="right" style="padding: 11px; border-bottom: 1px solid #e5e7eb">
+                                           {{vehicle.fuel.label}}
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td style="padding: 11px; border-bottom: 1px solid #e5e7eb; color: #777777">
+                                            Boîte
+                                        </td>
+                                        <td align="right" style="padding: 11px; border-bottom: 1px solid #e5e7eb">
+                                            {{vehicle.transmission}}
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td style="padding: 11px; border-bottom: 1px solid #e5e7eb; color: #777777">
+                                            Carrosserie
+                                        </td>
+                                        <td align="right" style="padding: 11px; border-bottom: 1px solid #e5e7eb">
+                                           {{vehicle.places}} places / {{vehicle.doors}} portes
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td style="padding: 11px; border-bottom: 1px solid #e5e7eb; color: #777777">
+                                            Couleur
+                                        </td>
+                                        <td align="right" style="padding: 11px; border-bottom: 1px solid #e5e7eb">
+                                            {{vehicle.color}}
+                                        </td>
+                                    </tr>
+
+                                    <tr>
+                                        <td style="padding: 11px; border-bottom: 1px solid #e5e7eb; color: #777777">
+                                            Puissance
+                                        </td>
+                                        <td align="right" style="padding: 11px; border-bottom: 1px solid #e5e7eb">
+                                        {{vehicle.power}} ch / {{vehicle.powerCv}} cv
+                                        </td>
+                                    </tr>
+                                  
+                                    <tr>
+                                        <td style="padding: 11px; border-bottom: 1px solid #e5e7eb; color: #777777">Type/CNIT</td>
+                                        <td align="right" style="padding: 11px; border-bottom: 1px solid #e5e7eb">{{vehicle.cnit}}</td>
+                                    </tr>
+                                </table>
+
+                                <!-- DESCRIPTION -->
+                                <h2
+                                    style="
+                                        margin: 35px 0 15px;
+                                        padding-bottom: 10px;
+                                        border-bottom: 2px solid #e30613;
+                                        font-size: 18px;
+                                        line-height: 26px;
+                                        color: #111111;
+                                    "
+                                >
+                                    Description
+                                </h2>
+
+                                <p style="margin: 0; font-size: 14px; line-height: 23px; color: #333333">
+                                    <strong> {{vehicle.description}}</strong>
+                                </p>
+
+                                <!-- OPTIONS -->
+                                <h2
+                                    style="
+                                        margin: 35px 0 15px;
+                                        padding-bottom: 10px;
+                                        border-bottom: 2px solid #e30613;
+                                        font-size: 18px;
+                                        line-height: 26px;
+                                        color: #111111;
+                                    "
+                                >
+                                    Options et équipements
+                                </h2>
+
+                                {% if vehicle.interiorMail is not empty %}
+                                    {% set interiors = vehicle.interiorMail|split(';') %}
+                                    <!-- INTERIOR -->
+                                    <h3 style="margin: 22px 0 10px; font-size: 15px; color: #d71920">Intérieur</h3>
+                                    <ul
+                                        style="
+                                            margin: 0;
+                                            padding-left: 22px;
+                                            font-size: 13px;
+                                            line-height: 24px;
+                                            color: #333333;"
+                                    >
+                                        {% for interior in interiors %}
+                                            <li>{{interior}}</li>
+                                        {% endfor %}
+                                    </ul>
+                                {% endif %}
+                                 
+                                {% if vehicle.exteriorMail is not empty %}
+                                     {% set exteriors = vehicle.exteriorMail|split(';') %}
+                                    <!-- EXTERIOR -->
+                                    <h3 style="margin: 25px 0 10px; font-size: 15px; color: #d71920">Extérieur</h3>
+                                    <ul
+                                        style="
+                                            margin: 0;
+                                            padding-left: 22px;
+                                            font-size: 13px;
+                                            line-height: 24px;
+                                            color: #333333;
+                                        "
+                                    >
+                                        {% for exterior in exteriors %}
+                                            <li>{{exterior}}</li>
+                                        {% endfor %}
+                                    </ul>
+                                {% endif %}
+
+
+                             {% if vehicle.securityMail is not empty %}
+                                   {% set securities = vehicle.securityMail|split(';') %}
+                                <!-- SAFETY -->
+                                <h3 style="margin: 25px 0 10px; font-size: 15px; color: #d71920">Sécurité</h3>
+                                <ul
+                                    style="
+                                        margin: 0;
+                                        padding-left: 22px;
+                                        font-size: 13px;
+                                        line-height: 24px;
+                                        color: #333333;
+                                    "
+                                >
+                                    {% for security in securities %}
+                                        <li>{{security}}</li>
+                                    {% endfor %}
+                                </ul>
+
+                               {% endif %}
+                                    <!-- OPTIONS -->
+                                    <h2
+                                        style="
+                                            margin: 35px 0 15px;
+                                            padding-bottom: 10px;
+                                            border-bottom: 2px solid #e30613;
+                                            font-size: 18px;
+                                            line-height: 26px;
+                                            color: #111111;
+                                        "
+                                    >
+                                        Documents complémentaires
+                                    </h2>
+
+                                    <!-- LEGAL -->
+                                    <table
+                                        width="100%"
+                                        cellpadding="0"
+                                        cellspacing="0"
+                                        border="0"
+                                        role="presentation"
+                                        style="
+                                            width: 100%;
+                                            margin-top: 25px;
+                                            background: #f7f7f7;
+                                            border: 1px solid #e5e7eb;"
+                                    >
+                                        <tr>
+                                            <td style="padding: 20px 22px">
+                                                <div style="font-size: 11px; line-height: 24px">
+                                                    <a
+                                                        target="_blank"
+                                                        href="{{url('vehicle_photo_supplementaire',{slug:vehicle.slug})}}"
+                                                        style="color: #d71920; text-decoration: none"
+                                                    >
+                                                        Photos supplémentaires 
+                                                    </a>
+                                                    <br />
+                                                    <a
+                                                        target="_blank"
+                                                        href="{{site_setting('company_site')}}/uploads/ct/{{vehicle.ctFile}}"
+                                                        style="color: #d71920; text-decoration: none"
+                                                    >
+                                                        Contrôle Technique
+                                                    </a>
+                                                    <br />
+                                                    <a
+                                                       target="_blank"
+                                                        href="{{url('vehicle_rapport',{slug:vehicle.slug})}}"
+                                                        style="color: #d71920; text-decoration: none"
+                                                    >
+                                                        Rapport d'entretien 
+                                                    </a>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </table>
+
+                                    {% if vehicle.historiqueMail is not empty %}
+                                        {% set histories = vehicle.historiqueMail|split('|') %}
+                                        <!-- HISTORY -->
+                                        <h2
+                                            style="
+                                                margin: 38px 0 15px;
+                                                padding-bottom: 10px;
+                                                border-bottom: 2px solid #e30613;
+                                                font-size: 18px;
+                                                line-height: 26px;
+                                                color: #111111;
+                                            "
+                                        >
+                                            Historique de révision
+                                        </h2>
+
+                                        <table
+                                            class="history-table"
+                                            width="100%"
+                                            cellpadding="0"
+                                            cellspacing="0"
+                                            border="0"
+                                            role="presentation"
+                                            style="width: 100%; border-collapse: collapse; font-size: 11px; line-height: 18px"
+                                        >
+                                            <tr style="background: #111111; color: #ffffff">
+                                                <th align="left" style="padding: 11px; border: 1px solid #111111">Date</th>
+                                                <th align="left" style="padding: 11px; border: 1px solid #111111">
+                                                    Kilométrage
+                                                </th>
+                                                <th align="left" style="padding: 11px; border: 1px solid #111111">
+                                                    Opérations
+                                                </th>
+                                            </tr>
+                                            {% for h in histories %}
+                                                {% set data = h|split(';') %}
+                                                <tr>
+                                                    <td style="padding: 11px; border: 1px solid #e5e7eb; vertical-align: top">
+                                                        {{data[0]}}
+                                                    </td>
+                                                    <td style="padding: 11px; border: 1px solid #e5e7eb; vertical-align: top">
+                                                        {{data[1]}} km
+                                                    </td>
+                                                    <td style="padding: 11px; border: 1px solid #e5e7eb; vertical-align: top">
+                                                        {{data[2]}}
+                                                    </td>
+                                                </tr>
+                                            {% endfor %}
+                                        </table>
+                                    {% endif %}
+
+                                    <!-- COMPANY -->
+                                    <table
+                                        width="100%"
+                                        cellpadding="0"
+                                        cellspacing="0"
+                                        border="0"
+                                        role="presentation"
+                                        style="
+                                            width: 100%;
+                                            margin-top: 38px;
+                                            background: #111111;
+                                            color: #ffffff;
+                                            border-radius: 8px;
+                                        "
+                                    >
+                                        <tr>
+                                            <td style="padding: 25px">
+                                                <div style="font-size: 19px; line-height: 26px; font-weight: bold">
+                                                    AUTO
+                                                    <span style="color: #ef1b23"> PRO </span>
+                                                    RESERVATION
+                                                </div>
+
+                                                <div
+                                                    style="
+                                                        width: 45px;
+                                                        height: 3px;
+                                                        margin: 12px 0 15px;
+                                                        background: #e30613;
+                                                    "
+                                                ></div>
+
+                                                <p style="margin: 0; font-size: 12px; line-height: 21px; color: #e5e7eb">
+                                                    Commerce de voitures et de véhicules automobiles légers
+                                                    <br /><br />
+
+                                                    <strong style="color: #ffffff"> SIRET : </strong>
+                                                    {{site_setting('company_registration') }}
+                                                    <br />
+
+                                                    <strong style="color: #ffffff"> Adresse : </strong>
+                                                    {{site_setting('company_address') }}
+                                                    <br />
+
+                                                    <strong style="color: #ffffff"> Mail : </strong>
+
+                                                    <a
+                                                        href="mailto:garage@autopro-reservation.fr"
+                                                        style="color: #ffffff; text-decoration: none"
+                                                    >
+                                                         {{site_setting('company_email') }}
+                                                    </a>
+
+                                                    <br />
+
+                                                    <strong style="color: #ffffff"> Tél : </strong>
+                                                     {{site_setting('company_phone') }}
+                                                </p>
+
+                                                <p
+                                                    style="
+                                                        margin: 18px 0 0;
+                                                        font-size: 13px;
+                                                        line-height: 22px;
+                                                        color: #ffffff;
+                                                    "
+                                                >
+                                                    <a
+                                                        href="https://www.autopro-reservation.fr"
+                                                        style="color: #ef4444; text-decoration: none; font-weight: bold"
+                                                    >
+                                                        {{site_setting('company_site') }}
+                                                    </a>
+                                                </p>
+                                            </td>
+                                        </tr>
+                                    </table>
+
+                                    <!-- LEGAL -->
+                                    <table
+                                        width="100%"
+                                        cellpadding="0"
+                                        cellspacing="0"
+                                        border="0"
+                                        role="presentation"
+                                        style="
+                                            width: 100%;
+                                            margin-top: 25px;
+                                            background: #f7f7f7;
+                                            border: 1px solid #e5e7eb;
+                                        "
+                                    >
+                                        <tr>
+                                            <td style="padding: 20px 22px">
+                                                <div
+                                                    style="
+                                                        margin-bottom: 10px;
+                                                        font-size: 12px;
+                                                        line-height: 19px;
+                                                        font-weight: bold;
+                                                        color: #333333;
+                                                    "
+                                                >
+                                                    Documents et informations légales
+                                                </div>
+
+                                                <div style="font-size: 11px; line-height: 24px">
+                                                    <a
+                                                        href="{{site_setting('company_site') }}/documents/mentions_legales_autopro_express.pdf"
+                                                        style="color: #d71920; text-decoration: none"
+                                                    >
+                                                        Mentions légales
+                                                    </a>
+
+                                                    <br />
+
+                                                    <a
+                                                        href="{{site_setting('company_site') }}/documents/cgv_autopro_express.pdf"
+                                                        style="color: #d71920; text-decoration: none"
+                                                    >
+                                                        Conditions générales de vente
+                                                    </a>
+
+                                                    <br />
+
+                                                    <a
+                                                        href=" {{site_setting('company_site') }}/documents/politique_confidentialite_autopro_express.pdf"
+                                                        style="color: #d71920; text-decoration: none"
+                                                    >
+                                                        Politique de confidentialité
+                                                    </a>
+                                                </div>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                        
+                        </tr>
+
+                        <!-- FOOTER -->
+                        <tr>
+                            <td
+                                align="center"
+                                style="
+                                    padding: 22px 25px;
+                                    background: #f5f5f5;
+                                    border-top: 1px solid #e5e7eb;
+                                    font-size: 10px;
+                                    line-height: 18px;
+                                    color: #777777;
+                                "
+                            >
+                                <strong style="color: #333333"> AUTO PRO RESERVATION </strong>
+
+                                <br />
+
+                                {{site_setting('company_address') }}
+
+                                <br />
+
+                                <a
+                                    href="mailto: {{site_setting('company_email') }}"
+                                    style="color: #777777; text-decoration: none"
+                                >
+                                   {{site_setting('company_phone') }}
+                                </a>
+
+                                <br />
+
+                                <a
+                                    href="{{site_setting('company_site') }}"
+                                    style="color: #d71920; text-decoration: none"
+                                >
+                                   {{site_setting('company_site') }}
+                                </a>
+
+                                <br /><br />
+
+                                © AUTO PRO RESERVATION
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </table>
+    </body>
+</html>

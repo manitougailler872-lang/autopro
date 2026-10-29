@@ -1,0 +1,8 @@
+{% set _class = 'bg-bl border-luxe-border text-luxe-text' %}
+{% if label == 'success' %}{% set _class = 'bg-green-950/40 border-green-700/40 text-green-300' %}{% endif %}
+{% if label == 'error' %}{% set _class = 'bg-red-950/40 border-red-700/40 text-white' %}{% endif %}
+{% if label == 'warning' %}{% set _class = 'bg-amber-950/40 border-amber-700/40 text-amber-300' %}{% endif %}
+
+<div class="fixed top-20 left-1/2 -translate-x-1/2 z-50 max-w-lg w-full mx-4 border rounded-lg px-4 py-3 text-sm shadow-lg fade-in {{ _class }}" role="status">
+    {{ msg }}
+</div>

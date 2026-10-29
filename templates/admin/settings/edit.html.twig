@@ -1,0 +1,58 @@
+{% extends 'admin/_layout.html.twig' %}
+{% block title %}Paramètres — Admin{% endblock %}
+{% block body %}
+<h1 class="text-2xl font-semibold mb-6">Paramètres du site</h1>
+
+{{ form_start(form) }}
+<div class="grid lg:grid-cols-2 gap-6">
+    <section class="bg-luxe-card border border-luxe-border rounded-xl p-6">
+        <h2 class="text-xs uppercase tracking-widest text-luxe-gold mb-4">Identité</h2>
+                   {{ form_row(form._token) }}
+        {{ form_row(form.company_name) }}
+        {{ form_row(form.company_email) }}
+        {{ form_row(form.company_phone) }}
+        {{ form_row(form.company_city) }}
+        {{ form_row(form.company_cp) }}
+        {{ form_row(form.company_registration) }}
+        {{ form_row(form.company_address) }}
+        {{ form_row(form.open_hour) }}
+        {{ form_row(form.company_logo) }}
+        {{ form_row(form.company_site) }}
+    </section>
+
+    <section class="bg-luxe-card border border-luxe-border rounded-xl p-6">
+        <h2 class="text-xs uppercase tracking-widest text-luxe-gold mb-4">Réservation</h2>
+        {{ form_row(form.reservation_percentage) }}
+        {{ form_row(form.active_sms) }}
+    </section>
+
+    <section class="bg-luxe-card border border-luxe-border rounded-xl p-6">
+        <h2 class="text-xs uppercase tracking-widest text-luxe-gold mb-4">Banque</h2>
+        {{ form_row(form.bank_holder) }}
+        {{ form_row(form.bank_name) }}
+        {{ form_row(form.bank_iban) }}
+        {{ form_row(form.bank_bic) }}
+        {{ form_row(form.bank_reference) }}
+        {{ form_row(form.payment_message) }}
+        {{ form_row(form.payment_message_v1) }}
+    </section>
+
+    <section class="bg-luxe-card border border-luxe-border rounded-xl p-6">
+        <h2 class="text-xs uppercase tracking-widest text-luxe-gold mb-4">Réseaux sociaux</h2>
+        {{ form_row(form.tiktok_url) }}
+        {{ form_row(form.tiktok_text) }}
+    </section>
+
+    <section class="bg-luxe-card border border-luxe-border rounded-xl p-6 lg:col-span-2">
+        <h2 class="text-xs uppercase tracking-widest text-luxe-gold mb-4">Informations légales</h2>
+        {{ form_row(form.legal_notice) }}
+        {{ form_row(form.terms) }}
+        {{ form_row(form.privacy_policy) }}
+    </section>
+</div>
+
+<div class="mt-6 flex gap-3">
+    <button type="submit" class="btn-gold">Enregistrer les paramètres</button>
+</div>
+{{ form_end(form,{render_rest:false}) }}
+{% endblock %}

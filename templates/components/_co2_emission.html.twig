@@ -1,0 +1,48 @@
+{# templates/components/_co2_scale.html.twig #}
+{# Usage : {% include 'components/_co2_scale.html.twig' with { grade: 'B' } %} #}
+
+{% set grades = [
+    { letter: 'A', color: '
+#0B8A3D' },
+    { letter: 'B', color: '
+#4CAF39' },
+    { letter: 'C', color: '
+#9DC81F' },
+    { letter: 'D', color: '
+#F7E000' },
+    { letter: 'E', color: '
+#F5A623' },
+    { letter: 'F', color: '
+#E8590C' },
+    { letter: 'G', color: '
+#D32F2F' },
+] %}
+
+{% set index = 0 %}
+{% for g in grades %}
+    {% if g.letter == grade %}{% set index = loop.index0 %}{% endif %}
+{% endfor %}
+
+<div class="w-full max-w-full mb-5">
+    <p class="text-xs text-luxe-muted mb-4 font-sans">
+        Le CO2 (dioxyde de carbone) est le principal gaz à effet de serre responsable du changement climatique.
+    </p>
+
+    <div class="relative flex h-6 w-full rounded-full overflow-hidden ring-1 ring-luxe-border">
+        {% for g in grades %}
+            <div style="background: {{ g.color }};" class="flex-1  {{ g.letter == grade ? 'relative z-10 scale-y-125' : 'opacity-70' }} transition-all"></div>
+        {% endfor %}
+
+        {#<div class="absolute top-1/2 -translate-y-1/2 -translate-x-1/2 z-20 animate-fade-in"#}
+        {#     style="left: {{ (index + 0.5) / grades|length * 100 }}%">#}
+        {#    <div class="w-8 h-8 bg-white rounded-full  border-1 border-luxe-black flex items-center justify-center shadow-lg">#}
+        {#        <span class="text-luxe-black font-display font-bold text-sm">{{ grade }}</span>#}
+        {#    </div>#}
+        {#</div>#}
+    </div>
+
+    <div class="flex justify-between text-xs text-luxe-faint mt-2 font-mono">
+        <span>≤ 100 g/km</span>
+        <span>&gt; 250 g/km</span>
+    </div>
+</div>

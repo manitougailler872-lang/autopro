@@ -1,0 +1,26 @@
+{% extends 'base.html.twig' %}
+{% block title %}Demande de remboursement — {{ reservation.reservationNumber }}{% endblock %}
+{% block body %}
+<div class="max-w-2xl mx-auto px-6 py-10">
+    <h1 class="text-2xl font-display font-bold mb-1">Demande de remboursement</h1>
+    <p class="text-sm text-luxe-muted mb-6">Nous vous répondrons sous quelques jours ouvrés.</p>
+
+    <div class="mb-6">
+        {% include 'components/_reservation_summary.html.twig' %}
+    </div>
+
+    <div class="card-luxe p-6">
+        {{ form_start(form) }}
+            <div class="space-y-3">
+                {{ form_row(form.reason) }}
+                {{ form_row(form.customerComment) }}
+                {{ form_row(form.iban) }}
+            </div>
+            <p class="text-xs text-luxe-muted mt-3 mb-6">
+                Une fois le remboursement demander, les fonds sont généralement crédités sur votre compte en instantané, sous réserve de la compatibilité et du traitement de votre banque.
+            </p>
+            <button type="submit" class="btn-gold w-full">Envoyer ma demande</button>
+        {{ form_end(form) }}
+    </div>
+</div>
+{% endblock %}

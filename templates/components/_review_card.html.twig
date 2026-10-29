@@ -1,0 +1,9 @@
+<div class="bg-luxe-card shadow-md  border border-luxe-border rounded-xl p-5">
+    <div style="color:#FBBC04 !important" class="flex mb-2" aria-label="{{ review.rating }} sur 5">
+        {% for i in 1..5 %}
+            {{ i <= review.rating ? '★' : '☆' }}
+        {% endfor %}
+    </div>
+    <p class="text-sm text-luxe-text mb-3 leading-relaxed">{{ review.comment }}</p>
+    <div class="text-xs text-luxe-muted">— {{ review.customerName }}</div>
+</div>

@@ -1,0 +1,95 @@
+{% extends 'admin/_layout.html.twig' %}
+{% block title %}{{ is_new ? 'Nouvelle pièce' : 'Éditer pièce' }} — Admin{% endblock %}
+{% block body %}
+    <div class="flex items-center justify-between mb-6 flex-wrap gap-3">
+        <h1 class="text-2xl font-display font-bold">{{ is_new ? 'Nouvelle pièce' : vehicle.brand }}</h1>
+        {% if not is_new %}
+            <div class="text-sm flex items-center gap-2 flex-wrap">
+                <span class="text-luxe-muted text-xs">Lien public :</span>
+                <code class="text-luxe-orange text-xs font-mono">{{ url('vehicle_detail', {slug: vehicle.slug}) }}</code>
+                <button type="button" onclick="navigator.clipboard.writeText('{{ url('vehicle_detail', {slug: vehicle.slug})|e('js') }}');this.textContent='✓ Copié';setTimeout(()=>this.textContent='Copier lien',1500);" class="btn-outline text-xs py-1 px-3">Copier lien</button>
+                <a href="{{ path('vehicle_detail', {slug: vehicle.slug}) }}" target="_blank" class="btn-outline text-xs py-1 px-3">Ouvrir</a>
+            </div>
+        {% endif %}
+    </div>
+
+    <div class="grid lg:grid-cols-3 gap-6">
+        <div class="lg:col-span-2 card-luxe p-6">
+            {{ form_start(form, {attr: {enctype: 'multipart/form-data', novalidate: 'novalidate'}}) }}
+            {{ form_row(form._token) }}
+            {{ form_row(form.vehicleType) }}
+            <h3 class="text-xs uppercase tracking-widest text-luxe-orange mb-4">Identification</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                    <div>{{ form_row(form.brand) }}</div>
+                    <div>{{ form_row(form.ean) }}</div>
+                    <div>{{ form_row(form.wvaNumber) }}</div>
+                    <div>{{ form_row(form.garnitureMaterial) }}</div>
+                    <div>{{ form_row(form.height) }}</div>
+                    <div>{{ form_row(form.width) }}</div>
+                    <div>{{ form_row(form.systemDeFreinage) }}</div>
+                    <div class="md:col-span-2">{{ form_row(form.originNumber) }}</div>
+                    <div class="md:col-span-2">{{ form_row(form.description) }}</div>
+            </div>
+            <h3 class="text-xs uppercase tracking-widest text-luxe-orange mb-4">Caractéristiques techniques</h3>
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+                <div>{{ form_row(form.rating) }}</div>
+            </div>
+            <h3 class="text-xs uppercase tracking-widest text-luxe-orange mb-4">Prix & publication</h3>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+                <div>{{ form_row(form.price) }}</div>
+                <div class="flex items-end pb-2">{{ form_row(form.published) }}</div>
+                <div class="flex items-end pb-2">{{ form_row(form.isAvailable) }}</div>
+                <div class="flex items-end pb-2">{{ form_row(form.bestDeal) }}</div>
+                <div class="flex items-end pb-2">{{ form_row(form.reserved) }}</div>
+                <div>{{ form_row(form.bestDealPercent) }}</div>
+            </div>
+
+            {% if not is_new %}
+                <hr class="border-luxe-border mb-6">
+                <h3 class="text-xs uppercase tracking-widest text-luxe-orange mb-4">Photos</h3>
+                <div>
+                    <label class="form-label">Ajouter des photos (max {{ 10 - vehicle.images|length }} de plus)</label>
+                    <input type="file" name="images[]" multiple accept="image/jpeg,image/png,image/webp">
+                    <p class="text-xs text-luxe-muted mt-2">Toutes les images sont redimensionnées automatiquement à 1200×800 (3:2).</p>
+                </div>
+            {% endif %}
+            <div class="mt-6 flex gap-3">
+                <button type="submit" class="btn-gold">{{ is_new ? 'Créer la pièce' : 'Enregistrer' }}</button>
+                <a href="{{ path('admin_piece_index') }}" class="btn-outline">Annuler</a>
+            </div>
+            {{ form_end(form,{render_rest: false}) }}
+        </div>
+
+        {% if not is_new %}
+            <aside class="card-luxe p-6 h-fit">
+                <h2 class="font-display font-semibold mb-4">Photos ({{ vehicle.images|length }}/10)</h2>
+                {% if vehicle.images|length == 0 %}
+                    <p class="text-sm text-luxe-muted">Aucune photo pour l'instant.</p>
+                {% else %}
+                    <div class="grid grid-cols-2 gap-3">
+                        {% for img in vehicle.images %}
+                            <div class="relative bg-luxe-black-alt border {{ img.primaryImage ? 'border-luxe-orange' : 'border-luxe-border' }} rounded-xl overflow-hidden">
+                                <img src="{{ img.publicPath }}" alt="" class="w-full aspect-[3/2] object-cover">
+                                {% if img.primaryImage %}
+                                    <span class="absolute top-1 left-1 text-[10px] bg-luxe-orange text-white px-2 py-0.5 rounded-full">★ Principale</span>
+                                {% endif %}
+                                <div class="p-2 flex gap-1">
+                                    {% if not img.primaryImage %}
+                                        <form method="post" action="{{ path('admin_piece_image_primary', {id: img.id}) }}" class="flex-1">
+                                            <input type="hidden" name="_token" value="{{ csrf_token('image_primary_' ~ img.id) }}">
+                                            <button class="btn-outline text-xs w-full py-1">★</button>
+                                        </form>
+                                    {% endif %}
+                                    <form method="post" action="{{ path('admin_piece_image_delete', {id: img.id}) }}" class="flex-1" onsubmit="return confirm('Supprimer cette photo ?')">
+                                        <input type="hidden" name="_token" value="{{ csrf_token('image_delete_' ~ img.id) }}">
+                                        <button class="btn-outline text-xs w-full py-1 text-red-400 border-red-500/40">×</button>
+                                    </form>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                {% endif %}
+            </aside>
+        {% endif %}
+    </div>
+{% endblock %}

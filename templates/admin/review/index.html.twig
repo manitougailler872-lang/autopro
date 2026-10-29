@@ -1,0 +1,61 @@
+{% extends 'admin/_layout.html.twig' %}
+{% block title %}Avis — Admin{% endblock %}
+{% block body %}
+<h1 class="text-2xl font-display font-bold mb-6">Modération des avis</h1>
+
+<div class="grid lg:grid-cols-3 gap-6">
+    <div class="lg:col-span-2 card-luxe overflow-x-auto">
+        <table class="w-full text-sm">
+            <thead class="text-luxe-muted uppercase text-xs tracking-widest">
+                <tr><th class="text-left px-4 py-3">Auteur</th><th>Note</th><th class="text-left">Commentaire</th><th>Statut</th><th>Reçu</th><th class="text-right px-4">Actions</th></tr>
+            </thead>
+            <tbody>
+                {% for r in reviews %}
+                    <tr class="border-t border-luxe-border align-top">
+                        <td class="px-4 py-3 font-semibold">{{ r.customerName }}</td>
+                        <td>{% include 'components/_stars.html.twig' with {rating: r.rating} %}</td>
+                        <td class="max-w-md">
+                            <form method="post" action="{{ path('admin_review_edit_comment', {id: r.id}) }}">
+                                <input type="hidden" name="_token" value="{{ csrf_token('review_edit_' ~ r.id) }}">
+                                <textarea name="comment" rows="2" class="input-luxe w-full text-xs">{{ r.comment }}</textarea>
+                                <button class="btn-outline text-xs mt-1 py-1 px-3">Enregistrer</button>
+                            </form>
+                        </td>
+                        <td class="text-xs">{{ r.status.label }}</td>
+                        <td class="text-xs text-luxe-muted">{{ r.createdAt|date('d/m/Y') }}</td>
+                        <td class="text-right px-4">
+                            <div class="flex flex-wrap gap-1 justify-end">
+                                {% for s, l in {'PUBLISHED': 'Publier', 'HIDDEN': 'Masquer', 'REJECTED': 'Refuser'} %}
+                                    <form method="post" action="{{ path('admin_review_status', {id: r.id}) }}">
+                                        <input type="hidden" name="_token" value="{{ csrf_token('review_status_' ~ r.id) }}">
+                                        <input type="hidden" name="status" value="{{ s }}">
+                                        <button class="btn-outline text-xs py-1 px-2">{{ l }}</button>
+                                    </form>
+                                {% endfor %}
+                                <form method="post" action="{{ path('admin_review_delete', {id: r.id}) }}" onsubmit="return confirm('Supprimer ?')">
+                                    <input type="hidden" name="_token" value="{{ csrf_token('review_delete_' ~ r.id) }}">
+                                    <button class="btn-outline text-xs py-1 px-2 text-red-400 border-red-500/40">×</button>
+                                </form>
+                            </div>
+                        </td>
+                    </tr>
+                {% else %}
+                    <tr><td colspan="6" class="px-4 py-8 text-center text-luxe-muted">Aucun avis pour l'instant.</td></tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    {# Admin can publish an avis directly (per client spec) #}
+    <aside class="card-luxe p-6 h-fit">
+        <h2 class="font-display font-semibold mb-4">Ajouter un avis</h2>
+        <p class="text-xs text-luxe-muted mb-4">Publié immédiatement.</p>
+        {{ form_start(form) }}
+            {{ form_row(form.customerName) }}
+            {{ form_row(form.rating) }}
+            {{ form_row(form.comment) }}
+            <button type="submit" class="btn-gold w-full mt-3">Publier l'avis</button>
+        {{ form_end(form) }}
+    </aside>
+</div>
+{% endblock %}

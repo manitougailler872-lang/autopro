@@ -1,0 +1,49 @@
+
+{% set img = vehicle.primaryImage %}
+{% set _cta = cta|default('Voir détails') %}
+<div class="max-w-4xl mx-auto bg-luxe-card border border-luxe-border rounded-xl">
+
+        <!-- COLONNE 1 : Photo véhicule -->
+        <div class="relative h-full md:h-full rounded-lg overflow-hidden border border-luxe-border">
+            {% if vehicle.bestDeal is not null and vehicle.bestDealPercent > 0 and vehicle.isAvailable %}
+                <div class="absolute -right-10 top-4 rotate-45 bg-green-600 text-white font-bold text-sm px-10 py-1 shadow-lg">
+                    -{{ vehicle.bestDealPercent }}%
+                </div>
+            {% endif %}
+            {% if img %}
+                <img src="{{ img.publicPath }}" alt="{{ vehicle.fullName }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+            {% else %}
+                <img src="{{ asset('images/default_img.png') }}" alt="{{ vehicle.fullName }}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+            {% endif %}
+        </div>
+        <!-- COLONNE 2 : Infos -->
+       <div class="min-w-0 px-4">
+            <h2 class="text-white font-bold text-lg truncate leading-snug mb-1">
+                {{ vehicle.fullName }}
+            </h2>
+           {% if vehicle.rating %}
+               {% include 'components/_stars.html.twig' with {rating: vehicle.rating} %}
+           {% else %}
+               {% include 'components/_stars.html.twig' with {rating: 0} %}
+           {% endif %}
+        </div>
+        <div class="flex flex-col pb-2 px-4 items-start gap-3">
+            <div class="px-2  inline-flex items-baseline gap-0.5">
+                <span class="text-red font-extrabold text-3xl leading-none">{{ vehicle.price|money_eur }}</span>
+            </div>
+            <div class="flex items-start gap-1.5 text-sm text-luxe-muted">
+                <i data-lucide="calendar-check" class="w-4 h-4 text-emerald-400 mt-0.5"></i>
+                <span>
+                  Retrait ou livraison<br>
+                  Dès le <span class="font-semibold text-luxe-text">06/08/2026</span>
+                </span>
+            </div>
+            <a href="{{ path('vehicle_detail', {slug: vehicle.slug}) }}" class="w-full">
+                <button class="w-full  p-4 flex items-center justify-center gap-2 bg-luxe-gold hover:bg-luxe-gold-light text-luxe-black font-semibold text-sm py-3 rounded-lg transition">
+                    <i data-lucide="key" class="w-4 h-4"></i>
+                   {{ _cta }}
+                </button>
+            </a>
+        </div>
+    </div>
+

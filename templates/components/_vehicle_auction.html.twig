@@ -1,0 +1,82 @@
+{% set img = vehicle.primaryImage %}
+{% set _cta = cta|default('Voir détails') %}
+<a {% if not vehicle.reserved %} href="{{ path('vehicle_detail', {slug: vehicle.slug}) }}"  {% endif %} class="group relative flex flex-col card-luxe overflow-hidden hover:border-luxe-orange hover:shadow-lg hover:shadow-luxe-orange/5 transition-all duration-200 reveal">
+    {% if vehicle.bestDeal is not null and vehicle.bestDealPercent > 0 and vehicle.isAvailable %}
+        <div class="absolute -right-10 top-4 rotate-45 bg-green-600 text-white font-bold text-sm px-10 py-1 shadow-lg">
+            -{{ vehicle.bestDealPercent }}%
+        </div>
+    {% endif %}
+
+    {% if not vehicle.isAvailable %}
+        <div class="absolute  left-5 top-5 rounded-r-full border border-luxe-orange bg-luxe-border px-5 py-2 text-sm font-semibold text-luxe-orange shadow-lg">
+            Non disponible
+        </div>
+    {% endif %}
+    {% if vehicle.reserved %}
+        <div class="absolute  left-5 top-5 rounded-r-full border border-luxe-orange bg-luxe-border px-5 py-2 text-sm font-semibold text-luxe-orange shadow-lg">
+            Réservé
+        </div>
+    {% endif %}
+    <div class="aspect-[3/2] bg-luxe-black-alt overflow-hidden">
+        {% if img %}
+            <img src="{{ img.publicPath }}" alt="{{ vehicle.fullName }}" loading="lazy"
+                 class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+        {% else %}
+            <div class="w-full h-full flex items-center justify-center text-4xl text-luxe-muted">🚗</div>
+        {% endif %}
+    </div>
+
+    {# Bande timer d'enchère #}
+    {% if vehicle.auctionEndsAt is defined and vehicle.auctionEndsAt is not null %}
+        <div
+            class="js-auction-band flex items-center gap-3 bg-green-600 px-3 py-2 text-white data-[expired=true]:bg-luxe-black-alt data-[expired=true]:text-luxe-muted transition-colors duration-300"
+            data-end="{{ vehicle.auctionEndsAt.format('c') }}"
+            data-expired="false"
+        >
+            <div class="relative flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-white/20">
+                <span class="js-auction-live absolute -top-0.5 -right-0.5 flex h-2.5 w-2.5">
+                    <span class="absolute inline-flex h-full w-full animate-ping rounded-full bg-white/80"></span>
+                    <span class="relative inline-flex h-2.5 w-2.5 rounded-full bg-white"></span>
+                </span>
+                <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="9"/>
+                    <path d="M12 7v5l3 2"/>
+                </svg>
+            </div>
+
+            <div class="flex flex-col leading-tight">
+                 <span class="js-auction-value font-mono font-bold text-sm tabular-nums">--:--:--</span>
+            </div>
+        </div>
+    {% endif %}
+
+    <div class="p-4 flex-1 flex flex-col">
+        <div class="flex items-start justify-between gap-2 mb-1">
+            <h3 class="font-display font-semibold truncate">{{ vehicle.brand }} {{ vehicle.model }}</h3>
+            {% if vehicle.rating %}
+                {% include 'components/_stars.html.twig' with {rating: vehicle.rating} %}
+            {% endif %}
+        </div>
+        <p class="text-xs text-luxe-muted mb-3 truncate">{{ vehicle.version }}</p>
+        <div class="flex flex-wrap gap-1.5 text-xs text-luxe-muted mb-4">
+            {% if vehicle.year is not empty %}
+                <span class="chip">{{ vehicle.year }}</span>
+            {% endif %}
+            {% if vehicle.mileage is not empty %}
+                <span class="chip">{{ vehicle.mileage|mileage }}</span>
+            {% endif %}
+            {% if vehicle.fuel is not empty %}
+                <span class="chip">{{ vehicle.fuel.label }}</span>
+            {% endif %}
+            {% if vehicle.originNumber is not empty %}
+                <span class="chip">{{ vehicle.originNumber }}</span>
+            {% endif %}
+        </div>
+        <div class="flex items-center justify-between mt-auto">
+            <div class="luxe-orange-soft text-lg font-bold">{{ vehicle.price|money_eur }}</div>
+            {% if not vehicle.reserved %}
+                <span class="btn-gold bg-black text-xs py-1.5 px-4">{{ _cta }}</span>
+            {% endif %}
+        </div>
+    </div>
+</a>

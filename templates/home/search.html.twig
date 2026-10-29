@@ -1,0 +1,37 @@
+{% extends 'base_simple.html.twig' %}
+{% block title %}AutoPro — Trouvez le véhicule de vos rêves{% endblock %}
+
+{% block body %}
+
+{# ========== HERO ========== #}
+<section class="relative overflow-hidden bg-luxe-black">
+    <div class="absolute inset-0 bg-cover bg-center" style="background-image: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.75) 20%,
+    rgba(255, 255, 255, 0.45) 50%,
+    rgba(255, 255, 255, 0.10) 100%
+), url({{ asset('images/bg-hero-3.png') }});"></div>
+    <div class="absolute inset-0 bg-[url({{ asset('images/bg-hero-3.png') }})] bg-cover bg-bottom"></div>
+    <div class="relative max-w-7xl mx-auto px-6 py-20 md:py-28">
+        <div class="max-w-xl fade-in-up">
+          
+        </div>
+    </div>
+</section>
+{# ========================================================= #} {# SECTION 3 : RECHERCHE PAR BUDGET #} {#
+========================================================= #}
+<section class="max-w-7xl mx-auto bg-luxe-black py-14 lg:py-12">
+    <div class="mx-auto max-w-[1450px] px-5 sm:px-8">
+        <div class="mx-auto max-w-4xl text-center">
+            <h2 class="mt-3 font-display text-3xl font-bold text-luxe-text md:text-4xl">
+                Trouver une voiture
+            </h2>
+            {# ================= SEARCH + FILTERS ON ONE LINE ================= #}
+            <form method="get" action="{{path('find')}}" class="card-luxe mt-5 p-3 mb-6">
+                <div class="flex flex-col lg:flex-row lg:items-center gap-2">
+                    <input type="text" name="query" placeholder="Veuillez renseigner la référence du véhicule" class="input-luxe lg:w-28">
+                    <button type="submit" class="btn-gold shrink-0">Rechercher</button>
+                </div>
+            </form>
+    </div>
+{% endblock %}

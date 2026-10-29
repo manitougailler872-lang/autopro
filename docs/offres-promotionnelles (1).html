@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Offres promotionnelles</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            'luxe-black':       '#FDFDFD',
+            'luxe-black-alt':   '#f5f7f9',
+            'luxe-card':        '#FFFFFF',
+            'luxe-border':      '#E6E3DC',
+            'luxe-orange':      '#ED1719',
+            'luxe-orange-dark': '#C81214',
+            'luxe-orange-soft': 'rgba(237, 23, 25, 0.12)',
+            'luxe-gold':        '#ED1719',
+            'luxe-gold-dark':   '#C81214',
+            'luxe-text':        '#000000',
+            'luxe-muted':       '#555555',
+            'luxe-faint':       '#555555',
+          },
+          fontFamily: {
+            sans:    ['"Raleway"', 'Inter', 'system-ui', 'sans-serif'],
+            display: ['"Raleway"', 'Inter', 'system-ui', 'sans-serif'],
+            mono:    ['"JetBrains Mono"', 'ui-monospace', 'SFMono-Regular', 'monospace'],
+          },
+          borderRadius: { 'xl': '0.9rem', '2xl': '1.25rem' },
+        },
+      },
+    }
+  </script>
+</head>
+
+<body class="bg-luxe-black font-sans text-luxe-text antialiased">
+
+  <section class="mx-auto max-w-screen-2xl px-6 py-8 lg:px-14">
+
+    <a href="#" class="mb-6 inline-flex items-center gap-2 rounded text-[28px] font-semibold leading-none tracking-tight text-luxe-text hover:text-luxe-orange-dark focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-luxe-orange">
+      Offres promotionnelles
+      <svg class="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 18 6-6-6-6"/></svg>
+    </a>
+
+    <div class="grid grid-cols-2 gap-x-5 gap-y-6 lg:grid-cols-[2fr_1fr_1fr_1fr_1fr]">
+
+      <article class="group relative col-span-2 lg:col-span-1 lg:row-span-2">
+        <a href="#" class="block focus-visible:outline-none" aria-label="Desodorisant Terraking Gruber/Hummer avec protection">
+          <div class="relative aspect-[4/3] overflow-hidden rounded-2xl bg-gradient-to-br from-emerald-800 via-emerald-600 to-stone-400">
+            <img src="https://images.unsplash.com/photo-1617351260761-f741393ad3e1?auto=format&fit=crop&w=1200&q=75" alt="Tracteur vert et orange dans un champ" loading="lazy" onerror="this.remove()" class="absolute inset-0 h-full w-full object-cover transition duration-300 group-hover:scale-105">
+            <span class="absolute left-2.5 top-2.5 rounded-full bg-white/90 px-3 py-1.5 text-sm font-medium text-luxe-text shadow-sm">Choix du jour</span>
+            <span class="absolute bottom-3 left-1/2 h-1.5 w-6 -translate-x-1/2 rounded-full bg-white/90" aria-hidden="true"></span>
+          </div>
+        </a>
+        <button type="button" class="fav absolute right-2.5 top-2.5 z-10 grid h-9 w-9 place-items-center rounded-full bg-slate-700/60 text-white backdrop-blur-sm transition hover:bg-slate-700/80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-luxe-orange" aria-label="Ajouter aux favoris" aria-pressed="false"><svg class="h-[18px] w-[18px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg></button>
+        <div class="mt-2 grid grid-cols-3 gap-2">
+          <div class="relative aspect-[4/3] overflow-hidden rounded-xl bg-gradient-to-br from-emerald-700 to-lime-500"><img src="https://images.unsplash.com/photo-1601171762693-d2c0fd292a16?auto=format&fit=crop&w=400&q=75" alt="Tracteur vert vue 2" loading="lazy" onerror="this.remove()" class="absolute inset-0 h-full w-full object-cover transition duration-300 group-hover:scale-105"></div>
+          <div class="relative aspect-[4/3] overflow-hidden rounded-xl bg-gradient-to-br from-emerald-900 to-stone-500"><img src="https://images.unsplash.com/photo-1684352729813-7c777cffc785?auto=format&fit=crop&w=400&q=75" alt="Avant d un tracteur vert" loading="lazy" onerror="this.remove()" class="absolute inset-0 h-full w-full object-cover transition duration-300 group-hover:scale-105"></div>
+          <div class="relative aspect-[4/3] overflow-hidden rounded-xl bg-gradient-to-br from-green-600 to-emerald-900"><img src="https://images.unsplash.com/photo-1575512567768-7fdb24d64043?auto=format&fit=crop&w=400&q=75" alt="Vue aerienne d un champ" loading="lazy" onerror="this.remove()" class="absolute inset-0 h-full w-full object-cover transition duration-300 group-hover:scale-105"></div>
+        </div>
+        <a href="#" class="mt-4 block focus-visible:outline-none">
+          <h3 class="truncate text-xl font-semibold text-luxe-text group-hover:text-luxe-orange-dark">D&eacute;sodorisant Terraking Gruber/Hummer avec protection</h3>
+          <p class="mt-1 text-[15px] text-luxe-muted"><span class="font-semibold">7 780 EUR</span> &middot; 2026</p>
+        </a>
+      </article>
+      <article class="group relative">
+        <a href="#" class="block focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-luxe-orange rounded-2xl" aria-label="Terraking Disc Hummer GreenPOWER">
+          <div class="relative aspect-[4/3] overflow-hidden rounded-2xl bg-gradient-to-br from-slate-800 via-green-700 to-stone-400"><img src="https://images.unsplash.com/photo-1557487970-5d5211b65a82?auto=format&fit=crop&w=800&q=75" alt="Herse a disques verte et rouge" loading="lazy" onerror="this.remove()" class="absolute inset-0 h-full w-full object-cover transition duration-300 group-hover:scale-105"></div>
+        </a>
+        <button type="button" class="fav absolute right-2.5 top-2.5 z-10 grid h-9 w-9 place-items-center rounded-full bg-slate-700/60 text-white backdrop-blur-sm transition hover:bg-slate-700/80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-luxe-orange" aria-label="Ajouter aux favoris" aria-pressed="false"><svg class="h-[18px] w-[18px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg></button>
+        <a href="#" class="mt-3 block focus-visible:outline-none">
+          <h3 class="line-clamp-2 text-[15px] font-medium leading-snug text-luxe-text group-hover:text-luxe-orange-dark">Terraking Disc Hummer GreenPOWER</h3>
+          <p class="mt-1 text-[15px] text-luxe-muted"><span class="font-semibold">6 595 EUR</span> &middot; 2026</p>
+        </a>
+      </article>
+      <article class="group relative">
+        <a href="#" class="block focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-luxe-orange rounded-2xl" aria-label="D&eacute;sodorisant Terraking Gruber/Hummer avec protection">
+          <div class="relative aspect-[4/3] overflow-hidden rounded-2xl bg-gradient-to-br from-emerald-800 via-emerald-600 to-stone-400"><img src="https://images.unsplash.com/photo-1617351260761-f741393ad3e1?auto=format&fit=crop&w=800&q=75" alt="Tracteur vert et orange" loading="lazy" onerror="this.remove()" class="absolute inset-0 h-full w-full object-cover transition duration-300 group-hover:scale-105"></div>
+        </a>
+        <button type="button" class="fav absolute right-2.5 top-2.5 z-10 grid h-9 w-9 place-items-center rounded-full bg-slate-700/60 text-white backdrop-blur-sm transition hover:bg-slate-700/80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-luxe-orange" aria-label="Ajouter aux favoris" aria-pressed="false"><svg class="h-[18px] w-[18px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg></button>
+        <a href="#" class="mt-3 block focus-visible:outline-none">
+          <h3 class="line-clamp-2 text-[15px] font-medium leading-snug text-luxe-text group-hover:text-luxe-orange-dark">D&eacute;sodorisant Terraking Gruber/Hummer avec protection</h3>
+          <p class="mt-1 text-[15px] text-luxe-muted"><span class="font-semibold">7 780 EUR</span> &middot; 2026</p>
+        </a>
+      </article>
+      <article class="group relative">
+        <a href="#" class="block focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-luxe-orange rounded-2xl" aria-label="IRRIMEC 63/300">
+          <div class="relative aspect-[4/3] overflow-hidden rounded-2xl bg-gradient-to-br from-stone-500 via-emerald-800 to-stone-300"><img src="https://images.unsplash.com/photo-1743742566156-f1745850281a?auto=format&fit=crop&w=800&q=75" alt="Champ irrigue par aspersion" loading="lazy" onerror="this.remove()" class="absolute inset-0 h-full w-full object-cover transition duration-300 group-hover:scale-105"></div>
+        </a>
+        <button type="button" class="fav absolute right-2.5 top-2.5 z-10 grid h-9 w-9 place-items-center rounded-full bg-slate-700/60 text-white backdrop-blur-sm transition hover:bg-slate-700/80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-luxe-orange" aria-label="Ajouter aux favoris" aria-pressed="false"><svg class="h-[18px] w-[18px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg></button>
+        <a href="#" class="mt-3 block focus-visible:outline-none">
+          <h3 class="line-clamp-2 text-[15px] font-medium leading-snug text-luxe-text group-hover:text-luxe-orange-dark">IRRIMEC 63/300</h3>
+          <p class="mt-1 text-[15px] text-luxe-muted"><span class="font-semibold">9 680 EUR</span> &middot; 2026</p>
+        </a>
+      </article>
+      <article class="group relative">
+        <a href="#" class="block focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-luxe-orange rounded-2xl" aria-label="Quivogne Rollmot 830">
+          <div class="relative aspect-[4/3] overflow-hidden rounded-2xl border border-luxe-border bg-luxe-black-alt"></div>
+        </a>
+        <button type="button" class="fav absolute right-2.5 top-2.5 z-10 grid h-9 w-9 place-items-center rounded-full bg-slate-700/60 text-white backdrop-blur-sm transition hover:bg-slate-700/80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-luxe-orange" aria-label="Ajouter aux favoris" aria-pressed="false"><svg class="h-[18px] w-[18px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg></button>
+        <a href="#" class="mt-3 block focus-visible:outline-none">
+          <h3 class="line-clamp-2 text-[15px] font-medium leading-snug text-luxe-text group-hover:text-luxe-orange-dark">Quivogne Rollmot 830</h3>
+          <p class="mt-1 text-[15px] text-luxe-muted"><span class="font-semibold">8 800 EUR</span> &middot; 2015</p>
+        </a>
+      </article>
+      <article class="group relative">
+        <a href="#" class="block focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-luxe-orange rounded-2xl" aria-label="Claas Jaguar 695 SL">
+          <div class="relative aspect-[4/3] overflow-hidden rounded-2xl bg-gradient-to-br from-slate-900 via-emerald-900 to-yellow-600"><img src="https://images.unsplash.com/photo-1760299092548-f6c6c867cc2f?auto=format&fit=crop&w=800&q=75" alt="Moissonneuse dans un champ de ble" loading="lazy" onerror="this.remove()" class="absolute inset-0 h-full w-full object-cover transition duration-300 group-hover:scale-105"></div>
+        </a>
+        <button type="button" class="fav absolute right-2.5 top-2.5 z-10 grid h-9 w-9 place-items-center rounded-full bg-slate-700/60 text-white backdrop-blur-sm transition hover:bg-slate-700/80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-luxe-orange" aria-label="Ajouter aux favoris" aria-pressed="false"><svg class="h-[18px] w-[18px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg></button>
+        <a href="#" class="mt-3 block focus-visible:outline-none">
+          <h3 class="line-clamp-2 text-[15px] font-medium leading-snug text-luxe-text group-hover:text-luxe-orange-dark">Claas Jaguar 695 SL</h3>
+          <p class="mt-1 text-[15px] text-luxe-muted"><span class="font-semibold">21 236 EUR</span> &middot; 1993</p>
+        </a>
+      </article>
+      <article class="group relative">
+        <a href="#" class="block focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-luxe-orange rounded-2xl" aria-label="Marathon Lemken Korund 8/900 km">
+          <div class="relative aspect-[4/3] overflow-hidden rounded-2xl bg-gradient-to-br from-blue-800 via-blue-600 to-sky-400"><img src="https://images.unsplash.com/photo-1641999165493-6167b9332959?auto=format&fit=crop&w=800&q=75" alt="Terre labouree en rangs" loading="lazy" onerror="this.remove()" class="absolute inset-0 h-full w-full object-cover transition duration-300 group-hover:scale-105"></div>
+        </a>
+        <button type="button" class="fav absolute right-2.5 top-2.5 z-10 grid h-9 w-9 place-items-center rounded-full bg-slate-700/60 text-white backdrop-blur-sm transition hover:bg-slate-700/80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-luxe-orange" aria-label="Ajouter aux favoris" aria-pressed="false"><svg class="h-[18px] w-[18px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg></button>
+        <a href="#" class="mt-3 block focus-visible:outline-none">
+          <h3 class="line-clamp-2 text-[15px] font-medium leading-snug text-luxe-text group-hover:text-luxe-orange-dark">Marathon Lemken Korund 8/900 km</h3>
+          <p class="mt-1 text-[15px] text-luxe-muted"><span class="font-semibold">44 649 EUR</span> &middot; 2026</p>
+        </a>
+      </article>
+      <article class="group relative">
+        <a href="#" class="block focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-luxe-orange rounded-2xl" aria-label="Semoir &agrave; paille Kuhn KUHN + Cultivateur de pr&eacute;paration KUHN">
+          <div class="relative aspect-[4/3] overflow-hidden rounded-2xl bg-gradient-to-br from-orange-700 via-orange-500 to-stone-300"><img src="https://images.unsplash.com/photo-1774367030640-ce361e83d389?auto=format&fit=crop&w=800&q=75" alt="Materiel agricole rouge" loading="lazy" onerror="this.remove()" class="absolute inset-0 h-full w-full object-cover transition duration-300 group-hover:scale-105"></div>
+        </a>
+        <button type="button" class="fav absolute right-2.5 top-2.5 z-10 grid h-9 w-9 place-items-center rounded-full bg-slate-700/60 text-white backdrop-blur-sm transition hover:bg-slate-700/80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-luxe-orange" aria-label="Ajouter aux favoris" aria-pressed="false"><svg class="h-[18px] w-[18px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg></button>
+        <a href="#" class="mt-3 block focus-visible:outline-none">
+          <h3 class="line-clamp-2 text-[15px] font-medium leading-snug text-luxe-text group-hover:text-luxe-orange-dark">Semoir &agrave; paille Kuhn KUHN + Cultivateur de pr&eacute;paration KUHN</h3>
+          <p class="mt-1 text-[15px] text-luxe-muted"><span class="font-semibold">11 834 EUR</span> &middot; 2010</p>
+        </a>
+      </article>
+      <article class="group relative">
+        <a href="#" class="block focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-luxe-orange rounded-2xl" aria-label="Solis H26 HST avec chargeur frontal">
+          <div class="relative aspect-[4/3] overflow-hidden rounded-2xl bg-gradient-to-br from-blue-700 via-blue-500 to-teal-400"><img src="https://images.unsplash.com/photo-1565151903241-634c9c12f28e?auto=format&fit=crop&w=800&q=75" alt="Tracteur avec chargeur frontal" loading="lazy" onerror="this.remove()" class="absolute inset-0 h-full w-full object-cover transition duration-300 group-hover:scale-105"></div>
+        </a>
+        <button type="button" class="fav absolute right-2.5 top-2.5 z-10 grid h-9 w-9 place-items-center rounded-full bg-slate-700/60 text-white backdrop-blur-sm transition hover:bg-slate-700/80 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-luxe-orange" aria-label="Ajouter aux favoris" aria-pressed="false"><svg class="h-[18px] w-[18px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 14c1.49-1.46 3-3.21 3-5.5A5.5 5.5 0 0 0 16.5 3c-1.76 0-3 .5-4.5 2-1.5-1.5-2.74-2-4.5-2A5.5 5.5 0 0 0 2 8.5c0 2.3 1.5 4.05 3 5.5l7 7Z"/></svg></button>
+        <a href="#" class="mt-3 block focus-visible:outline-none">
+          <h3 class="line-clamp-2 text-[15px] font-medium leading-snug text-luxe-text group-hover:text-luxe-orange-dark">Solis H26 HST avec chargeur frontal</h3>
+          <p class="mt-1 text-[15px] text-luxe-muted"><span class="font-semibold">19 360 EUR</span> &middot; 2024</p>
+        </a>
+      </article>
+
+    </div>
+  </section>
+
+  <script>
+    // Bouton favori : coeur plein rouge (accent luxe-orange)
+    document.querySelectorAll('.fav').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var on = btn.getAttribute('aria-pressed') !== 'true';
+        btn.setAttribute('aria-pressed', on);
+        btn.classList.toggle('bg-luxe-orange', on);
+        btn.classList.toggle('bg-slate-700/60', !on);
+        btn.querySelector('svg').setAttribute('fill', on ? 'currentColor' : 'none');
+      });
+    });
+  </script>
+</body>
+</html>

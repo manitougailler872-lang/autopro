@@ -1,0 +1,1568 @@
+{% extends 'base.html.twig' %}
+{% block title %}AUTO PRO — Trouvez le véhicule de vos rêves{% endblock %}
+
+{% block body %}
+
+{# ========== HERO ========== #}
+<section class="relative overflow-hidden bg-luxe-black">
+    <div class="absolute inset-0 bg-cover bg-center" style="background-image: linear-gradient(
+    90deg,
+    rgba(255, 255, 255, 0.75) 20%,
+    rgba(255, 255, 255, 0.45) 50%,
+    rgba(255, 255, 255, 0.10) 100%
+), url({{ asset('images/bg-hero-3.png') }});"></div>
+    <div class="absolute inset-0 bg-[url({{ asset('images/bg-hero-3.png') }})] bg-cover bg-bottom"></div>
+    <div class="relative max-w-7xl mx-auto px-6 py-20 md:py-28">
+        <div class="max-w-xl fade-in-up">
+            <h1 class="text-4xl text-black md:text-5xl text-upper font-display font-bold leading-tight mb-6">
+                Trouvez votre <br>prochaine voiture <br>
+                chez&nbsp;<span class="text-luxe-orange">AUTOPRO</span>
+            </h1>
+            <p class="text-sm text-blanc mb-8 max-w-md leading-relaxed">
+                Véhicules d'occasion sélectionnés, contrôlés et garantis
+            </p>
+            <div class="flex flex-wrap gap-3">
+                <a href="{{ path('vehicle_list') }}" class="btn-gold">Notre collection</a>
+                <a href="#contact" class="btn-outline text-white bg-black">Nous contacter</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+{# ========================================================= #} {# SECTION 3 : RECHERCHE PAR BUDGET #} {#
+========================================================= #}
+
+<section class="max-w-7xl mx-auto bg-luxe-black py-14 lg:py-12">
+    <div class="mx-auto max-w-[1450px] px-5 sm:px-8">
+        <div class="mx-auto max-w-4xl text-center">
+            <h2 class="mt-3 font-display text-3xl font-bold text-luxe-text md:text-4xl">
+                Trouvez une voiture correspondant à votre budget
+            </h2>
+            <p class="mx-auto mt-4 max-w-2xl text-luxe-muted">
+                Sélectionnez votre budget et découvrez rapidement les véhicules adaptés à vos critères.
+            </p>
+               {# ================= SEARCH + FILTERS ON ONE LINE ================= #}
+    <form method="get" class="card-luxe mt-5 p-3 mb-6">
+        <div class="flex flex-col lg:flex-row lg:items-center gap-2">
+            {# Big rounded search field #}
+{#
+            <div class="relative flex-1">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="w-5 h-5 absolute left-4 top-1/2 -translate-y-1/2 text-luxe-muted" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" clip-rule="evenodd" d="M10.75 4.5a6.25 6.25 0 104.44 10.65l4.28 4.28a.75.75 0 101.06-1.06l-4.28-4.28A6.25 6.25 0 0010.75 4.5Z"/></svg>
+                <input type="search" name="q" value="{{ q }}" placeholder="Rechercher par libellé, marque, modèle..." class="w-full lg:w-40 bg-luxe-black-alt border border-luxe-border rounded-full pl-11 pr-4 py-3 text-sm focus:border-luxe-orange focus:outline-none focus:ring-2 focus:ring-luxe-orange/25 transition">
+            </div>
+#}
+            <select name="brand" class="input-luxe lg:w-40">
+                <option value="">Marque</option>
+                {% for b in brandVehicles %}
+                    <option value="{{ b }}">{{ b }}</option>
+                {% endfor %}
+            </select>
+            <select name="model" class="input-luxe lg:w-40">
+                <option value="">Modèle</option>
+                {% for b in modeles %}
+                    <option value="{{ b }}">{{ b }}</option>
+                {% endfor %}
+            </select>
+
+            <select name="year" class="input-luxe lg:w-32">
+                <option value="">Année</option>
+                {% for y in 2026..2008 %}
+                    <option value="{{ y }}" {{ y == y ? 'selected' : '' }}>{{ y }}</option>
+                {% endfor %}
+            </select>
+
+            <input type="text" name="query" placeholder="Libellé, Marque, Référence..." class="input-luxe lg:w-28">
+           
+            <button type="submit" class="btn-gold shrink-0">Rechercher</button>
+        </div>
+    </form>
+        </div>
+
+        {# Switch #}
+        {# <div class="mt-10 flex justify-center">
+            <div class="flex w-full max-w-[430px] rounded-xl border border-luxe-border bg-luxe-black-alt p-1">
+                <button
+                    type="button"
+                    class="flex-1 rounded-lg bg-luxe-orange px-5 py-3 font-semibold text-white shadow-sm transition"
+                >
+                    Prix total
+                </button>
+
+                <button
+                    type="button"
+                    class="flex-1 rounded-lg px-5 py-3 font-semibold text-luxe-muted transition hover:bg-luxe-card hover:text-luxe-text"
+                >
+                    Budget mensuel
+                </button>
+            </div>
+        </div> #}
+
+        {# Budgets #}
+        <div class="mt-9 flex flex-wrap items-center justify-center gap-3">
+          {% set budgets = {
+                'Jusqu’à 4 000 €': 4000,
+                'Jusqu’à 6 000 €': 6000,
+                'Jusqu’à 8 000 €': 8000,
+                'Jusqu’à 10 000 €': 10000,
+                'Jusqu’à 15 000 €': 15000,
+                'Jusqu’à 20 000 €': 20000,
+                'Jusqu’à 25 000 €': 25000,
+                'Jusqu’à 30 000 €': 30000,
+                'Plus de 30 000 €': 30001
+            } %}
+            {% for budget, value in budgets %}
+                {% if value == 30001 %}
+
+                    <a
+                        href="{{ path('vehicle_list', {'price_min': value}) }}"
+                        class="rounded-xl border border-luxe-border bg-luxe-black-alt px-5 py-3 text-sm font-semibold text-luxe-text transition duration-300 hover:border-luxe-orange hover:bg-luxe-orange-soft hover:text-luxe-orange-dark"
+                    >
+                        {{ budget }}
+                    </a>
+
+                {% else %}
+
+                    <a
+                        href="{{ path('vehicle_list', {'price_max': value}) }}"
+                        class="rounded-xl border border-luxe-border bg-luxe-black-alt px-5 py-3 text-sm font-semibold text-luxe-text transition duration-300 hover:border-luxe-orange hover:bg-luxe-orange-soft hover:text-luxe-orange-dark"
+                    >
+                        {{ budget }}
+                    </a>
+
+                {% endif %}
+
+            {% endfor %}
+            {# <a
+                href="#"
+                class="inline-flex items-center gap-2 rounded-xl bg-luxe-orange px-5 py-3 text-sm font-semibold text-white transition hover:bg-luxe-orange-dark"
+            >
+                Voir tout
+
+                <svg class="h-4 w-4" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.4">
+                    <path d="m7 4 6 6-6 6" />
+                </svg>
+            </a> #}
+        </div>
+
+        {# Modèles populaires #}
+        {# <div class="mt-16">
+            <div
+                class="flex flex-col gap-4 border-b border-luxe-border pb-5 sm:flex-row sm:items-center sm:justify-between"
+            >
+                <h3 class="font-display text-2xl font-bold text-luxe-text">Modèles de voitures populaires</h3>
+
+                <a
+                    href="#"
+                    class="inline-flex w-fit items-center gap-2 text-sm font-semibold text-luxe-orange-dark transition hover:text-luxe-orange"
+                >
+                    Toutes les voitures
+
+                    <svg class="h-4 w-4" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2.4">
+                        <path d="m7 4 6 6-6 6" />
+                    </svg>
+                </a>
+            </div>
+
+            {% set models = [ ['Audi A1','Audi A3','Audi A4','Audi Q3','BMW Série 1','BMW X1','Citroën C3'], ['Dacia
+            Duster','Fiat 500','Fiat 500X','Ford Fiesta','Ford Focus','Hyundai Tucson','Kia Sportage'], ['Mercedes
+            Classe A','Mercedes GLA','Nissan Juke','Nissan Qashqai','Peugeot 2008','Peugeot 208','Peugeot 3008'],
+            ['Peugeot 308','Peugeot 508','Seat Ibiza','Toyota C-HR','Toyota Yaris','Volvo V40'] ] %}
+
+            <div class="mt-8 grid grid-cols-2 gap-x-10 gap-y-4 md:grid-cols-3 lg:grid-cols-4">
+                {% for column in modeles %}
+                <div class="space-y-4">
+                     <a
+                        href="{{path('vehicle_list')}}?model={{column}}"
+                        class="block text-[15px] font-medium text-black transition hover:translate-x-1 hover:text-luxe-orange-dark"
+                    >
+                        {{ column }}
+                    </a>
+                </div>
+                {% endfor %}
+            </div>
+        </div> #}
+    </div>
+</section>
+
+{# ========== NOUVELLE COLLECTION (renamed) ========== #}
+<section class="max-w-7xl mx-auto px-6 py-5 ">
+    <div class="flex items-end justify-between mb-8">
+        <div>
+            <h2 class="text-2xl md:text-3xl font-display font-bold">Nouvelle collection</h2>
+            <p class="text-sm text-luxe-muted mt-1">Sélection récente ajoutée au catalogue</p>
+        </div>
+        <a href="{{ path('vehicle_list') }}" class="text-luxe-orange text-sm hover:underline font-medium">Tout voir →</a>
+    </div>
+    {% if featured_vehicles|length == 0 %}
+        <div class="text-center py-16 card-luxe">
+            <p class="text-luxe-muted">Aucun véhicule pour le moment.</p>
+        </div>
+    {% else %}
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+            {% for v in featured_vehicles|slice(0, 4) %}
+                {% include 'components/_vehicle_card.html.twig' with {vehicle: v, cta: 'Réservez'} %}
+            {% endfor %}
+        </div>
+    {% endif %}
+</section>
+
+{# ========== NOUVELLE COLLECTION (renamed) ========== #}
+<section class="max-w-7xl mx-auto px-6 py-10">
+    <div class="flex items-end justify-between mb-8">
+        <div>
+            <h2 class="text-2xl md:text-3xl font-display font-bold">Enchères</h2>
+            <p class="text-sm text-luxe-muted mt-1">Sélection récente ajoutée au catalogue</p>
+        </div>
+        <a href="{{ path('vehicle_list') }}" class="text-luxe-orange text-sm hover:underline font-medium">Tout voir →</a>
+    </div>
+    {% if auctions|length == 0 %}
+        <div class="text-center py-16 card-luxe">
+            <p class="text-luxe-muted">Aucun véhicule pour le moment.</p>
+        </div>
+    {% else %}
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+            {% for v in auctions|slice(0, 4) %}
+              {% include 'components/_vehicle_auction.html.twig' with {vehicle: v, cta: 'Enchérir'} %}
+            {% endfor %}
+        </div>
+    {% endif %}
+</section>
+
+
+{# ========== LES PLUS VENDUS  (renamed) ========== #}
+{% if featured_good_deals|length > 0 %}
+    <section class="max-w-7xl mx-auto px-6 py-10 ">
+        <div class="flex items-end justify-between mb-8">
+            <div>
+                <h2 class="text-2xl md:text-3xl font-display font-bold">Les bonnes affaires</h2>
+                <p class="text-sm text-luxe-muted mt-1">Une réduction exceptionnelle sur cete collection de véhicule</p>
+            </div>
+            <a href="{{ path('vehicle_list') }}" class="text-luxe-orange text-sm hover:underline font-medium">Tout voir →</a>
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+            {% for v in featured_good_deals|slice(0, 4) %}
+                {% include 'components/_vehicle_card.html.twig' with {vehicle: v, cta: 'Réservez'} %}
+            {% endfor %}
+        </div>
+    </section>
+{% endif %}
+
+
+{# ========== RESERVE (renamed) ========== #}
+<section class="max-w-7xl mx-auto px-6 py-10 ">
+    <div class="flex items-end justify-between mb-8">
+        <div>
+            <h2 class="text-2xl md:text-3xl font-display font-bold">Petits prix</h2>
+            <p class="text-sm text-luxe-muted mt-1">Sélection récente ajoutée au catalogue</p>
+        </div>
+        <a href="{{ path('vehicle_list') }}" class="text-luxe-orange text-sm hover:underline font-medium">Tout voir →</a>
+    </div>
+    {% if reserved|length == 0 %}
+        <div class="text-center py-16 card-luxe">
+            <p class="text-luxe-muted">Aucun véhicle pour le moment.</p>
+        </div>
+    {% else %}
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+            {% for v in reserved|slice(0, 8) %}
+                {% include 'components/_vehicle_card.html.twig' with {vehicle: v, cta: 'Réservez'} %}
+            {% endfor %}
+        </div>
+    {% endif %}
+</section>
+
+
+{# ========== NOUVELLE COLLECTION (renamed) ========== #}
+<section class="max-w-7xl mx-auto px-6 py-10 ">
+    <div class="flex items-end justify-between mb-8">
+        <div>
+            <h2 class="text-2xl md:text-3xl font-display font-bold">Pièces Autos</h2>
+            <p class="text-sm text-luxe-muted mt-1">Sélection récente ajoutée au catalogue</p>
+        </div>
+        <a href="{{ path('piece_list') }}" class="text-luxe-orange text-sm hover:underline font-medium">Tout voir →</a>
+    </div>
+    {% if pieces|length == 0 %}
+        <div class="text-center py-16 card-luxe">
+            <p class="text-luxe-muted">Aucune pièce pour le moment.</p>
+        </div>
+    {% else %}
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5">
+            {% for v in pieces|slice(0, 8) %}
+                {% include 'components/_piece_card_v2.html.twig' with {vehicle: v, cta: 'Réservez'} %}
+            {% endfor %}
+        </div>
+    {% endif %}
+</section>
+
+
+
+
+{# ========== POPULAR BRANDS (NEW) ========== #}
+<section class="max-w-7xl mx-auto px-6 py-10 ">
+    <h2 class="text-sm font-display font-semibold mb-8 tracking-wide">MARQUES POPULAIRES</h2>
+    <div class="grid grid-cols-3 sm:grid-cols-4 md:grid-cols-6 lg:grid-cols-8 gap-3">
+        {% for b in ['Peugeot','Renault','Volkswagen','KIA','Toyota','BMW','Mercedes','Audi'] %}
+            {% if b == 'Audi' %}
+                {% set logo = 'audi.svg' %}
+            {% elseif b == 'Renault' %}
+                {% set logo = 'renault.svg' %}
+            {% elseif b == 'Peugeot' %}
+                {% set logo = 'peugeot.svg' %}
+            {% elseif b == 'BMW' %}
+                {% set logo = 'bmw.svg' %}
+            {% elseif b == 'Mercedes' %}
+                {% set logo = 'mercedes.svg' %}
+            {% elseif b == 'KIA' %}
+                {% set logo = 'kia.png' %}
+            {% elseif b == 'Toyota' %}
+                {% set logo = 'toyota.png' %}
+            {% elseif b == 'Volkswagen' %}
+                {% set logo = 'volks.png' %}
+            {% else %}
+                {% set logo = 'renault.svg' %}
+            {% endif %}
+            <a href="{{ path('vehicle_list', {brand: b}) }}" class="card-luxe gap-2 bg-white border-1 border-luxe-border px-4 py-6 flex items-center justify-center text-luxe-muted hover:text-luxe-orange hover:border-luxe-orange transition flex-col font-display font-semibold text-sm">
+                <img
+                    src="{{ asset('images/marques/' ~ logo) }}"
+                    alt="LUXE CAR"
+                    class="h-8 w-10 mx-1 text-white inline-block object-cover"
+                >
+                {{ b }}
+            </a>
+        {% endfor %}
+    </div>
+</section>
+
+{% set partners = partners|default([
+    {name: 'ARVAL', logo: 'v2_content_logo_arval.webp'},
+    {name: 'Athlon', logo: 'v2_content_logo_athlon.webp'},
+    {name: 'Ayvens', logo: 'v2_content_logo_ayvens.webp'},
+    {name: 'Hertz', logo: 'v2_content_logo_hertz.webp'},
+    {name: 'Avis', logo: 'v2_content_logo_avis.webp'},
+    {name: 'DriveMe', logo: 'driveme.png'},
+    {name: 'STCV', logo: 'stcv.png'},
+]) %}
+<section class="max-w-7xl mx-auto bg-luxe-black">
+    <div class="max-w-6xl mx-auto px-4">
+        <p class="text-center text-sm font-semibold text-neutral-400 uppercase tracking-widest mb-10"></p>
+        <div class="relative overflow-hidden [mask-image:linear-gradient(to_right,transparent,black_10%,black_90%,transparent)]">
+            <div class="flex w-max animate-marquee hover:[animation-play-state:paused]">
+                {% for i in 1..2 %}
+                    <div class="flex items-center gap-16 pr-16 shrink-0" {% if i == 2 %}aria-hidden="true"{% endif %}>
+                        {% for partner in partners %}
+                            <img src="{{ asset('images/partners/' ~ partner.logo) }}"
+                                 alt="{{ i == 1 ? partner.name : '' }}"
+                                 class="h-8 w-auto hover:grayscale-0 hover:opacity-100 transition-all duration-300">
+                        {% endfor %}
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</section>
+
+
+
+
+<section class="max-w-5xl mx-auto px-6 py-14" id="simulateur">
+    <div class="grid grid-cols-1 gap-6">
+        <h2 class="mt-3 mb-8 text-center font-display text-3xl font-bold text-luxe-text md:text-4xl">
+            Nos dernières livraisons
+        </h2>
+        <!-- GRANDE CARTE -->
+        <article class="overflow-hidden rounded-xl border border-gray-200 bg-white">
+            <div class="relative aspect-[4/3] overflow-hidden bg-gray-100">
+                <img
+                    src="{{asset('images/proves/prove-1.png')}}"
+                    alt="Ford Galaxy"
+                    class="h-full w-full object-cover"
+                />
+            </div>
+        </article>
+
+        <!-- PETITES CARTES -->
+        <div class="grid grid-cols-1 gap-6 lg:grid-cols-2">
+            <!-- Card -->
+            <article class="overflow-hidden rounded-xl border border-gray-200 bg-white">
+                <div class="relative aspect-[16/9] overflow-hidden bg-gray-100">
+                    <img
+                        src="{{asset('images/proves/prove-4.png')}}"
+                        alt="Volkswagen Passat"
+                        class="h-full w-full object-cover"
+                    />
+                </div>
+                <div class="p-6">
+                   <p class="text-sm text-luxe-muted font-medium">
+                        Ils sont satisfaits de leur véhicule. La livraison a été rapide et assurée par une épuipe professionnelle
+                   </p>
+
+                </div>
+            </article>
+
+            <!-- Card -->
+            <article class="overflow-hidden rounded-xl border border-gray-200 bg-white">
+                <div class="relative aspect-[16/9] overflow-hidden bg-gray-100">
+                    <img
+                        src="{{asset('images/proves/prove-2.png')}}"
+                        alt="Volkswagen T-Roc"
+                        class="h-full w-full object-cover"
+                    />
+                </div>
+                <div class="p-6">
+                      <p class="text-sm text-luxe-muted font-medium">
+                       Jérémie🗣️✨J’ai bien reçu mon véhicule et il correspond globalement à mes attentes. Malheureusement, la livraison a pris beaucoup plus de temps que prévu ⏳. La voiture est finalement arrivée en bon état ✅. J’aurais simplement apprécié une meilleure communication concernant le retard et les délais de livraison. 📞🚚         </p>
+                </div>
+            </article>
+
+            <!-- Card -->
+            <article class="overflow-hidden rounded-xl border border-gray-200 bg-white">
+                <div class="relative aspect-[16/9] overflow-hidden bg-gray-100">
+                    <img
+                        src="{{asset('images/proves/prove-3.png')}}"
+                        alt="Tesla Model Y"
+                        class="h-full w-full object-cover"
+                    />
+                </div>
+                <div class="p-6">
+                    <p class="text-sm text-luxe-muted font-medium">
+                    ⭐⭐⭐
+                        Emilie🗣️✨ Très satisfaite de mon achat ! 🚗✨
+                        Véhicule conforme à l’annonce, équipe professionnelle et très accueillante. Tout s’est déroulé rapidement, de la réservation jusqu’à la remise des clés 🔑. Merci à toute l’équipe ! 🙏
+                     </p>
+                </div>
+            </article>
+
+
+            <!-- Card -->
+            <article class="overflow-hidden rounded-xl border border-gray-200 bg-white">
+                <div class="relative aspect-[16/9] overflow-hidden">
+                    <img
+                        src="{{asset('images/proves/prove-5.jpg')}}"
+                        alt="Suzuki Swift"
+                        class="h-full w-full object-cover"
+                    />
+
+                </div>
+                <div class="p-6">
+                    <p class="text-sm text-luxe-muted font-medium">
+                     Fabienne🗣️✨Je suis vraiment contente de mon nouveau véhicule 🚙❤️. Transaction simple, explications claires et accueil chaleureux. Merci pour votre professionnalisme 👏.
+                    </p>
+                </div>
+            </article>
+
+            <!-- Card -->
+            <article class="overflow-hidden rounded-xl border border-gray-200 bg-white">
+                <div class="relative aspect-[16/9] overflow-hidden bg-gray-100">
+                    <img
+                        src="{{asset('images/proves/prove-6.png')}}"
+                        alt="Suzuki Swift"
+                        class="h-full w-full object-cover"
+                    />
+                </div>
+                <div class="p-6">
+                    <p class="text-sm text-luxe-muted font-medium">
+                       Contrôle technique établi en 3 jours
+                    </p>
+                </div>
+            </article>
+        </div>
+    </div>
+</section>
+
+
+
+
+
+
+
+{# templates/components/_partners_marquee.html.twig #}
+
+
+{# <section class="max-w-5xl mx-auto px-6 py-16" id="simulateur">
+ 
+  <!-- En-tête -->
+  <div class="text-center mb-10">
+    <div class="text-xs font-semibold tracking-widest text-luxe-orange-dark mb-3">SIMULATEUR</div>
+    <h2 class="text-3xl md:text-4xl font-semibold text-luxe-text mb-4">
+      <span class="bg-luxe-orange-soft px-2 rounded">Estimez votre</span> financement véhicule
+    </h2>
+    <p class="text-luxe-muted max-w-xl mx-auto">
+      Ajustez le montant et la durée pour voir immédiatement une estimation, sans engagement.
+    </p>
+  </div>
+ 
+  <!-- Carte -->
+  <div class="bg-luxe-card border border-luxe-border rounded-2xl p-8 grid grid-cols-1 md:grid-cols-2 gap-10">
+ 
+    <!-- Colonne gauche : paramètres -->
+    <div>
+ 
+      <!-- Type de financement -->
+      <div class="mb-8">
+        <div class="text-sm text-luxe-text font-medium mb-3">Type de financement</div>
+        <div class="flex flex-wrap gap-2" id="typesFinancement">
+          <button type="button" class="type-btn px-4 py-2 rounded-full text-sm border transition bg-luxe-orange active:text-white text-white border-luxe-orange font-medium" data-taux="5.9" data-active="true">
+            Crédit classique
+          </button>
+          <button type="button" class="type-btn px-4 py-2 rounded-full text-sm border transition bg-luxe-card text-luxe-muted border-luxe-border hover:border-luxe-orange-dark" data-taux="3.9">
+            LLD
+          </button>
+        </div>
+      </div>
+ 
+      <!-- Montant emprunté -->
+      <div class="mb-8">
+        <div class="flex items-baseline justify-between mb-2">
+          <label for="montant" class="text-sm text-luxe-text font-medium">Montant du véhicule financé</label>
+          <span class="font-mono text-sm text-luxe-text"><span id="montantAffiche">10 000</span> €</span>
+        </div>
+        <input type="range" id="montant" min="2000" max="80000" step="500" value="10000" class="w-full">
+        <div class="flex justify-between text-xs text-luxe-faint mt-1 font-mono">
+          <span>2 000 €</span>
+          <span>80 000 €</span>
+        </div>
+      </div>
+ 
+      <!-- Durée -->
+      <div>
+        <div class="flex items-baseline justify-between mb-2">
+          <label for="duree" class="text-sm text-luxe-text font-medium">Durée de remboursement</label>
+          <span class="font-mono text-sm text-luxe-text"><span id="dureeAffichee">36</span> mois</span>
+        </div>
+        <input type="range" id="duree" min="12" max="84" step="6" value="36" class="w-full">
+        <div class="flex justify-between text-xs text-luxe-faint mt-1 font-mono">
+          <span>12 mois</span>
+          <span>84 mois</span>
+        </div>
+      </div>
+ 
+    </div>
+ 
+    <!-- Colonne droite : résultat -->
+    <div class="bg-luxe-black-alt border border-luxe-border rounded-xl p-8 flex flex-col">
+ 
+      <div class="text-center mb-6">
+        <div class="text-xs font-semibold tracking-widest text-luxe-muted mb-2">MENSUALITÉ ESTIMÉE</div>
+        <div class="flex items-baseline justify-center gap-2">
+          <span class="text-5xl font-semibold text-luxe-text font-mono" id="mensualite">304</span>
+          <span class="text-2xl font-semibold text-luxe-text">€</span>
+          <span class="text-luxe-faint">/mois</span>
+        </div>
+        <div class="text-sm text-luxe-muted mt-2">
+          Taux fixe indicatif : <span class="text-luxe-orange-dark font-medium" id="tauxActuel">5,9</span> % TAEG
+        </div>
+      </div>
+ 
+      <div class="border-t border-luxe-border pt-5 space-y-4">
+        <div class="flex justify-between text-sm">
+          <span class="text-luxe-muted">Montant total dû</span>
+          <span class="font-mono font-medium text-luxe-text"><span id="montantTotalDu">10 936</span> €</span>
+        </div>
+        <div class="flex justify-between text-sm">
+          <span class="text-luxe-muted">Coût total du crédit</span>
+          <span class="font-mono font-medium text-luxe-text"><span id="coutTotalCredit">936</span> €</span>
+        </div>
+      </div>
+ 
+      <p class="text-xs text-luxe-faint text-center mt-auto pt-6">
+        Simulation indicative et non contractuelle, calculée sur la base d'un taux fixe.
+        Le taux définitif dépend de l'étude de votre dossier.
+      </p>
+    </div>
+ 
+  </div>
+ 
+  <!-- Tableau d'amortissement -->
+  <div class="mt-10">
+    <button type="button" id="toggleTableau" class="flex items-center gap-2 text-sm font-medium text-luxe-text hover:text-luxe-orange-dark mb-4">
+      <span id="toggleTableauLabel">Voir le tableau d’amortissement</span>
+      <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 transition-transform" id="toggleTableauIcon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
+      </svg>
+    </button>
+ 
+    <div id="tableauWrapper" class="bg-luxe-card border border-luxe-border rounded-xl overflow-hidden" hidden>
+      <div class="overflow-x-auto max-h-96 overflow-y-auto">
+        <table class="w-full text-sm">
+          <thead class="bg-luxe-black-alt sticky top-0">
+            <tr class="text-left text-luxe-muted text-xs uppercase tracking-wide">
+              <th class="px-4 py-3 font-medium">Échéance</th>
+              <th class="px-4 py-3 font-medium text-right">Mensualité</th>
+              <th class="px-4 py-3 font-medium text-right">Capital</th>
+              <th class="px-4 py-3 font-medium text-right">Intérêts</th>
+              <th class="px-4 py-3 font-medium text-right">Capital restant dû</th>
+            </tr>
+          </thead>
+          <tbody id="tableauCorps">
+            <!-- lignes générées en JS -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+</section> #}
+
+
+
+
+{# <section class="max-w-7xl mx-auto px-6 py-10 ">
+    <div class="mx-auto max-w-[1640px]">
+        <div class="mb-8">
+            <h2 class="font-display text-3xl font-medium leading-tight text-luxe-text lg:text-4xl">
+                Pièces automobiles pour {{brandPieces|length}} marques de voitures et 123 modèles d'auto:
+            </h2>
+        </div>
+
+        {% set brands = [
+            { name: 'RENAULT', count: 69 },
+            { name: 'PEUGEOT', count: 49 },
+            { name: 'CITROËN', count: 44 },
+
+            { name: 'BMW', count: 41 },
+            { name: 'MERCEDES-BENZ', count: 62 },
+            { name: 'AUDI', count: 31 },
+            { name: 'FORD', count: 47 },
+
+            { name: 'FIAT', count: 67 },
+            { name: 'TOYOTA', count: 77 },
+            { name: 'NISSAN', count: 75 },
+
+            { name: 'HYUNDAI', count: 57 },
+
+            { name: 'HONDA', count: 44 },
+            { name: 'SKODA', count: 22 },
+            { name: 'MITSUBISHI', count: 32 },
+            { name: 'LAND ROVER', count: 8 },
+        ] %}
+
+        <div class="grid grid-cols-1 gap-x-4 gap-y-4 sm:grid-cols-2 lg:grid-cols-4">
+
+            {% for brand in brandPieces %}
+                <a
+                    href="{{path('piece_list')}}?q={{brand}}"
+                    class="group flex min-h-[62px] items-center justify-between
+                           bg-luxe-black-alt px-5 py-4
+                           transition duration-200
+                           hover:bg-luxe-orange-soft"
+                >
+                    <span
+                        class="font-display text-[18px] font-medium uppercase
+                               tracking-tight text-luxe-text
+                               transition group-hover:text-luxe-orange-dark"
+                    >
+                        {{ brand.name }}
+                    </span>
+                </a>
+            {% endfor %}
+
+        </div>
+    </div>
+</section> #}
+{# 
+<section class="max-w-7xl mx-auto px-6 py-10">
+    <div class="flex flex-col justify-center items-center gap-2 mb-8">
+        <h2 class="text-2xl text-center md:text-3xl font-display font-bold">Tout ce qu'il faut, rien que l'essentiel</h2>
+        <p class="mx-auto text-center max-w-2xl text-luxe-muted">
+           Livraison, reprise, financement, immatriculation — on s'occupe de tout, vous profitez du reste.
+        </p>
+    </div>
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10">
+        <!-- Livraison -->
+        <div class="flex flex-col items-center text-center">
+            <div class="w-24 h-24 rounded-full  bg-black flex items-center justify-center mb-5">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-9 h-9 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5V7a1 1 0 0 1 1-1h9a1 1 0 0 1 1 1v9.5M3 16.5h11M3 16.5H1.5m12.5 0h4.379a1 1 0 0 0 .707-.293l2.121-2.121a1 1 0 0 0 .293-.707V11a1 1 0 0 0-.293-.707l-2.5-2.5A1 1 0 0 0 17.5 7.5H14M17 19.5a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3ZM7.5 19.5a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3Z" />
+                </svg>
+            </div>
+            <h3 class="text-sm font-bold tracking-wide text-neutral-900 uppercase">Livraison</h3>
+            <span class="block w-6 h-0.5 bg-orange-600 mt-2 mb-2"></span>
+            <p class="text-sm text-neutral-600 leading-relaxed max-w-[220px]">
+                Service de livraison de véhicule à votre domicile
+            </p>
+        </div>
+
+        <!-- Reprise -->
+        <div class="flex flex-col items-center text-center">
+            <div class="w-24 h-24 rounded-full  bg-black flex items-center justify-center mb-5">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-9 h-9 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M4 8h13m0 0-3.5-3.5M17 8l-3.5 3.5M20 16H7m0 0 3.5-3.5M7 16l3.5 3.5" />
+                </svg>
+            </div>
+            <h3 class="text-sm font-bold tracking-wide text-neutral-900 uppercase">Reprise</h3>
+            <span class="block w-6 h-0.5 bg-orange-600 mt-2 mb-2"></span>
+            <p class="text-sm text-neutral-600 leading-relaxed max-w-[220px]">
+                Offre de reprise sur mesure selon vos besoins
+            </p>
+        </div>
+
+        <!-- Financement -->
+        <div class="flex flex-col items-center text-center">
+            <div class="w-24 h-24 rounded-full  bg-black flex items-center justify-center mb-5">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-9 h-9 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M3 21h18M4 21V10m16 11V10M5 10l7-6 7 6M6 10v0m3 0v0m3 0v0m3 0v0m3 0v0M6 21v-7m4 7v-7m4 7v-7m4 7v-7" />
+                </svg>
+            </div>
+            <h3 class="text-sm font-bold tracking-wide text-neutral-900 uppercase">Financement</h3>
+            <span class="block w-6 h-0.5 bg-orange-600 mt-2 mb-2"></span>
+            <p class="text-sm text-neutral-600 leading-relaxed max-w-[220px]">
+                Financez votre acquisition avec nos partenaires
+            </p>
+        </div>
+
+        <!-- Certificat immatriculation -->
+        <div class="flex flex-col items-center text-center">
+            <div class="w-24 h-24 rounded-full bg-black  flex items-center justify-center mb-5">
+                <svg xmlns="http://www.w3.org/2000/svg" class="w-9 h-9 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.8">
+                    <rect x="3" y="5" width="18" height="14" rx="1.5" />
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M7 9h2m-2 3h2m4-4v8m3-6h2m-2 3h2" />
+                </svg>
+            </div>
+            <h3 class="text-sm font-bold tracking-wide text-neutral-900 uppercase">Certificat immatriculation</h3>
+            <span class="block w-6 h-0.5 bg-luxe-orange mt-2 mb-2"></span>
+            <p class="text-sm text-neutral-600 leading-relaxed max-w-[220px]">
+                Relais immatriculation sur place en 15 minutes
+            </p>
+        </div>
+    </div>
+</section> #}
+
+
+{# ========== NOTRE EXPERTISE À VOTRE SERVICE ========== #}
+<section class="max-w-7xl mx-auto px-6 py-10 ">
+    <div class="card-luxe rounded-none shadow-none p-6 md:p-8">
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 md:gap-10 items-center">
+
+          {# LEFT — image #}
+    <div class="w-full overflow-hidden rounded-lg aspect-[4/3] lg:aspect-auto lg:h-full">
+        <img
+            src="{{ asset('images/equipes.png') }}"
+            alt="Notre expertise à votre service"
+            class="block w-full h-full object-cover"
+            loading="lazy"
+        >
+    </div>
+            RIGHT — title + 2x2 cards 
+            <div>
+                <h2 class="text-2xl md:text-3xl font-display font-bold mb-6 md:mb-8">
+                    Notre expertise à votre service
+                </h2>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {% for feature in [
+                        {t: 'Le meilleur prix',      d: 'Une analyse objective des prix des véhicules pour vous aider', icon: 'search'},
+                        {t: 'En toute sérénité',     d: 'Une visibilité complète sur l\'historique du véhicule',        icon: 'clock'},
+                        {t: 'Adapté à votre budget', d: 'Un budget maîtrisé avec notre simulateur de financement',       icon: 'euro'},
+                        {t: 'Vous conseiller',       d: 'Une projection claire sur les futurs entretiens à prévoir',    icon: 'wrench'},
+                    ] %}
+                        <div class="bg-luxe-black-alt border border-luxe-border rounded-lg p-5 hover:border-luxe-orange transition-colors duration-200">
+                            <div class="flex items-start gap-3">
+                                <div class="w-9 h-9 rounded-full bg-luxe-orange-soft border border-luxe-orange/30 flex items-center justify-center text-luxe-orange shrink-0">
+                                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="w-4 h-4" fill="currentColor" aria-hidden="true">
+                                        {% if feature.icon == 'search' %}
+                                            <path fill-rule="evenodd" clip-rule="evenodd" d="M10.75 4.5a6.25 6.25 0 104.44 10.65l4.28 4.28a.75.75 0 101.06-1.06l-4.28-4.28A6.25 6.25 0 0010.75 4.5ZM6 10.75a4.75 4.75 0 119.5 0 4.75 4.75 0 01-9.5 0Z"/>
+                                        {% elseif feature.icon == 'clock' %}
+                                            <path fill-rule="evenodd" clip-rule="evenodd" d="M12 2a10 10 0 100 20 10 10 0 000-20Zm.75 5a.75.75 0 00-1.5 0v5c0 .2.08.39.22.53l3 3a.75.75 0 101.06-1.06L12.75 11.7V7Z"/>
+                                        {% elseif feature.icon == 'euro' %}
+                                            <path fill-rule="evenodd" clip-rule="evenodd" d="M13.5 3.5a8.5 8.5 0 106.55 13.94.75.75 0 011.15.96A10 10 0 113.5 12c0-5.52 4.48-10 10-10 2.68 0 5.12 1.06 6.9 2.78a.75.75 0 11-1.04 1.08A8.47 8.47 0 0013.5 3.5ZM6 9.75A.75.75 0 016.75 9h6a.75.75 0 010 1.5h-6A.75.75 0 016 9.75Zm0 3.75a.75.75 0 01.75-.75h6a.75.75 0 010 1.5h-6a.75.75 0 01-.75-.75Z"/>
+                                        {% elseif feature.icon == 'wrench' %}
+                                            <path fill-rule="evenodd" clip-rule="evenodd" d="M15.4 2.3a5.5 5.5 0 00-6.9 6.9L3 14.7a2 2 0 000 2.83l3.47 3.47a2 2 0 002.83 0l5.5-5.5a5.5 5.5 0 006.9-6.9l-3.35 3.35a1.5 1.5 0 01-2.12 0l-1.42-1.42a1.5 1.5 0 010-2.12L18.15 5.06 15.4 2.3Z"/>
+                                        {% endif %}
+                                    </svg>
+                                </div>
+                                <div class="min-w-0">
+                                    <h3 class="font-display font-semibold text-sm md:text-base mb-1">{{ feature.t }}</h3>
+                                    <p class="text-xs md:text-sm text-luxe-muted leading-relaxed">{{ feature.d }}</p>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+{# ========== COMMENT ÇA MARCHE ========== #}
+<section id="comment-ca-marche" class="max-w-7xl mx-auto px-6 py-10 ">
+    <div class="flex items-center gap-2 mb-8">
+        <h2 class="text-2xl md:text-3xl font-display font-bold">Comment ça marche</h2>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="w-6 h-6 text-luxe-orange" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" clip-rule="evenodd" d="M12 22C6.477 22 2 17.523 2 12S6.477 2 12 2s10 4.477 10 10-4.477 10-10 10Zm-1-6.75a1 1 0 112 0V14a1 1 0 11-2 0v-.25Zm.05-6.5A2.75 2.75 0 0114.75 10c0 .95-.55 1.6-1.32 2.11-.5.33-.68.5-.68.89v.25a.75.75 0 01-1.5 0V13c0-.9.53-1.5 1.35-2.05.53-.35.65-.55.65-.95a1.25 1.25 0 10-2.5 0 .75.75 0 01-1.5 0A2.75 2.75 0 0111.05 7.25Z"/></svg>
+    </div>
+    <div class="grid grid-cols-1 md:grid-cols-4 gap-4">
+        {% for step in [
+            {n: 1, t: 'Choisissez', d: 'Découvrez nos véhicules soigneusement sélectionnés avec photos réelles, description détaillée et informations transparentes.'},
+            {n: 2, t: 'Réservez',   d: 'Validation simple et sécurisée de votre véhicule avec accompagnement dans les démarches administratives.
+
+'},
+            {n: 3, t: 'Payez un accompte de 15 à 20%',  d: 'Effectuez le virement des frais de réservation.'},
+            {n: 4, t: '	
+Livraison ou retrait au garage',    d: 'Votre voiture est prête à rouler, contrôlée et préparée pour vous être remise en toute sérénité.'},
+        ] %}
+            <div class="card-luxe p-6 reveal">
+                <div class="text-luxe-orange font-display text-3xl font-bold mb-2">0{{ step.n }}</div>
+                <div class="font-display font-semibold mb-1">{{ step.t }}</div>
+                <p class="text-sm text-luxe-muted">{{ step.d }}</p>
+            </div>
+        {% endfor %}
+    </div>
+</section>
+
+
+
+
+
+
+
+{#<section class="max-w-7xl mx-auto px-6 py-10">
+    <div class="mb-14 text-center">
+      <h2 class="text-3xl font-medium">Pourquoi choisir  <span>LUXE <span class="text-luxe-orange">CAR</span></span></h2>
+      <p class="text-sm text-luxe-muted mt-1">  Nous révolutionnons l'achat de véhicules pour les professionnels avec une approche moderne et efficace.</p>
+    </div>
+   <div class="grid sm:grid-cols-2 grid-cols-1 md:grid-cols-4 gap-6">
+      <div class="bg-white border border-line rounded-lg p-7 text-center">
+        <div class="w-11 h-11 rounded-lg  border border-line flex items-center justify-center mb-4 text-brand2 mx-auto">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="w-7 h-7" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" clip-rule="evenodd" d="M12.6 1.5a1.5 1.5 0 00-1.2 0L4.6 4.5A2.5 2.5 0 003 6.8v4.9C3 16.7 5.8 20.9 12 22.5c6.2-1.6 9-5.8 9-10.8V6.8a2.5 2.5 0 00-1.6-2.3l-6.8-3ZM16.8 10l-5.5 5.5a1 1 0 01-1.4 0l-2.8-2.8a1 1 0 111.4-1.4l2.1 2.1 4.8-4.8a1 1 0 011.4 1.4Z"/></svg>
+        </div>
+        <h3 class="text-sm font-medium mb-2">Véhicules vérifiés</h3>
+        <p class="text-luxe-muted text-[14.5px]">Protection avancée de vos données et de vos transactions.</p>
+      </div>
+      <div class="bg-white border border-line rounded-lg p-7 text-center">
+        <div class="w-11 h-11 rounded-lg border border-line flex items-center justify-center mb-4 text-brand2 mx-auto">
+           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="w-7 h-7" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" clip-rule="evenodd" d="M8 2.5a.75.75 0 01.75.75v1.25h6.5V3.25a.75.75 0 011.5 0V4.5h1.75A2.5 2.5 0 0121 7v11a2.5 2.5 0 01-2.5 2.5h-13A2.5 2.5 0 013 18V7a2.5 2.5 0 012.5-2.5h1.75V3.25A.75.75 0 018 2.5ZM5.5 6a1 1 0 00-1 1v2h15V7a1 1 0 00-1-1h-13Zm14 4.5h-15V18a1 1 0 001 1h13a1 1 0 001-1v-7.5Z"/></svg>   </div>
+        <h3 class="text-sm font-medium mb-2">Réservation sécurisée</h3>
+        <p class="text-luxe-muted text-[14.5px]">Gérez tout depuis votre mobile ou votre ordinateur, sans papier.</p>
+      </div>
+       <div class="bg-white border border-line rounded-lg p-7 text-center">
+        <div class="w-11 h-11 rounded-lg border border-line flex items-center justify-center mb-4 text-brand2 mx-auto"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><path d="M9 11L12 14L21 5M20 12V18C20 19.1 19.1 20 18 20H6C4.9 20 4 19.1 4 18V6C4 4.9 4.9 4 6 4H15" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <h3 class="text-sm font-medium mb-2">Livraison à domicile</h3>
+        <p class="text-luxe-muted text-[14.5px]">Aucun frais caché. Tout est affiché clairement.</p>
+      </div>
+      <div class="bg-white border border-line rounded-lg p-7 text-center">
+        <div class="w-11 h-11 rounded-lg border border-line flex items-center justify-center mb-4 text-brand2 mx-auto"><svg width="20" height="20" viewBox="0 0 24 24" fill="none"><circle cx="12" cy="12" r="9" stroke="currentColor" stroke-width="1.8"/><path d="M12 7V12L15 15" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg></div>
+        <h3 class="text-sm font-medium mb-2">Support 24/7</h3>
+        <p class="text-luxe-muted text-[14.5px]">Une équipe disponible pour vous aider, à toute heure.</p>
+      </div>
+    </div>
+</section>#}
+
+<section class="max-w-7xl mx-auto px-6 py-5 ">
+    <h2 class="text-3xl font-bold text-neutral-900 mb-10">
+        Pourquoi choisir AUTOPRO?
+    </h2>
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+
+        <!-- Carte 1 -->
+        <div class="bg-white border border-neutral-200 rounded-xl p-6">
+            <div class="flex items-center gap-4 mb-4">
+                <div class="w-16 h-16 shrink-0 rounded-full bg-neutral-100 flex items-center justify-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-7 h-7 text-neutral-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.6">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M3 16.5V7a1 1 0 0 1 1-1h9a1 1 0 0 1 1 1v9.5M3 16.5h11M14 7.5h3.5a1 1 0 0 1 .7.3l2.5 2.5a1 1 0 0 1 .3.7V15a1 1 0 0 1-1 1.5H17M17 19.5a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3ZM7.5 19.5a1.5 1.5 0 1 0 0-3 1.5 1.5 0 0 0 0 3Z" />
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M13 4.5 15 6" />
+                    </svg>
+                </div>
+                <h3 class="text-lg font-semibold text-neutral-900 leading-snug">
+                    Plus de 7000 voitures disponibles chaque semaine
+                </h3>
+            </div>
+            <p class="text-neutral-500 text-sm leading-relaxed text-justify">
+                Avec un inventaire étendu de plus de 7000 voitures disponibles chaque semaine, AutoPro offre une large sélection de véhicules provenant de sociétés de leasing, de sociétés de location à court terme et de concessionnaires d'Europe. Notre stock constamment mis à jour et nos ventes aux enchères vous garantissent l'accès à des véhicules répondant à des besoins variés.
+            </p>
+        </div>
+
+        <!-- Carte 2 -->
+        <div class="bg-white border border-neutral-200 rounded-xl p-6">
+            <div class="flex items-center gap-4 mb-4">
+                <div class="w-16 h-16 shrink-0 rounded-full bg-neutral-100 flex items-center justify-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-7 h-7 text-neutral-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.6">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M9 11V6a2 2 0 0 1 4 0v7m-4-2v1a2 2 0 1 0 4 0m-4-1 6.5 1.5a2 2 0 0 1 1.5 2v.5a4 4 0 0 1-4 4h-3a4 4 0 0 1-3.5-2L4 14.5" />
+                    </svg>
+                </div>
+                <h3 class="text-lg font-semibold text-neutral-900 leading-snug">
+                    Achat de véhicule rapide et simple
+                </h3>
+            </div>
+            <p class="text-neutral-500 text-sm leading-relaxed text-justify">
+                AutoPro facilite l'achat de véhicules grâce à son processus d'enchères et à sa plateforme conviviale. Profitez d'une expérience d'achat transparente et rationalisée, que vous participiez à des ventes aux enchères en ligne ou que vous achetiez directement dans notre stock. Notre processus est conçu pour être simple et efficace.
+            </p>
+        </div>
+
+        <!-- Carte 3 -->
+        <div class="bg-white border border-neutral-200 rounded-xl p-6">
+            <div class="flex items-center gap-4 mb-4">
+                <div class="w-16 h-16 shrink-0 rounded-full bg-neutral-100 flex items-center justify-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-7 h-7 text-neutral-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.6">
+                        <circle cx="12" cy="12" r="9" />
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M10 8.5c0-1 1-1.5 2-1.5s2 .5 2 1.5c0 1-1 1.2-2 1.7-1 .5-2 .9-2 2v.3M12 16h.01" />
+                    </svg>
+                </div>
+                <h3 class="text-lg font-semibold text-neutral-900 leading-snug">
+                    Commissions réduites et frais transparents
+                </h3>
+            </div>
+            <p class="text-neutral-500 text-sm leading-relaxed text-justify">
+                Nos prix compétitifs sont sans frais cachés. Chez AutoPro, nous proposons des frais transparents avec une commission fixe basée sur le montant de votre offre et l'origine du véhicule. Vous savez toujours combien vous allez payer au total, ce qui vous garantit une expérience d'achat claire et rentable.
+            </p>
+        </div>
+
+        <!-- Carte 4 -->
+        <div class="bg-white border border-neutral-200 rounded-xl p-6">
+            <div class="flex items-center gap-4 mb-4">
+                <div class="w-16 h-16 shrink-0 rounded-full bg-neutral-100 flex items-center justify-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-7 h-7 text-neutral-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.6">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="m9 12 2 2 4-4" />
+                        <circle cx="12" cy="12" r="9" />
+                    </svg>
+                </div>
+                <h3 class="text-lg font-semibold text-neutral-900 leading-snug">
+                    Qualité des véhicules vérifiée
+                </h3>
+            </div>
+          
+            <p class="text-neutral-500 text-sm leading-relaxed text-justify">
+                La plupart des véhicules répertoriés sur AutoPro sont soumis à des inspections indépendantes afin d'en garantir la qualité. Nous fournissons des descriptions détaillées des véhicules, des photos et des rapports sur l'historique des véhicules, ce qui vous donne confiance dans les voitures que vous achetez sur notre marché de véhicules d'occasion.
+            </p>
+        </div>
+
+        <!-- Carte 5 -->
+        <div class="bg-white border border-neutral-200 rounded-xl p-6">
+            <div class="flex items-center gap-4 mb-4">
+                <div class="w-16 h-16 shrink-0 rounded-full bg-neutral-100 flex items-center justify-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-7 h-7 text-neutral-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.6">
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M12 3v3m0 12v3m9-9h-3M6 12H3m14.5-6.5-2 2m-9 9-2 2m13-2 2 2m-13-13-2-2" />
+                        <circle cx="12" cy="12" r="4.5" />
+                    </svg>
+                </div>
+                <h3 class="text-lg font-semibold text-neutral-900 leading-snug">
+                    Note de 4,8 - Des milliers de concessionnaires nous font confiance
+                </h3>
+            </div>
+            <p class="text-neutral-500 text-sm leading-relaxed text-justify">
+                Avec une note de 4,8 sur Google, nous sommes un partenaire de confiance pour les concessionnaires et les négociants, qui s'engage à établir des relations à long terme. Notre équipe de vente et notre service clientèle multilingues sont là pour vous aider à chaque étape, afin de garantir votre succès dans l'achat de véhicules d'occasion sur notre plateforme de vente transfrontalière de voitures.
+            </p>
+        </div>
+
+        <!-- Carte 6 -->
+        <div class="bg-white border border-neutral-200 rounded-xl p-6">
+            <div class="flex items-center gap-4 mb-4">
+                <div class="w-16 h-16 shrink-0 rounded-full bg-neutral-100 flex items-center justify-center">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-7 h-7 text-neutral-500" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="1.6">
+                        <circle cx="12" cy="12" r="9" />
+                        <path stroke-linecap="round" stroke-linejoin="round" d="M3 12h18M12 3a13.5 13.5 0 0 1 0 18M12 3a13.5 13.5 0 0 0 0 18" />
+                    </svg>
+                </div>
+                <h3 class="text-lg font-semibold text-neutral-900 leading-snug">
+                    Assistance après-vente
+                </h3>
+            </div>
+            <p class="text-neutral-500 text-sm leading-relaxed text-justify">
+                Chez AutoPro, nous vous apportons notre soutien pour votre expérience après-vente. Pour les exportations en dehors de l'UE, nous vous aidons à préparer la déclaration de douane. Au sein de l'UE, notre service de livraison AutoPro propose des solutions logistiques et d'expédition pour garantir l'arrivée de vos véhicules à temps et en toute sécurité.
+            </p>
+        </div>
+    </div>
+</section>
+
+
+
+
+
+
+<section id="comment-ca-marche" class="max-w-7xl mx-auto px-6 py-5 border-t border-luxe-border/60">
+    <h1 class="text-3xl font-semibold mb-8">Avis de nos clients</h1>
+    <div class="grid md:grid-cols-2 gap-4 mb-12">
+        {% for r in reviews %}
+            {% include 'components/_review_card.html.twig' with {review: r} %}
+        {% endfor %}
+    </div>
+</section>
+
+<section class="max-w-7xl mx-auto px-6 py-10 " id="faq">
+    <div class="mx-auto max-w-[1200px] px-4 sm:px-6 lg:px-8">
+        {# En-tête #}
+        <div class="mx-auto max-w-3xl text-center">
+         
+            <h2 class="mt-3 font-display text-3xl font-bold tracking-tight text-luxe-text sm:text-4xl lg:text-5xl">
+                Questions fréquemment posées par nos clients
+            </h2>
+            <p class="mx-auto mt-5 max-w-2xl text-base leading-relaxed text-luxe-muted">
+                Retrouvez les réponses aux principales questions concernant le financement,
+                la réservation et l’achat de votre véhicule.
+            </p>
+            <div class="mx-auto mt-6 h-[3px] w-16 rounded-full bg-luxe-orange"></div>
+        </div>
+
+        {# FAQ #}
+        <div class="mt-14 border-t border-luxe-border">
+
+            {# Question 1 #}
+            <div class="faq-item border-b border-luxe-border">
+
+                <button
+                    type="button"
+                    class="faq-button flex w-full items-center justify-between gap-5 py-6 text-left"
+                    aria-expanded="true"
+                >
+                    <div class="flex items-center gap-4">
+
+                        <span
+                            class="flex h-9 w-9 shrink-0 items-center justify-center
+                                   rounded-full bg-black text-white"
+                        >
+                            <svg
+                                class="faq-icon h-5 w-5 rotate-180 transition-transform duration-300"
+                                viewBox="0 0 20 20"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2.2"
+                            >
+                                <path d="m5 12 5-5 5 5"/>
+                            </svg>
+                        </span>
+
+                        <span class="font-display text-xl font-semibold text-luxe-text">
+                           Qui sommes-nous ?
+                        </span>
+
+                    </div>
+                </button>
+
+                <div class="faq-content pb-7 pl-0 sm:pl-[52px]">
+                    <p class="max-w-4xl text-[15px] leading-7 text-luxe-muted sm:text-base">
+                        www.autopro-reservation.fr est le site de vente qui rassemble l’ensemble des véhicules d’occasion du groupe Auto Pro, acteur majeur de la distribution automobile avec plus de 50 concessions en France. Des milliers de véhicules d’occasion avec un service complet : de la reprise de votre véhicule, au financement et à la livraison à domicile.
+                    </p>
+                </div>
+
+            </div>
+
+            
+            {# Question 3 #}
+            <div class="faq-item border-b border-luxe-border">
+
+                <button
+                    type="button"
+                    class="faq-button flex w-full items-center justify-between gap-5 py-6 text-left"
+                    aria-expanded="false"
+                >
+                    <div class="flex items-center gap-4">
+
+                        <span
+                            class="flex h-9 w-9 shrink-0 items-center justify-center
+                                   rounded-full bg-black text-white"
+                        >
+                            <svg
+                                class="faq-icon h-5 w-5 transition-transform duration-300"
+                                viewBox="0 0 20 20"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2.2"
+                            >
+                                <path d="m5 8 5 5 5-5"/>
+                            </svg>
+                        </span>
+
+                        <span class="font-display text-sm font-semibold text-luxe-text sm:text-xl">
+                           Comment nous contacter ?
+                        </span>
+
+                    </div>
+                </button>
+
+                <div class="faq-content hidden pb-7 pl-0 sm:pl-[52px]">
+                    <p class="max-w-4xl text-[15px] leading-7 text-luxe-muted sm:text-base">
+                        Pour nous contacter c’est simple, rendez-vous sur la page d’accueil du site internet, puis cliquez sur « Nous contacter », 
+                        vous trouverez tous les moyens de contact possibles en fonction de vos besoins.
+                    </p>
+                </div>
+
+            </div>
+
+
+            {# Question 2 #}
+            <div class="faq-item border-b border-luxe-border">
+
+                <button
+                    type="button"
+                    class="faq-button flex w-full items-center justify-between gap-5 py-6 text-left"
+                    aria-expanded="false"
+                >
+                    <div class="flex items-center gap-4">
+
+                        <span
+                            class="flex h-9 w-9 shrink-0 items-center justify-center
+                                   rounded-full bg-black text-white"
+                        >
+                            <svg
+                                class="faq-icon h-5 w-5 transition-transform duration-300"
+                                viewBox="0 0 20 20"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2.2"
+                            >
+                                <path d="m5 8 5 5 5-5"/>
+                            </svg>
+                        </span>
+
+                        <span class="font-display text-sm font-semibold text-luxe-text sm:text-xl">
+                            Pourquoi acheter ma voiture chez Auto Pro
+                        </span>
+
+                    </div>
+                </button>
+
+                <div class="faq-content hidden pb-7 pl-0 sm:pl-[52px]">
+                    <p class="max-w-4xl text-[15px] leading-7 text-luxe-muted sm:text-base">
+                        Nos engagements qualité :<br/>
+                        – Sélection des véhicules : Les véhicules proposés par Auto Pro sont sélectionnés selon un cahier des charges précis par des professionnels de l’automobile.<br/>
+                        – Préparation et contrôle : Au minimum 13 points de contrôle et parfois davantage en fonction de labels occasion.<br/>
+                        – Les garanties : Chaque véhicule proposé bénéficie d’une garantie de 6 mois à 12 mois<br/>
+                        – L’option SATISFAIT OU REMBOURSE: Dans le cas d’un achat à distance, le délai est de 14 jours à partir de la date de livraison (Se référer aux conditions générales de ventes)
+                    </p>
+                </div>
+            </div>
+
+            {# Question 3 #}
+            <div class="faq-item border-b border-luxe-border">
+
+                <button
+                    type="button"
+                    class="faq-button flex w-full items-center justify-between gap-5 py-6 text-left"
+                    aria-expanded="false"
+                >
+                    <div class="flex items-center gap-4">
+
+                        <span
+                            class="flex h-9 w-9 shrink-0 items-center justify-center
+                                   rounded-full bg-black text-white"
+                        >
+                            <svg
+                                class="faq-icon h-5 w-5 transition-transform duration-300"
+                                viewBox="0 0 20 20"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2.2"
+                            >
+                                <path d="m5 8 5 5 5-5"/>
+                            </svg>
+                        </span>
+
+                        <span class="font-display text-sm font-semibold text-luxe-text sm:text-xl">
+                           Comment je fais pour réserver sur le site ?
+                        </span>
+
+                    </div>
+                </button>
+
+                <div class="faq-content hidden pb-7 pl-0 sm:pl-[52px]">
+                    <p class="max-w-4xl text-[15px] leading-7 text-luxe-muted sm:text-base">
+                       Rien de plus simple : recherchez le véhicule à l’aide de sa référence, puis cliquez sur « Réserver ». Il vous suffit ensuite de renseigner vos coordonnées et de régler l’acompte en ligne, par carte bancaire ou virement bancaire, selon votre préférence.
+                       <br/>
+                       Vous disposez également d’un délai de rétractation de 14 jours, conformément aux conditions applicables, pour demander l’annulation de votre réservation et, lorsque les conditions de rétractation sont réunies, obtenir le remboursement des sommes versées.
+                    </p>
+                </div>
+
+            </div>
+
+            {# Question 3 #}
+            <div class="faq-item border-b border-luxe-border">
+
+                <button
+                    type="button"
+                    class="faq-button flex w-full items-center justify-between gap-5 py-6 text-left"
+                    aria-expanded="false"
+                >
+                    <div class="flex items-center gap-4">
+
+                        <span
+                            class="flex h-9 w-9 shrink-0 items-center justify-center
+                                   rounded-full bg-black text-white"
+                        >
+                            <svg
+                                class="faq-icon h-5 w-5 transition-transform duration-300"
+                                viewBox="0 0 20 20"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2.2"
+                            >
+                                <path d="m5 8 5 5 5-5"/>
+                            </svg>
+                        </span>
+
+                        <span class="font-display text-sm font-semibold text-luxe-text sm:text-xl">
+                           Pourquoi dois-je payer un acompte pour réserver ?
+                        </span>
+
+                    </div>
+                </button>
+
+                <div class="faq-content hidden pb-7 pl-0 sm:pl-[52px]">
+                    <p class="max-w-4xl text-[15px] leading-7 text-luxe-muted sm:text-base">
+                        L'acompte permet de bloquer le véhicule à votre nom et de le retirer de la vente, le temps que vous veniez finaliser votre achat.
+                        Il est bien sur déduit du prix final du véhicule.
+                    </p>
+                </div>
+
+            </div>
+
+            {# Question 3 #}
+            <div class="faq-item border-b border-luxe-border">
+
+                <button
+                    type="button"
+                    class="faq-button flex w-full items-center justify-between gap-5 py-6 text-left"
+                    aria-expanded="false"
+                >
+                    <div class="flex items-center gap-4">
+
+                        <span
+                            class="flex h-9 w-9 shrink-0 items-center justify-center
+                                   rounded-full bg-black text-white"
+                        >
+                            <svg
+                                class="faq-icon h-5 w-5 transition-transform duration-300"
+                                viewBox="0 0 20 20"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2.2"
+                            >
+                                <path d="m5 8 5 5 5-5"/>
+                            </svg>
+                        </span>
+
+                        <span class="font-display text-sm font-semibold text-luxe-text sm:text-xl">
+                           L'acompte est-il remboursable?
+                        </span>
+
+                    </div>
+                </button>
+
+                <div class="faq-content hidden pb-7 pl-0 sm:pl-[52px]">
+                    <p class="max-w-4xl text-[15px] leading-7 text-luxe-muted sm:text-base">
+                        Oui l'acompte est remboursable si le véhicle ne correspond plus à vos attentes. Pour ce faire, 
+                        vous pouvez soit vous rendre à votre banque pour annuler le virement ou directement faire une demande de remboursement depuis notre site internet.
+                    </p>
+                </div>
+
+            </div>
+
+             {# Question 3 #}
+            <div class="faq-item border-b border-luxe-border">
+
+                <button
+                    type="button"
+                    class="faq-button flex w-full items-center justify-between gap-5 py-6 text-left"
+                    aria-expanded="false"
+                >
+                    <div class="flex items-center gap-4">
+
+                        <span
+                            class="flex h-9 w-9 shrink-0 items-center justify-center
+                                   rounded-full bg-black text-white"
+                        >
+                            <svg
+                                class="faq-icon h-5 w-5 transition-transform duration-300"
+                                viewBox="0 0 20 20"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2.2"
+                            >
+                                <path d="m5 8 5 5 5-5"/>
+                            </svg>
+                        </span>
+
+                        <span class="font-display text-sm font-semibold text-luxe-text sm:text-xl">
+                           Le prix affiché est-il négociable ?
+                        </span>
+
+                    </div>
+                </button>
+
+                <div class="faq-content hidden pb-7 pl-0 sm:pl-[52px]">
+                    <p class="max-w-4xl text-[15px] leading-7 text-luxe-muted sm:text-base">
+                        Le prix affiché est celui en vigueur pour la réservation en ligne. Nous pourrons en rediscuter lors de votre passable si besoin.
+                    </p>
+                </div>
+
+            </div>
+
+            {# Question 3 #}
+            <div class="faq-item border-b border-luxe-border">
+
+                <button
+                    type="button"
+                    class="faq-button flex w-full items-center justify-between gap-5 py-6 text-left"
+                    aria-expanded="false"
+                >
+                    <div class="flex items-center gap-4">
+
+                        <span
+                            class="flex h-9 w-9 shrink-0 items-center justify-center
+                                   rounded-full bg-black text-white"
+                        >
+                            <svg
+                                class="faq-icon h-5 w-5 transition-transform duration-300"
+                                viewBox="0 0 20 20"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2.2"
+                            >
+                                <path d="m5 8 5 5 5-5"/>
+                            </svg>
+                        </span>
+
+                        <span class="font-display text-sm font-semibold text-luxe-text sm:text-xl">
+                           Puis-je demander un remboursement si le véhicule ne convient pas à mes attentes ?
+                        </span>
+
+                    </div>
+                </button>
+
+                <div class="faq-content hidden pb-7 pl-0 sm:pl-[52px]">
+                    <p class="max-w-4xl text-[15px] leading-7 text-luxe-muted sm:text-base">
+                        Oui vous disposez de 14 jours maximum pour se rétracter et bénéficier d’un remboursement intégrale sans aucune forme juridique. Vous pourrez vous rendre à votre banque et annuler le paiement (virement) afin d’avoir un retour de fonds intégral sur votre compte ou alors le client demande un remplacement s’il vous le souhaitez
+                    </p>
+                </div>
+
+            </div>
+
+
+            {# Question 4 #}
+            <div class="faq-item border-b border-luxe-border">
+                <button
+                    type="button"
+                    class="faq-button flex w-full items-center justify-between gap-5 py-6 text-left"
+                    aria-expanded="false"
+                >
+                    <div class="flex items-center gap-4">
+                        <span
+                            class="flex h-9 w-9 shrink-0 items-center justify-center
+                                   rounded-full bg-black text-white"
+                        >
+                            <svg
+                                class="faq-icon h-5 w-5 transition-transform duration-300"
+                                viewBox="0 0 20 20"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2.2"
+                            >
+                                <path d="m5 8 5 5 5-5"/>
+                            </svg>
+                        </span>
+
+                        <span class="font-display text-sm font-semibold text-luxe-text sm:text-xl">
+                            Que se passe-t-il si je souhaite annuler ma réservation ?
+                        </span>
+
+                    </div>
+                </button>
+                <div class="faq-content hidden pb-7 pl-0 sm:pl-[52px]">
+                    <p class="max-w-4xl text-[15px] leading-7 text-luxe-muted sm:text-base">
+                        Vous pouvez contacter notre équipe afin d’étudier votre demande
+                        d’annulation. Les conditions applicables dépendent de l’état
+                        d’avancement de la réservation et des conditions acceptées
+                        lors de votre commande.
+                    </p>
+                </div>
+            </div>
+
+           
+
+            {# Question 5 #}
+            <div class="faq-item border-b border-luxe-border">
+
+                <button
+                    type="button"
+                    class="faq-button flex w-full items-center justify-between gap-5 py-6 text-left"
+                    aria-expanded="false"
+                >
+                    <div class="flex items-center gap-4">
+
+                        <span
+                            class="flex h-9 w-9 shrink-0 items-center justify-center
+                                   rounded-full bg-black text-white"
+                        >
+                            <svg
+                                class="faq-icon h-5 w-5 transition-transform duration-300"
+                                viewBox="0 0 20 20"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2.2"
+                            >
+                                <path d="m5 8 5 5 5-5"/>
+                            </svg>
+                        </span>
+
+                        <span class="font-display text-sm font-semibold text-luxe-text sm:text-xl">
+                           Quels sont les délais de commande et de livraison ?
+                        </span>
+
+                    </div>
+                </button>
+
+                <div class="faq-content hidden pb-7 pl-0 sm:pl-[52px]">
+                    <p class="max-w-4xl text-[15px] leading-7 text-luxe-muted sm:text-base">
+                        En moyenne, votre véhicule est livré dans les 3 jours suivants la commande.
+Vous n’avez pas besoin de bloquer une journée, nous organisons la livraison sur un créneau d’une heure.
+                    </p>
+                </div>
+            </div>
+
+            {# Question 6 #}
+            <div class="faq-item border-b border-luxe-border">
+
+                <button
+                    type="button"
+                    class="faq-button flex w-full items-center justify-between gap-5 py-6 text-left"
+                    aria-expanded="false"
+                >
+                    <div class="flex items-center gap-4">
+
+                        <span
+                            class="flex h-9 w-9 shrink-0 items-center justify-center
+                                   rounded-full bg-black text-white"
+                        >
+                            <svg
+                                class="faq-icon h-5 w-5 transition-transform duration-300"
+                                viewBox="0 0 20 20"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2.2"
+                            >
+                                <path d="m5 8 5 5 5-5"/>
+                            </svg>
+                        </span>
+
+                        <span class="font-display text-sm font-semibold text-luxe-text sm:text-xl">
+                            Comment sera livré mon véhicule ?
+                        </span>
+
+                    </div>
+                </button>
+
+                <div class="faq-content hidden pb-7 pl-0 sm:pl-[52px]">
+                    <p class="max-w-4xl text-[15px] leading-7 text-luxe-muted sm:text-base">
+                       Nous travaillons avec les meilleures sociétés de livraison de véhicules (DriveMe, STCV, etc..) qui se chargeront de conduire votre véhicule jusqu’au lieu de livraison. Ces derniers sont équipées pour vous garantir la meilleure livraison possible.
+                    </p>
+                </div>
+
+            </div>
+
+
+            {# Question 7 #}
+            <div class="faq-item border-b border-luxe-border">
+
+                <button
+                    type="button"
+                    class="faq-button flex w-full items-center justify-between gap-5 py-6 text-left"
+                    aria-expanded="false"
+                >
+                    <div class="flex items-center gap-4">
+
+                        <span
+                            class="flex h-9 w-9 shrink-0 items-center justify-center
+                                   rounded-full bg-black text-white"
+                        >
+                            <svg
+                                class="faq-icon h-5 w-5 transition-transform duration-300"
+                                viewBox="0 0 20 20"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2.2"
+                            >
+                                <path d="m5 8 5 5 5-5"/>
+                            </svg>
+                        </span>
+
+                        <span class="font-display text-sm font-semibold text-luxe-text sm:text-xl">
+                            Quand le véhicule est-il réservé pour moi ?
+                        </span>
+
+                    </div>
+                </button>
+
+                <div class="faq-content hidden pb-7 pl-0 sm:pl-[52px]">
+                    <p class="max-w-4xl text-[15px] leading-7 text-luxe-muted sm:text-base">
+                        Le véhicule est considéré comme réservé lorsque les étapes
+                        nécessaires à la réservation ont été validées conformément
+                        aux conditions affichées lors de votre demande.
+                    </p>
+                </div>
+
+            </div>
+
+
+            {# Question 8 #}
+            <div class="faq-item border-b border-luxe-border">
+
+                <button
+                    type="button"
+                    class="faq-button flex w-full items-center justify-between gap-5 py-6 text-left"
+                    aria-expanded="false"
+                >
+                    <div class="flex items-center gap-4">
+
+                        <span
+                            class="flex h-9 w-9 shrink-0 items-center justify-center
+                                   rounded-full bg-black text-white"
+                        >
+                            <svg
+                                class="faq-icon h-5 w-5 transition-transform duration-300"
+                                viewBox="0 0 20 20"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="2.2"
+                            >
+                                <path d="m5 8 5 5 5-5"/>
+                            </svg>
+                        </span>
+
+                        <span class="font-display text-sm font-semibold text-luxe-text sm:text-xl">
+                            Quels documents dois-je fournir pour une demande de financement ?
+                        </span>
+
+                    </div>
+                </button>
+
+                <div class="faq-content hidden pb-7 pl-0 sm:pl-[52px]">
+                    <p class="max-w-4xl text-[15px] leading-7 text-luxe-muted sm:text-base">
+                        Les documents demandés dépendent du financement choisi et de
+                        votre situation. Ils peuvent notamment inclure une pièce
+                        d’identité, un justificatif de domicile ainsi que des
+                        justificatifs permettant d’étudier votre capacité de financement.
+                    </p>
+                </div>
+
+            </div>
+
+        </div>
+
+
+        {# CTA bas FAQ #}
+        <div
+            class="mt-12 flex flex-col items-center justify-between gap-6
+                   rounded-2xl border border-luxe-border bg-luxe-black-alt
+                   px-6 py-7 sm:flex-row sm:px-8"
+        >
+
+            <div>
+                <h3 class="font-display text-xl font-bold text-luxe-text">
+                    Vous n’avez pas trouvé votre réponse ?
+                </h3>
+
+                <p class="mt-1 text-sm text-luxe-muted">
+                    Notre équipe est disponible pour répondre à vos questions.
+                </p>
+            </div>
+
+            <a
+                href="{{path('contact')}}"
+                class="inline-flex shrink-0 items-center justify-center
+                       rounded-xl bg-luxe-orange px-6 py-3.5
+                       font-semibold text-white transition
+                       hover:bg-luxe-orange-dark"
+            >
+                Nous contacter
+            </a>
+
+        </div>
+    </div>
+</section>
+
+{% endblock %}

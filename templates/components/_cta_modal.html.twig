@@ -1,0 +1,348 @@
+<!-- ============================================================= -->
+<!-- Thin, translucent scrollbars for the modal.                    -->
+<!-- Move this into your global stylesheet if you prefer.           -->
+<!-- ============================================================= -->
+<style>
+    .diag-panel{
+    background: linear-gradient(115deg, #ffffff 0%, #ffffff 58%, #f3f4f6 58%, #f3f4f6 62%, #dc2626 62%, #b91c1c 100%);
+  }
+    /* Inner card body (white background) — dark, translucent thumb */
+    .modal-scroll {
+        scrollbar-width: thin; /* Firefox */
+        scrollbar-color: rgba(0, 0, 0, 0.22) transparent; /* Firefox */
+    }
+    .modal-scroll::-webkit-scrollbar {
+        /* Chrome / Safari / Edge */
+        width: 6px;
+    }
+    .modal-scroll::-webkit-scrollbar-track {
+        background: transparent;
+    }
+    .modal-scroll::-webkit-scrollbar-thumb {
+        background-color: rgba(0, 0, 0, 0.22);
+        border-radius: 9999px;
+    }
+    .modal-scroll::-webkit-scrollbar-thumb:hover {
+        background-color: rgba(0, 0, 0, 0.38);
+    }
+
+    /* Outer dark overlay — light, translucent thumb */
+    .modal-overlay-scroll {
+        scrollbar-width: thin;
+        scrollbar-color: rgba(255, 255, 255, 0.3) transparent;
+    }
+    .modal-overlay-scroll::-webkit-scrollbar {
+        width: 6px;
+    }
+    .modal-overlay-scroll::-webkit-scrollbar-track {
+        background: transparent;
+    }
+    .modal-overlay-scroll::-webkit-scrollbar-thumb {
+        background-color: rgba(255, 255, 255, 0.3);
+        border-radius: 9999px;
+    }
+    .modal-overlay-scroll::-webkit-scrollbar-thumb:hover {
+        background-color: rgba(255, 255, 255, 0.5);
+    }
+</style>
+
+<!-- ============================================================= -->
+<!-- MODAL — copy this block into your Twig partial                -->
+<!-- e.g. templates/vehicle/_modal.html.twig                        -->
+<!-- ============================================================= -->
+<div
+    id="vehicle-modal"
+    class="modal-overlay-scroll fixed inset-0 z-50 overflow-y-auto overscroll-contain bg-black/70 backdrop-blur-[2px] [-webkit-overflow-scrolling:touch]"
+>
+    <div class="min-h-full flex items-start sm:items-center justify-center p-4 py-8 sm:py-4">
+        <div
+            class="relative w-full  max-w-3xl bg-white rounded-3xl shadow-2xl overflow-hidden max-h-[calc(100vh-4rem)] sm:max-h-[92vh] flex flex-col"
+        >
+            <!-- Close button: stays on the card itself (outside the scrolling body below), so it's always reachable -->
+            <button
+                type="button"
+                id="modal-close"
+                class="absolute top-5 right-5 z-20 w-9 h-9 rounded-full bg-black text-white shadow flex items-center justify-center hover:bg-neutral-100"
+            >
+                <svg
+                    class="w-4 h-4 text-white"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2.5"
+                    stroke-linecap="round"
+                >
+                    <path d="M6 6l12 12M18 6L6 18" />
+                </svg>
+            </button>
+
+            <!-- Scrollable body: everything below scrolls when it's taller than the screen -->
+            <div class="modal-scroll overflow-y-auto overscroll-contain [-webkit-overflow-scrolling:touch]">
+                <!-- Top: image + info panel -->
+                <div class="relative diag-panel px-8 pt-7 pb-6">
+                    <!-- Brand logo -->
+                    <div class="absolute top-7 right-7 flex flex-col items-center text-white">
+                        <svg class="w-9 h-9" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12 2l7 6-3 4 3 4-7 6-7-6 3-4-3-4z" />
+                        </svg>
+                        <span class="mt-1 text-[11px] font-extrabold tracking-widest"
+                            >{{enHonneur.version|capitalize }}</span
+                        >
+                    </div>
+
+                    <!-- Eyebrow -->
+                    <div class="flex items-center gap-3 mb-2">
+                        <span class="text-red-600 text-xs font-bold tracking-widest">NOTRE COUP DE CŒUR</span>
+                        <span class="h-px w-10 bg-red-600"></span>
+                    </div>
+
+                    <!-- Title -->
+                    <h2 class="text-4xl font-extrabold italic tracking-tight text-neutral-900">
+                        {% set names = enHonneur.model|split(' ') %} {{names[0] }}
+                        <span class="text-red-600">{{names[1] }}</span>
+                    </h2>
+                    <p class="mt-1 text-lg text-neutral-700">{{enHonneur.brand }}</p>
+
+                    <!-- Specs row -->
+                    <div class="mt-5 grid grid-cols-4 gap-4 max-w-md">
+                        <div class="flex items-start gap-2">
+                            <svg
+                                class="w-5 h-5 mt-0.5 text-neutral-800 shrink-0"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="1.8"
+                            >
+                                <rect x="3" y="4" width="18" height="17" rx="2" />
+                                <path d="M3 9h18M8 2v4M16 2v4" />
+                            </svg>
+                            <div class="leading-tight">
+                                <div class="text-sm font-semibold text-neutral-900">{{enHonneur.year }}</div>
+                                <div class="text-xs text-neutral-500">Année</div>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-2">
+                            <svg
+                                class="w-5 h-5 mt-0.5 text-neutral-800 shrink-0"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="1.8"
+                            >
+                                <circle cx="12" cy="13" r="8" />
+                                <path d="M12 13l3-3M9 2h6" />
+                            </svg>
+                            <div class="leading-tight">
+                                <div class="text-sm font-semibold text-neutral-900">{{enHonneur.mileage }} km</div>
+                                <div class="text-xs text-neutral-500">Kilométrage</div>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-2">
+                            <svg
+                                class="w-5 h-5 mt-0.5 text-neutral-800 shrink-0"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="1.8"
+                            >
+                                <path
+                                    d="M4 21V6a2 2 0 012-2h4a2 2 0 012 2v15M4 21h8M16 10l2.5 2.5A2 2 0 0119 14v4a1.5 1.5 0 003 0v-6l-3-3"
+                                />
+                            </svg>
+                            <div class="leading-tight">
+                                <div class="text-sm font-semibold text-neutral-900">Hybride</div>
+                                <div class="text-xs text-neutral-500">{{enHonneur.fuel.value|capitalize }}</div>
+                            </div>
+                        </div>
+                        <div class="flex items-start gap-2">
+                            <svg
+                                class="w-5 h-5 mt-0.5 text-neutral-800 shrink-0"
+                                viewBox="0 0 24 24"
+                                fill="none"
+                                stroke="currentColor"
+                                stroke-width="1.8"
+                            >
+                                <circle cx="12" cy="12" r="3" />
+                                <path
+                                    d="M19.4 15a1.7 1.7 0 00.34 1.87l.06.06a2 2 0 11-2.83 2.83l-.06-.06a1.7 1.7 0 00-1.87-.34 1.7 1.7 0 00-1 1.55V21a2 2 0 11-4 0v-.09a1.7 1.7 0 00-1-1.56 1.7 1.7 0 00-1.87.34l-.06.06a2 2 0 11-2.83-2.83l.06-.06a1.7 1.7 0 00.34-1.87 1.7 1.7 0 00-1.55-1H3a2 2 0 110-4h.09a1.7 1.7 0 001.55-1 1.7 1.7 0 00-.34-1.87l-.06-.06a2 2 0 112.83-2.83l.06.06a1.7 1.7 0 001.87.34H9a1.7 1.7 0 001-1.55V3a2 2 0 114 0v.09a1.7 1.7 0 001 1.55 1.7 1.7 0 001.87-.34l.06-.06a2 2 0 112.83 2.83l-.06.06a1.7 1.7 0 00-.34 1.87V9a1.7 1.7 0 001.55 1H21a2 2 0 110 4h-.09a1.7 1.7 0 00-1.55 1z"
+                                />
+                            </svg>
+                            <div class="leading-tight">
+                                <div class="text-sm font-semibold text-neutral-900">DSG</div>
+                                <div class="text-xs text-neutral-500">{{enHonneur.transmission|capitalize }}</div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Description -->
+                    <p class="mt-4 max-w-md text-sm text-neutral-600 leading-relaxed">
+                        Un SUV au design sportif et affirmé, alliant performances, confort et technologie hybride. Idéal
+                        pour ceux qui recherchent puissance et élégance au quotidien.
+                    </p>
+                    <!-- Price -->
+                    <div class="mt-4">
+                        <div class="text-3xl font-extrabold text-red-600">{{enHonneur.price|money_eur }}</div>
+                        <div class="text-xs text-neutral-500">TVA incluse</div>
+                    </div>
+                </div>
+
+                <!-- Thumbnails -->
+                <div class="px-8 pt-2">
+                    <div class="flex items-center gap-3">
+                        <div id="thumb-list" class="grid grid-cols-3 gap-3 flex-1">
+                            <button
+                                type="button"
+                                class="thumb-btn rounded-xl ring-2 ring-red-600 overflow-hidden aspect-[4/3]"
+                                data-index="0"
+                            >
+                                <img
+                                    src="{{ asset('uploads/vehicles/' ~ enHonneur.getPrimaryImage().filename) }}"
+                                    alt="{{ enHonneur.brand }}"
+                                    loading="lazy"
+                                    class="w-full h-full object-cover"
+                                />
+                            </button>
+                            <button
+                                type="button"
+                                class="thumb-btn rounded-xl ring-1 ring-neutral-200 overflow-hidden aspect-[4/3]"
+                                data-index="1"
+                                data-full="https://images.unsplash.com/photo-1503376780353-7e6692767b70?q=80&w=1000&auto=format&fit=crop"
+                            >
+                                <img
+                                    src="{{ asset('uploads/vehicles/' ~ enHonneur.images[1].filename) }}"
+                                    alt="{{ enHonneur.brand }}"
+                                    loading="lazy"
+                                    class="w-full h-full object-cover"
+                                />
+                            </button>
+                            <button
+                                type="button"
+                                class="thumb-btn rounded-xl ring-1 ring-neutral-200 overflow-hidden aspect-[4/3]"
+                                data-index="2"
+                                data-full="https://images.unsplash.com/photo-1533473359331-0135ef1b58bf?q=80&w=1000&auto=format&fit=crop"
+                            >
+                                <img
+                                    src="{{ asset('uploads/vehicles/' ~ enHonneur.images[2].filename) }}"
+                                    alt="{{ enHonneur.brand }}"
+                                    loading="lazy"
+                                    class="w-full h-full object-cover"
+                                />
+                            </button>
+                        </div>
+                        <div class="flex flex-col gap-2 shrink-0">
+                            <button
+                                type="button"
+                                id="thumb-prev"
+                                class="w-8 h-8 rounded-full bg-white shadow ring-1 ring-neutral-200 flex items-center justify-center hover:bg-neutral-100"
+                            >
+                                <svg
+                                    class="w-4 h-4 text-neutral-700"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    stroke-width="2"
+                                >
+                                    <path d="M15 18l-6-6 6-6" />
+                                </svg>
+                            </button>
+                            <button
+                                type="button"
+                                id="thumb-next"
+                                class="w-8 h-8 rounded-full bg-white shadow ring-1 ring-neutral-200 flex items-center justify-center hover:bg-neutral-100"
+                            >
+                                <svg
+                                    class="w-4 h-4 text-neutral-700"
+                                    viewBox="0 0 24 24"
+                                    fill="none"
+                                    stroke="currentColor"
+                                    stroke-width="2"
+                                >
+                                    <path d="M9 6l6 6-6 6" />
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- CTA buttons -->
+                <div class="px-8 pt-5 grid grid-cols-1 sm:grid-cols-2 gap-3">
+                    <a
+                        href="{{path('vehicle_detail',{slug:enHonneur.slug})}}"
+                        class="flex items-center justify-center gap-2 rounded-xl bg-red-600 hover:bg-red-700 text-white font-semibold py-3.5"
+                    >
+                        Réservez ce véhicule
+                        <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M5 12h14M13 6l6 6-6 6" />
+                        </svg>
+                    </a>
+                    <a
+                        href="{{path('vehicle_detail',{slug:enHonneur.slug})}}"
+                        class="flex items-center justify-center gap-2 rounded-xl bg-white ring-1 ring-neutral-300 hover:bg-neutral-50 text-neutral-900 font-semibold py-3.5"
+                    >
+                        <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                            <path
+                                d="M12 21s-7-4.35-9.5-8.5C.8 9 2 5.5 5.5 5c2-.3 3.5.8 4.5 2.2C11 5.8 12.5 4.7 14.5 5c3.5.5 4.7 4 3 7.5C17 16.65 12 21 12 21z"
+                            />
+                        </svg>
+                        Ajouter aux favoris
+                    </a>
+                </div>
+
+                <!-- Bottom features -->
+                <div class="mt-6 border-t border-neutral-100 px-8 py-6 grid grid-cols-1 sm:grid-cols-3 gap-5">
+                    <div class="flex items-center gap-3">
+                        <svg
+                            class="w-6 h-6 text-neutral-800 shrink-0"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="1.6"
+                        >
+                            <path d="M12 2l8 4v6c0 5-3.5 8.5-8 10-4.5-1.5-8-5-8-10V6l8-4z" />
+                            <path d="M9 12l2 2 4-4" />
+                        </svg>
+                        <div class="text-sm text-neutral-800 leading-tight">
+                            <div class="font-medium">Véhicule contrôlé</div>
+                            <div>et révisé</div>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <svg
+                            class="w-6 h-6 text-neutral-800 shrink-0"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="1.6"
+                        >
+                            <path d="M3 6h11v9H3zM14 10h4l3 3v2h-7z" />
+                            <circle cx="7" cy="18" r="1.6" />
+                            <circle cx="17.5" cy="18" r="1.6" />
+                        </svg>
+                        <div class="text-sm text-neutral-800 leading-tight">
+                            <div class="font-medium">Livraison partout</div>
+                            <div>en France</div>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <svg
+                            class="w-6 h-6 text-neutral-800 shrink-0"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            stroke="currentColor"
+                            stroke-width="1.6"
+                        >
+                            <path d="M7 3h7l4 4v14H7zM14 3v4h4M9 13h6M9 17h6" />
+                        </svg>
+                        <div class="text-sm text-neutral-800 leading-tight">
+                            <div class="font-medium">Garantie possible</div>
+                            <div>jusqu'à 24 mois</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- /scrollable body -->
+        </div>
+        <!-- /card -->
+    </div>
+    <!-- /centering wrapper -->
+</div>
+<!-- ========================== FIN MODAL ========================== -->

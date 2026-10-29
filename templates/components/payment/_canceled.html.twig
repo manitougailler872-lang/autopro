@@ -1,0 +1,31 @@
+<!-- Étape 2b : paiement échoué -->
+<div class="w-full max-w-[300px] hidden flex-col items-center" id="tdsFail">
+    <div
+        class="w-full bg-luxe-card border border-luxe-border rounded-2xl p-6 text-center shadow-[0_16px_40px_rgba(0,0,0,.16)]"
+    >
+        <div class="w-16 h-16 mx-auto mb-3.5 text-luxe-orange-dark">
+            <svg viewBox="0 0 80 80" fill="none" class="w-full h-full">
+                <circle class="tds-cross-circle" cx="40" cy="40" r="36" stroke="currentColor" stroke-width="4" />
+                <path
+                    class="tds-cross-mark"
+                    d="M28 28 L52 52 M52 28 L28 52"
+                    stroke="currentColor"
+                    stroke-width="5"
+                    stroke-linecap="round"
+                />
+            </svg>
+        </div>
+        <div class="font-display font-extrabold text-lg mb-1.5">Paiement échoué</div>
+        <div class="text-[13px] text-luxe-muted mb-5 leading-relaxed" id="tdsFailReason">
+            La vérification de votre banque a échoué.
+        </div>
+        <a
+            href="{{ path('reservation_payment_by_rib', {uuid: reservation.uuid}) }}"
+            type="button"
+            id="tdsRetryBtn"
+            class="w-full px-2 border-none rounded-xl py-3 font-bold text-[14.5px] cursor-pointer text-white bg-luxe-orange transition-colors hover:bg-luxe-orange-dark active:scale-[.99]"
+        >
+            Procéder par virement bancaire
+        </a>
+    </div>
+</div>

@@ -1,0 +1,71 @@
+
+{% set _size = size|default('md') %}
+{% set _dim = _size == 'sm' ? 'w-6 h-6' : (_size == 'lg' ? 'w-10 h-10' : 'w-8 h-8') %}
+{% set _text = _size == 'sm' ? 'text-sm' : (_size == 'lg' ? 'text-2xl' : 'text-lg') %}
+
+<div style=" !important;color:#17171a;" class="w-full bg-black text-white overflow-hidden group">
+    <div class="flex whitespace-nowrap animate-marquee group-hover:[animation-play-state:paused] motion-reduce:animate-none w-max">
+        <div class="flex items-center text-white shrink-0 py-2 px-4 gap-8 text-sm font-medium">
+            <span>Livraison à domicile disponible sur tout le territoire</span>
+            <span>•</span>
+            <span>Réservez en ligne — Retrait au garage ou livraison</span>
+            <span>•</span>
+            <span>Paiement 100% sécurisé par virement bancaire</span>
+            <span>•</span>
+        </div>
+        <!-- Bloc dupliqué à l'identique pour un défilement en boucle sans coupure -->
+        <div class="flex items-center text-white shrink-0 py-2 px-4 gap-8 text-sm font-medium" aria-hidden="true">
+            <span>Livraison à domicile disponible sur tout le territoire</span>
+            <span>•</span>
+            <span>Réservez en ligne — Retrait au garage ou livraison</span>
+            <span>•</span>
+            <span>Paiement 100% sécurisé par virement bancaire</span>
+            <span>•</span>
+        </div>
+    </div>
+</div>
+<nav class="bg-luxe-black border-b border-luxe-border sticky top-0 z-40 backdrop-blur" x-data="{open:false}">
+    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 flex items-center justify-between">
+        <a href="{{ path('home') }}">
+            {% set logo =  site_setting('company_logo') %}
+            <img 
+                src="{{ asset('uploads/logos/' ~ logo) }}" 
+                alt="AUTOPRO" 
+                class="w-64 h-auto object-contain">
+        </a>
+
+        <div class="hidden md:flex items-center gap-4 text-sm font-medium">
+            {% set active = app.request.attributes.get('_route') %}
+            <a href="{{ path('vehicle_list') }}"  class="{{ active starts with 'vehicle_' ? 'text-luxe-text' : 'text-luxe-muted' }} hover:text-luxe-orange transition">Véhicules d'occasions</a>
+            <a href="{{path('financement')}}"  class="{{ active starts with 'financement' ? 'text-luxe-text' : 'text-luxe-muted' }} hover:text-luxe-orange transition">Financement</a>
+            <a href="{{ path('last_delivery') }}"  class="{{ active starts with 'piece_' ? 'text-luxe-text' : 'text-luxe-muted' }} hover:text-luxe-orange transition">Dernières Livraisons</a>
+            <a href="{{ path('last_delivery') }}"  class="{{ active starts with 'piece_' ? 'text-luxe-text' : 'text-luxe-muted' }} hover:text-luxe-orange transition">Nos conseils</a>
+            <a href="{{path('faq')}}" class="{{ active starts with 'faq' ? 'text-luxe-text' : 'text-luxe-muted' }} hover:text-luxe-orange transition">Questions et Réponses</a>
+            <a href="{{ path('review_index') }}"  class="text-luxe-muted hover:text-luxe-orange transition">Avis</a>
+        </div>
+
+        <div class="flex items-center gap-2">
+           <a href="#" class="hidden md:flex items-center gap-1 rounded-full bg-luxe-orange px-4 py-2 text-white transition hover:bg-luxe-orange-dark focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-luxe-orange focus-visible:ring-offset-2 md:inline-flex">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-5 w-5 animate-[pulse_1s_ease-in-out_infinite] motion-reduce:animate-none" aria-hidden="true">
+                    <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/>
+                </svg>
+                09 74 06 84 45 
+            </a>
+            {# Mobile menu toggle #}
+            <button type="button" class="md:hidden w-10 h-10 rounded-full border border-luxe-border flex items-center justify-center text-luxe-muted hover:text-luxe-orange hover:border-luxe-orange transition" onclick="document.getElementById('mobile-menu').classList.toggle('hidden')" aria-label="Menu">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="w-5 h-5" fill="currentColor" aria-hidden="true"><path fill-rule="evenodd" clip-rule="evenodd" d="M3 6.75A.75.75 0 013.75 6h16.5a.75.75 0 010 1.5H3.75A.75.75 0 013 6.75Zm0 5.25a.75.75 0 01.75-.75h16.5a.75.75 0 010 1.5H3.75A.75.75 0 013 12Zm.75 4.5a.75.75 0 000 1.5h16.5a.75.75 0 000-1.5H3.75Z"/></svg>
+            </button>
+        </div>
+    </div>
+    {# Mobile menu drawer #}
+    <div id="mobile-menu" class="hidden md:hidden border-t border-luxe-border bg-luxe-black-alt">
+        <div class="px-4 py-4 space-y-1 text-sm font-medium">
+            <a href="{{ path('vehicle_list') }}"  class="block px-3 py-2 rounded-xl text-luxe-muted hover:bg-luxe-card hover:text-luxe-text transition">Notre collection</a>
+            <a href="{{path('financement')}}"  class="block px-3 py-2 rounded-xl text-luxe-muted hover:bg-luxe-card hover:text-luxe-text transition">Financement</a>
+            <a href="{{path('last_delivery')}}"  class="block px-3 py-2 rounded-xl text-luxe-muted hover:bg-luxe-card hover:text-luxe-text transition">FAQ</a>
+            <a href="{{path('blogs')}}"  class="block px-3 py-2 rounded-xl text-luxe-muted hover:bg-luxe-card hover:text-luxe-text transition">Dernières Livraison</a>
+            <a href="{{path('faq')}}"  class="block px-3 py-2 rounded-xl text-luxe-muted hover:bg-luxe-card hover:text-luxe-text transition">Nos conseils</a>
+            <a href="{{ path('review_index') }}"  class="block px-3 py-2 rounded-xl text-luxe-muted hover:bg-luxe-card hover:text-luxe-text transition">Avis</a>
+          </div>
+    </div>
+</nav>

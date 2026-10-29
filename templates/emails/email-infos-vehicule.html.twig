@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="x-apple-disable-message-reformatting">
+  <title>Informations complémentaires sur votre véhicule - AutoPro</title>
+  <style>
+    body { margin:0; padding:0; background:#f5f7f9; -webkit-text-size-adjust:100%; }
+    table { border-collapse:collapse; }
+    img { border:0; outline:none; text-decoration:none; }
+    a { color:#C81214; }
+    @media (max-width: 620px) {
+      .container { width:100% !important; }
+      .px { padding-left:20px !important; padding-right:20px !important; }
+      .col { display:block !important; width:100% !important; }
+      .h1 { font-size:22px !important; }
+      .price { font-size:26px !important; }
+    }
+  </style>
+</head>
+
+<body style="margin:0;padding:0;background:#f5f7f9;font-family:Verdana,Arial,Helvetica,sans-serif;color:#000000;">
+
+  <!-- Texte d'aperçu (visible dans la boîte de réception, masqué dans le mail) -->
+  <div style="display:none;max-height:0;overflow:hidden;opacity:0;font-size:1px;line-height:1px;color:#f5f7f9;">
+    Fiche détaillée, équipements et conditions de réservation de votre véhicule.
+  </div>
+
+  <!-- ===== EN-TETE DE MAQUETTE (à retirer en production) ===== -->
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#e9edf1;">
+    <tr>
+      <td align="center" style="padding:14px 16px;font-family:Arial,Helvetica,sans-serif;font-size:12px;color:#555555;line-height:1.6;">
+        <strong>De :</strong> AutoPro &lt;noreply@autopro-reservation.fr&gt; &nbsp;|&nbsp;
+        <strong>Objet :</strong> Votre demande d'informations : Tesla Model 3 Long Range (2021)
+      </td>
+    </tr>
+  </table>
+
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#f5f7f9;">
+    <tr>
+      <td align="center" style="padding:24px 12px 40px;">
+
+        <!-- ===== CONTENEUR 600px ===== -->
+        <table role="presentation" class="container" width="600" cellpadding="0" cellspacing="0" style="width:600px;max-width:600px;background:#FFFFFF;border:1px solid #E6E3DC;">
+
+          <!-- Logo -->
+          <tr>
+            <td class="px" align="center" style="padding:22px 32px;border-top:4px solid #ED1719;border-bottom:1px solid #E6E3DC;">
+              <!-- Remplace par : <img src="https://.../logo-autopro.png" width="150" alt="AutoPro"> -->
+              <span style="font-family:Verdana,Arial,Helvetica,sans-serif;font-size:26px;font-weight:700;letter-spacing:1px;color:#000000;">AUTO<span style="color:#ED1719;">PRO</span></span>
+            </td>
+          </tr>
+
+          <!-- Introduction -->
+          <tr>
+            <td class="px" style="padding:32px 32px 8px;">
+              <p style="margin:0 0 12px;font-size:15px;line-height:1.6;color:#000000;">Bonjour {{gender }},</p>
+              <p style="margin:0;font-size:15px;line-height:1.6;color:#555555;">
+                Suite à votre demande, voici les informations complémentaires sur le véhicule qui vous intéresse.
+                Vous y trouverez la fiche détaillée, les équipements et les modalités de réservation.
+              </p>
+            </td>
+          </tr>
+
+          <!-- Photo principale -->
+          <tr>
+            <td class="px" style="padding:24px 32px 0;">
+              <a href="#" style="text-decoration:none;">
+                <img 
+                      src="{{ absolute_url(
+                          asset(
+                              'uploads/vehicles/' ~ vehicle.getPrimaryImage().filename
+                          )
+                      ) }}"
+                     width="536" alt="Tesla Model 3 Long Range blanche" style="display:block;width:100%;height:auto;border:0;">
+              </a>
+            </td>
+          </tr>
+
+          <!-- Miniatures -->
+          <tr>
+            <td class="px" style="padding:6px 32px 0;">
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
+                <tr>
+                  <td width="33%" style="padding-right:3px;">
+                    <img 
+                       src="{{ absolute_url(
+                                  asset(
+                                        'uploads/vehicles/mail/' ~ vehicle.imagesMail[0].filename
+                                    )
+                                  ) }}"
+                        width="170" alt="Vue avant" style="display:block;width:100%;height:auto;">
+                  </td>
+                  <td width="34%" style="padding:0 3px;">
+                  <img 
+                       src="{{ absolute_url(
+                                  asset(
+                                        'uploads/vehicles/mail/' ~ vehicle.imagesMail[1].filename
+                                    )
+                                  ) }}"
+                        width="170" alt="Vue avant" style="display:block;width:100%;height:auto;"> </td>
+                  <td width="33%" style="padding-left:3px;">
+                   <img 
+                       src="{{ absolute_url(
+                                  asset(
+                                        'uploads/vehicles/mail/' ~ vehicle.imagesMail[2].filename
+                                    )
+                                  ) }}"
+                        width="170" alt="Vue avant" style="display:block;width:100%;height:auto;">  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+
+          <!-- Titre + prix -->
+          <tr>
+            <td class="px" style="padding:24px 32px 0;">
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
+                <tr>
+                  <td>
+                    <span style="display:inline-block;background:#FFCC00;color:#000000;font-size:11px;font-weight:600;letter-spacing:.5px;text-transform:uppercase;padding:4px 10px;border-radius:5px;">Occasion</span>
+                    <span style="font-size:12px;color:#555555;padding-left:8px;">Réf. {{vehicle.originNumber }}</span>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="h1" style="padding-top:10px;font-size:26px;line-height:1.25;font-weight:700;color:#000000;">
+                    {{vehicle.brand }}
+                  </td>
+                </tr>
+                <tr>
+                  <td style="padding-top:4px;font-size:14px;color:#555555;">{{vehicle.model }}, {{vehicle.year }}, {{vehicle.places }} places</td>
+                </tr>
+                <tr>
+                  <td class="price" style="padding-top:12px;font-size:32px;line-height:1.1;font-weight:700;color:#ED1719;">{{vehicle.price|number_format(2, ',', ' ') }} €</td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+
+          <!-- Caractéristiques -->
+          <tr>
+            <td class="px" style="padding:28px 32px 0;">
+              <p style="margin:0 0 10px;font-size:16px;font-weight:700;color:#000000;">Caractéristiques</p>
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border-top:1px solid #E6E3DC;">
+                <tr>
+                  <td class="col" width="50%" style="padding:12px 0;border-bottom:1px solid #E6E3DC;">
+                    <div style="font-size:12px;color:#555555;">Année</div>
+                    <div style="font-size:15px;font-weight:600;color:#000000;">{{vehicle.year }}</div>
+                  </td>
+                  <td class="col" width="50%" style="padding:12px 0;border-bottom:1px solid #E6E3DC;">
+                    <div style="font-size:12px;color:#555555;">Kilométrage</div>
+                    <div style="font-size:15px;font-weight:600;color:#000000;">{{vehicle.mileage|number_format(0,'', ' ') }} km</div>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="col" width="50%" style="padding:12px 0;border-bottom:1px solid #E6E3DC;">
+                    <div style="font-size:12px;color:#555555;">Énergie</div>
+                    <div style="font-size:15px;font-weight:600;color:#000000;">{{vehicle.year }}</div>
+                  </td>
+                  <td class="col" width="50%" style="padding:12px 0;border-bottom:1px solid #E6E3DC;">
+                    <div style="font-size:12px;color:#555555;">Boîte de vitesses</div>
+                    <div style="font-size:15px;font-weight:600;color:#000000;">{{vehicle.transmission }}</div>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="col" width="50%" style="padding:12px 0;border-bottom:1px solid #E6E3DC;">
+                    <div style="font-size:12px;color:#555555;">Puissance</div>
+                    <div style="font-size:15px;font-weight:600;color:#000000;">{{vehicle.power }} ch / {{vehicle.powerCv }} cv</div>
+                  </td>
+                  <td class="col" width="50%" style="padding:12px 0;border-bottom:1px solid #E6E3DC;">
+                    <div style="font-size:12px;color:#555555;">Couleur</div>
+                    <div style="font-size:15px;font-weight:600;color:#000000;">{{vehicle.color }}</div>
+                  </td>
+                </tr>
+                <tr>
+                  <td class="col" width="50%" style="padding:12px 0;border-bottom:1px solid #E6E3DC;">
+                    <div style="font-size:12px;color:#555555;">Première main</div>
+                    <div style="font-size:15px;font-weight:600;color:#000000;">Oui</div>
+                  </td>
+                  <td class="col" width="50%" style="padding:12px 0;border-bottom:1px solid #E6E3DC;">
+                    <div style="font-size:12px;color:#555555;">Localisation</div>
+                    <div style="font-size:15px;font-weight:600;color:#000000;">{{site_setting('company_city') }}({{site_setting('company_cp') }})</div>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+          {% if vehicle.interiorMail is not empty %}
+              {% set interiors = vehicle.interiorMail|split(';') %}
+              {% set total = interiors|length %}
+              {% set middle = (total / 2)|round(0, 'ceil') %}
+              {% set first = interiors|slice(0, middle) %}
+              {% set second = interiors|slice(middle) %}
+            <!-- Équipements -->
+            <tr>
+              <td class="px" style="padding:28px 32px 0;">
+                <p style="margin:0 0 10px;font-size:16px;font-weight:700;color:#000000;">Équipements intérieur</p>
+                <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
+                  <tr>
+                    <td class="col" width="50%" valign="top" style="font-size:14px;line-height:1.5;color:#000000;">
+                       {% for c in second %}
+                          <div style="padding:4px 0;"><span style="color:#ED1719;font-weight:700;">&#10003;</span>&nbsp; {{c}}l</div>
+                       {% endfor %}
+                      </td>
+                    <td class="col" width="50%" valign="top" style="font-size:14px;line-height:1.5;color:#000000;">
+                       {% for c in first %}
+                          <div style="padding:4px 0;"><span style="color:#ED1719;font-weight:700;">&#10003;</span>&nbsp; {{c}}</div>
+                       {% endfor %}  
+                       </td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
+          {% endif  %}
+
+      
+
+          {% if vehicle.exteriorMail is not empty %}
+              {% set interiors = vehicle.exteriorMail|split(';') %}
+              {% set total = interiors|length %}
+              {% set middle = (total / 2)|round(0, 'ceil') %}
+              {% set first = interiors|slice(0, middle) %}
+              {% set second = interiors|slice(middle) %}
+            <!-- Équipements -->
+            <tr>
+              <td class="px" style="padding:28px 32px 0;">
+                <p style="margin:0 0 10px;font-size:16px;font-weight:700;color:#000000;">Équipements extérieur</p>
+                <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
+                  <tr>
+                    <td class="col" width="50%" valign="top" style="font-size:14px;line-height:1.5;color:#000000;">
+                       {% for c in second %}
+                          <div style="padding:4px 0;"><span style="color:#ED1719;font-weight:700;">&#10003;</span>&nbsp; {{c}}l</div>
+                       {% endfor %}
+                      </td>
+                    <td class="col" width="50%" valign="top" style="font-size:14px;line-height:1.5;color:#000000;">
+                       {% for c in first %}
+                          <div style="padding:4px 0;"><span style="color:#ED1719;font-weight:700;">&#10003;</span>&nbsp; {{c}}</div>
+                       {% endfor %}  
+                       </td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
+          {% endif  %}
+
+              {% if vehicle.securityMail is not empty %}
+              {% set interiors = vehicle.securityMail|split(';') %}
+              {% set total = interiors|length %}
+              {% set middle = (total / 2)|round(0, 'ceil') %}
+              {% set first = interiors|slice(0, middle) %}
+              {% set second = interiors|slice(middle) %}
+            <!-- Équipements -->
+            <tr>
+              <td class="px" style="padding:28px 32px 0;">
+                <p style="margin:0 0 10px;font-size:16px;font-weight:700;color:#000000;">Équipements sécurité</p>
+                <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
+                  <tr>
+                    <td class="col" width="50%" valign="top" style="font-size:14px;line-height:1.5;color:#000000;">
+                       {% for c in second %}
+                          <div style="padding:4px 0;"><span style="color:#ED1719;font-weight:700;">&#10003;</span>&nbsp; {{c}}l</div>
+                       {% endfor %}
+                      </td>
+                    <td class="col" width="50%" valign="top" style="font-size:14px;line-height:1.5;color:#000000;">
+                       {% for c in first %}
+                          <div style="padding:4px 0;"><span style="color:#ED1719;font-weight:700;">&#10003;</span>&nbsp; {{c}}</div>
+                       {% endfor %}  
+                       </td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
+          {% endif  %}
+            
+
+          {% if vehicle.historiqueMail is not empty %}
+              {% set histories = vehicle.historiqueMail|split('|') %}
+              <!-- Historique d'entretien -->
+              <tr>
+                <td class="px" style="padding:28px 32px 0;">
+                  <p style="margin:0 0 10px;font-size:16px;font-weight:700;color:#000000;">Historique d'entretien</p>
+                  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border:1px solid #E6E3DC;">
+                    {% for h in histories %}
+                      {% set data = h|split(';') %}
+                      <tr style="background:#f5f7f9;">
+                        <td bgcolor="#f5f7f9" style="width:90px;padding:10px 12px;font-size:12px;font-weight:700;color:#555555;border-bottom:1px solid #E6E3DC;">{{data[0]}}</td>
+                        <td bgcolor="#f5f7f9" style="padding:10px 12px;font-size:12px;font-weight:700;color:#555555;border-bottom:1px solid #E6E3DC;">{{data[1]}}</td>
+                        <td bgcolor="#f5f7f9" style="padding:10px 12px;font-size:12px;font-weight:700;color:#555555;border-bottom:1px solid #E6E3DC;">{{data[2]}}</td>
+                      </tr>
+                    {% endfor %}
+                  </table>
+                </td>
+              </tr>
+          {% endif %}
+          <!-- Photos et documents -->
+          {% if vehicle.imagesPlus is not empty %}
+          <tr>
+            <td class="px" style="padding:28px 32px 0;">
+              <p style="margin:0 0 10px;font-size:16px;font-weight:700;color:#000000;">Photos et documents</p>
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border:1px solid #E6E3DC;">
+                <tr>
+                  <td style="padding:14px 16px;border-bottom:1px solid #E6E3DC;">
+                    <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
+                      <tr>
+                        <td valign="middle">
+                          <a target="_blank"  href="{{url('vehicle_photo_supplementaire',{slug:vehicle.slug})}}" style="font-size:15px;font-weight:700;color:#000000;text-decoration:none;">Photos supplémentaires</a>
+                          <div style="padding-top:2px;font-size:13px;line-height:1.5;color:#555555;">24 photos : intérieur, coffre, moteur et détails</div>
+                        </td>
+                        <td valign="middle" align="right" width="110" style="white-space:nowrap;">
+                          <a  target="_blank" href="{{url('vehicle_photo_supplementaire',{slug:vehicle.slug})}}" style="font-size:13px;font-weight:600;color:#C81214;text-decoration:none;">Voir &rsaquo;</a>
+                        </td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+                 {% endif  %}
+                {% if vehicle.ctFile is not empty %}
+                  <tr>
+                    <td style="padding:14px 16px;border-bottom:1px solid #E6E3DC;">
+                      <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
+                        <tr>
+                          <td valign="middle">
+                            <a  target="_blank"  href="{{site_setting('company_site')}}/uploads/ct/{{vehicle.ctFile}}" style="font-size:15px;font-weight:700;color:#000000;text-decoration:none;">Contrôle technique</a>
+                            <div style="padding-top:2px;font-size:13px;line-height:1.5;color:#555555;">Procès-verbal du contrôle technique</div>
+                          </td>
+                          <td valign="middle" align="right" width="110" style="white-space:nowrap;">
+                            <a  target="_blank" href="{{site_setting('company_site')}}/uploads/ct/{{vehicle.ctFile}}" style="font-size:13px;font-weight:600;color:#C81214;text-decoration:none;">Voir &rsaquo;</a>
+                          </td>
+                        </tr>
+                      </table>
+                    </td>
+                  </tr>
+                {% endif  %}
+                <tr>
+                  <td style="padding:14px 16px;">
+                    <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
+                      <tr>
+                        <td valign="middle">
+                          <a  target="_blank"  href="{{url('vehicle_rapport',{slug:vehicle.slug})}}" style="font-size:15px;font-weight:700;color:#000000;text-decoration:none;">Rapport d'entretien</a>
+                          <div style="padding-top:2px;font-size:13px;line-height:1.5;color:#555555;">Historique des révisions et des interventions</div>
+                        </td>
+                        <td valign="middle" align="right" width="110" style="white-space:nowrap;">
+                          <a  target="_blank"  href="{{url('vehicle_rapport',{slug:vehicle.slug})}}" style="font-size:13px;font-weight:600;color:#C81214;text-decoration:none;">Voir &rsaquo;</a>
+                        </td>
+                      </tr>
+                    </table>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+
+          <!-- Nos engagements -->
+          <tr>
+            <td class="px" style="padding:28px 32px 0;">
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#f5f7f9;border:1px solid #E6E3DC;">
+                <tr>
+                  <td style="padding:20px 22px;">
+                    <p style="margin:0 0 12px;font-size:16px;font-weight:700;color:#000000;">Nos engagements</p>
+                    <div style="font-size:14px;line-height:1.5;color:#000000;padding:4px 0;"><strong>13 points de contrôle</strong> minimum avant la mise en vente</div>
+                    <div style="font-size:14px;line-height:1.5;color:#000000;padding:4px 0;"><strong>Garantie de 6 à 12 mois</strong> sur chaque véhicule</div>
+                    <div style="font-size:14px;line-height:1.5;color:#000000;padding:4px 0;"><strong>Livraison en 3 jours</strong> en moyenne, sur un créneau d'une heure</div>
+                    <div style="font-size:14px;line-height:1.5;color:#000000;padding:4px 0;"><strong>14 jours</strong> pour vous rétracter après la livraison</div>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+
+          <!-- Comment réserver -->
+          <tr>
+            <td class="px" style="padding:28px 32px 0;">
+              <p style="margin:0 0 10px;font-size:16px;font-weight:700;color:#000000;">Comment réserver ?</p>
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
+                <tr>
+                  <td width="28" valign="top" style="padding:6px 0;"><span style="display:inline-block;width:22px;height:22px;line-height:22px;text-align:center;border-radius:11px;background:#000000;color:#ffffff;font-size:12px;font-weight:700;">1</span></td>
+                  <td style="padding:6px 0;font-size:14px;line-height:1.5;color:#000000;">Cliquez sur « Réserver » et renseignez vos coordonnées.</td>
+                </tr>
+                <tr>
+                  <td width="28" valign="top" style="padding:6px 0;"><span style="display:inline-block;width:22px;height:22px;line-height:22px;text-align:center;border-radius:11px;background:#000000;color:#ffffff;font-size:12px;font-weight:700;">2</span></td>
+                  <td style="padding:6px 0;font-size:14px;line-height:1.5;color:#000000;">Réglez l'acompte de <strong>15 à 20 %</strong>, soit de 4 335 € à 5 780 € pour ce véhicule, par carte ou virement.</td>
+                </tr>
+                <tr>
+                  <td width="28" valign="top" style="padding:6px 0;"><span style="display:inline-block;width:22px;height:22px;line-height:22px;text-align:center;border-radius:11px;background:#000000;color:#ffffff;font-size:12px;font-weight:700;">3</span></td>
+                  <td style="padding:6px 0;font-size:14px;line-height:1.5;color:#000000;">Recevez votre véhicule à domicile ou retirez-le au garage.</td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+
+          <!-- Bouton -->
+          <tr>
+            <td class="px" align="center" style="padding:32px 32px 8px;">
+              <table role="presentation" cellpadding="0" cellspacing="0">
+                <tr>
+                  <td align="center" bgcolor="#ED1719" style="background:#ED1719;">
+                    <a target="_blank" href="{{path('vehicle_detail',{slug:vehicle.slug})}}" style="display:inline-block;padding:15px 34px;font-family:Verdana,Arial,Helvetica,sans-serif;font-size:16px;font-weight:600;color:#FFFFFF;text-decoration:none;">Réserver ce véhicule</a>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+
+          <!-- Contact -->
+          <tr>
+            <td class="px" style="padding:24px 32px 32px;">
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border-top:1px solid #E6E3DC;">
+                <tr>
+                  <td style="padding-top:20px;font-size:14px;line-height:1.6;color:#555555;">
+                    Une question sur ce véhicule ? Répondez simplement à cet e-mail ou appelez-nous au
+                    <strong style="color:#000000;">{{site_setting('company_phone') }}</strong>.<br>
+                    Notre équipe vous répond du lundi au samedi.
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+
+        </table>
+        <!-- ===== FIN CONTENEUR ===== -->
+
+        <!-- Pied de mail -->
+        <table role="presentation" class="container" width="600" cellpadding="0" cellspacing="0" style="width:600px;max-width:600px;">
+          <tr>
+            <td class="px" align="center" style="padding:22px 32px 0;font-size:12px;line-height:1.6;color:#555555;">
+              Vous recevez cet e-mail suite à votre demande d'informations sur
+              <a href="{{site_setting('company_site') }}" style="color:#555555;">{{site_setting('company_site') }}</a>.<br>
+              Les informations et le prix sont donnés à titre indicatif et peuvent évoluer jusqu'à la réservation.<br>
+              <span style="color:#555555;">AutoPro, {{site_setting('company_address') }}</span>
+            </td>
+          </tr>
+        </table>
+
+      </td>
+    </tr>
+  </table>
+
+</body>
+</html>

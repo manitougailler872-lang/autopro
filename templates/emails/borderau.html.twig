@@ -1,0 +1,794 @@
+<!doctype html>
+<html lang="fr">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Paiement - Transaction confirmée</title>
+        <style>
+            body {
+                margin: 0;
+                padding: 0;
+                background: #f5f6f8;
+                font-family: "Arial", Arial, Helvetica, sans-serif;
+                color: #14213d;
+            }
+
+            table {
+                border-spacing: 0;
+            }
+
+            img {
+                border: 0;
+                display: block;
+                max-width: 100%;
+            }
+
+            a {
+                color: inherit;
+                text-decoration: none;
+            }
+
+            .wrapper {
+                width: 100%;
+                background: #f5f6f8;
+                padding: 30px 0;
+            }
+
+            .container {
+                width: 640px;
+                max-width: 640px;
+                background: #ffffff;
+                margin: 0 auto;
+            }
+
+            .content {
+                padding: 0 28px;
+            }
+
+            /* HEADER */
+
+            .header {
+                padding: 22px 28px;
+            }
+
+            .logo {
+                font-size: 25px;
+                line-height: 30px;
+                font-weight: 800;
+                color: #f4511e;
+            }
+
+            .header-text {
+                text-align: right;
+                font-size: 11px;
+                line-height: 16px;
+                color: #68758a;
+            }
+
+            /* HERO */
+
+            .hero {
+                background: #fff3ec;
+                border-radius: 12px;
+            }
+
+            .hero-inner {
+                padding: 24px;
+            }
+
+            .hero-icon {
+                width: 78px;
+                vertical-align: middle;
+            }
+
+            .hero-circle {
+                width: 62px;
+                height: 62px;
+                background: #ffe0d1;
+                border-radius: 50%;
+                text-align: center;
+                vertical-align: middle;
+            }
+
+            .hero-check {
+                color: #f4511e;
+                font-size: 34px;
+                line-height: 62px;
+                font-weight: 800;
+            }
+
+            .hero-content {
+                vertical-align: middle;
+                padding-right: 15px;
+            }
+
+            .hero-title {
+                margin: 0;
+                font-size: 23px;
+                line-height: 28px;
+                font-weight: 800;
+                color: #14213d;
+            }
+
+            .hero-subtitle {
+                margin: 1px 0 5px;
+                font-size: 17px;
+                line-height: 22px;
+                font-weight: 700;
+                color: #f4511e;
+            }
+
+            .hero-description {
+                margin: 0;
+                font-size: 11px;
+                line-height: 17px;
+                color: #68758a;
+            }
+
+            .security-mini {
+                width: 115px;
+                background: #ffe8db;
+                border-radius: 12px;
+                padding: 11px 8px;
+                text-align: center;
+            }
+
+            .security-mini-icon {
+                font-size: 23px;
+                line-height: 26px;
+                color: #f4511e;
+            }
+
+            .security-mini-text {
+                margin-top: 3px;
+                font-size: 8px;
+                line-height: 12px;
+                color: #68758a;
+            }
+
+            /* META */
+
+            .meta-wrapper {
+                padding: 16px 0;
+            }
+
+            .meta-card {
+                width: 50%;
+                border: 1px solid #e3e6eb;
+                border-radius: 9px;
+                padding: 12px;
+            }
+
+            .meta-space {
+                width: 12px;
+            }
+
+            .meta-icon {
+                width: 35px;
+                height: 35px;
+                background: #f3f5f7;
+                border-radius: 50%;
+                text-align: center;
+                line-height: 35px;
+                color: #63708a;
+                font-size: 14px;
+                font-weight: 700;
+            }
+
+            .meta-content {
+                padding-left: 10px;
+            }
+
+            .meta-label {
+                font-size: 9px;
+                line-height: 13px;
+                color: #68758a;
+                text-transform: uppercase;
+            }
+
+            .meta-value {
+                margin-top: 2px;
+                font-size: 12px;
+                line-height: 17px;
+                font-weight: 700;
+                color: #14213d;
+            }
+
+            /* VEHICLE */
+
+            .vehicle {
+                border: 1px solid #e1e5eb;
+                border-radius: 10px;
+            }
+
+            .vehicle-inner {
+                padding: 15px;
+            }
+
+            .vehicle-image-cell {
+                width: 180px;
+                vertical-align: top;
+            }
+
+            .vehicle-image {
+                width: 165px;
+                height: 95px;
+                border-radius: 8px;
+                object-fit: cover;
+                background: #f2f3f5;
+            }
+
+            .vehicle-info {
+                vertical-align: top;
+                padding: 2px 10px;
+            }
+
+            .vehicle-name {
+                font-size: 18px;
+                line-height: 23px;
+                font-weight: 800;
+                color: #14213d;
+            }
+
+            .vehicle-details {
+                margin-top: 3px;
+                font-size: 10px;
+                line-height: 15px;
+                color: #68758a;
+            }
+
+            .vehicle-price {
+                width: 115px;
+                vertical-align: top;
+                text-align: right;
+            }
+
+            .price {
+                font-size: 18px;
+                line-height: 24px;
+                font-weight: 800;
+                color: #f4511e;
+                white-space: nowrap;
+            }
+
+            .paid {
+                display: inline-block;
+                margin-top: 7px;
+                padding: 5px 8px;
+                background: #fff1e9;
+                border-radius: 5px;
+                color: #f4511e;
+                font-size: 8px;
+                font-weight: 700;
+            }
+
+            /* PAYMENT */
+
+            .payment {
+                margin-top: 14px;
+                border-top: 1px solid #e5e8ed;
+                padding-top: 12px;
+            }
+
+            .payment-title {
+                margin-bottom: 5px;
+                font-size: 12px;
+                font-weight: 800;
+                color: #14213d;
+            }
+
+            .payment-row td {
+                padding: 4px 0;
+                font-size: 10px;
+                line-height: 15px;
+                color: #68758a;
+            }
+
+            .payment-amount {
+                text-align: right;
+            }
+
+            .total td {
+                padding: 9px 11px;
+                background: #fff2eb;
+            }
+
+            .total td:first-child {
+                border-radius: 6px 0 0 6px;
+                font-size: 11px;
+                font-weight: 800;
+                color: #14213d;
+            }
+
+            .total td:last-child {
+                border-radius: 0 6px 6px 0;
+                text-align: right;
+                font-size: 15px;
+                font-weight: 800;
+                color: #f4511e;
+            }
+
+            /* PEOPLE */
+
+            .people {
+                padding-top: 15px;
+            }
+
+            .person {
+                width: 50%;
+                border: 1px solid #e1e5eb;
+                border-radius: 8px;
+                padding: 11px;
+            }
+
+            .person-space {
+                width: 12px;
+            }
+
+            .person-icon {
+                width: 35px;
+                height: 35px;
+                background: #fff0e9;
+                border-radius: 50%;
+                text-align: center;
+                line-height: 35px;
+                color: #f4511e;
+                font-size: 15px;
+                font-weight: 800;
+            }
+
+            .person-content {
+                padding-left: 9px;
+            }
+
+            .person-title {
+                font-size: 10px;
+                line-height: 14px;
+                font-weight: 800;
+                color: #14213d;
+            }
+
+            .person-name {
+                font-size: 10px;
+                line-height: 15px;
+                color: #14213d;
+            }
+
+            .person-subtitle {
+                font-size: 8px;
+                line-height: 12px;
+                color: #68758a;
+            }
+
+            /* STATUS */
+
+            .status-wrapper {
+                padding-top: 15px;
+            }
+
+            .status {
+                background: #eaf8ee;
+                border-radius: 9px;
+            }
+
+            .status-inner {
+                padding: 13px 15px;
+            }
+
+            .status-icon {
+                width: 43px;
+                vertical-align: middle;
+            }
+
+            .status-circle {
+                width: 35px;
+                height: 35px;
+                background: #0c9b48;
+                border-radius: 50%;
+                text-align: center;
+                line-height: 35px;
+                color: #ffffff;
+                font-size: 18px;
+                font-weight: 800;
+            }
+
+            .status-content {
+                vertical-align: middle;
+            }
+
+            .status-label {
+                font-size: 9px;
+                color: #14213d;
+            }
+
+            .status-value {
+                font-size: 13px;
+                line-height: 18px;
+                font-weight: 800;
+                color: #0c9345;
+            }
+
+            .status-description {
+                width: 210px;
+                border-left: 1px solid #b9d8c4;
+                padding-left: 15px;
+                vertical-align: middle;
+                font-size: 8px;
+                line-height: 12px;
+                color: #68758a;
+            }
+
+            /* SECURITY */
+
+            .security-wrapper {
+                padding-top: 12px;
+            }
+
+            .security {
+                background: #fff4ed;
+                border-radius: 9px;
+            }
+
+            .security-inner {
+                padding: 12px 15px;
+            }
+
+            .security-icon-cell {
+                width: 40px;
+                vertical-align: middle;
+            }
+
+            .security-icon {
+                width: 31px;
+                height: 31px;
+                background: #ffe1d2;
+                border-radius: 50%;
+                text-align: center;
+                line-height: 31px;
+                color: #f4511e;
+                font-size: 14px;
+            }
+
+            .security-title {
+                font-size: 10px;
+                line-height: 14px;
+                font-weight: 800;
+                color: #14213d;
+            }
+
+            .security-text {
+                font-size: 8px;
+                line-height: 12px;
+                color: #68758a;
+            }
+
+            .security-right {
+                width: 100px;
+                text-align: right;
+                font-size: 8px;
+                color: #f4511e;
+            }
+
+            /* FOOTER */
+
+            .footer {
+                margin-top: 18px;
+                padding: 15px 0 5px;
+                border-top: 1px solid #e1e5eb;
+            }
+
+            .footer-logo {
+                font-size: 19px;
+                line-height: 23px;
+                font-weight: 800;
+                color: #f4511e;
+            }
+
+            .footer-text {
+                font-size: 8px;
+                line-height: 12px;
+                color: #68758a;
+            }
+
+            .footer-item {
+                text-align: center;
+                font-size: 8px;
+                line-height: 12px;
+                color: #68758a;
+            }
+
+            .footer-check {
+                color: #f4511e;
+                font-size: 11px;
+                font-weight: 800;
+            }
+
+            @media screen and (max-width: 640px) {
+                .wrapper {
+                    padding: 0;
+                }
+
+                .container {
+                    width: 100% !important;
+                }
+
+                .content {
+                    padding: 0 15px !important;
+                }
+
+                .hero-inner {
+                    padding: 16px !important;
+                }
+
+                .hero-icon {
+                    width: 65px !important;
+                }
+
+                .security-mini {
+                    display: none;
+                }
+
+                .vehicle-image-cell {
+                    width: 135px !important;
+                }
+
+                .vehicle-image {
+                    width: 125px !important;
+                    height: 80px !important;
+                }
+
+                .vehicle-price {
+                    width: 90px !important;
+                }
+            }
+        </style>
+    </head>
+
+    <body>
+        <table role="presentation" class="wrapper" width="100%">
+            <tr>
+                <td align="center">
+                    <table role="presentation" class="container" width="640" cellpadding="0" cellspacing="0">
+                        <!-- HEADER -->
+                        <tr>
+                            <td class="header">
+                                <table role="presentation" width="100%">
+                                    <tr>
+                                        <td>
+                                            <div class="logo">Leboncoin</div>
+                                        </td>
+                                        <td class="header-text">
+                                            Des transactions sécurisées<br />
+                                            en toute confiance
+                                        </td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+
+                        <!-- CONTENT -->
+                        <tr>
+                            <td class="content">
+                                <!-- HERO -->
+                                <table role="presentation" width="100%" class="hero">
+                                    <tr>
+                                        <td class="hero-inner">
+                                            <table role="presentation" width="100%">
+                                                <tr>
+                                                    <td class="hero-icon">
+                                                        <table role="presentation">
+                                                            <tr>
+                                                                <td class="hero-circle">
+                                                                    <span class="hero-check">✓</span>
+                                                                </td>
+                                                            </tr>
+                                                        </table>
+                                                    </td>
+
+                                                    <td class="hero-content">
+                                                        <div class="hero-title">Paiement sécurisé</div>
+                                                        <div class="hero-subtitle">Transaction confirmée</div>
+                                                        <div class="hero-description">
+                                                            Votre paiement a bien été enregistré. Votre transaction est
+                                                            maintenant confirmée.
+                                                        </div>
+                                                    </td>
+
+                                                    <td width="115">
+                                                        <div class="security-mini">
+                                                            <div class="security-mini-icon">🔒</div>
+
+                                                            <div class="security-mini-text">
+                                                                Transaction protégée<br />
+                                                                et sécurisée
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            </table>
+                                        </td>
+                                    </tr>
+                                </table>
+
+                                <!-- REFERENCE / DATE -->
+                                <div class="meta-wrapper">
+                                    <table role="presentation" width="100%">
+                                        <tr>
+                                            <td class="meta-card">
+                                                <table role="presentation">
+                                                    <tr>
+                                                        <td width="35">
+                                                            <div class="meta-icon">#</div>
+                                                        </td>
+
+                                                        <td class="meta-content">
+                                                            <div class="meta-label">Référence de la transaction</div>
+
+                                                            <div class="meta-value">{{lbcLink.referenceLbc }}</div>
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                            </td>
+                                            <td class="meta-space"></td>
+                                            <td class="meta-card">
+                                                <table role="presentation">
+                                                    <tr>
+                                                        <td width="35">
+                                                            <div class="meta-icon">▣</div>
+                                                        </td>
+                                                        <td class="meta-content">
+                                                            <div class="meta-label">Date et heure</div>
+                                                            <div class="meta-value">{{'now'|date('d/m/Y') }} {{'now'|date('H:m') }}</div>
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+
+                                <!-- VEHICLE -->
+                                <table role="presentation" width="100%" class="vehicle">
+                                    <tr>
+                                        <td class="vehicle-inner">
+                                            <table role="presentation" width="100%">
+                                                <tr>
+                                                    <td class="vehicle-image-cell">
+                                                        <img
+                                                           src="{{ absolute_url(
+                                                                asset(
+                                                                    'uploads/vehicles/' ~ lbcLink.reservation.vehicle.getPrimaryImage().filename
+                                                                )
+                                                            ) }}"    width="165"
+                                                            height="95"
+                                                            class="vehicle-image"
+                                                            alt="Peugeot 208"
+                                                        />
+                                                    </td>
+
+                                                    <td class="vehicle-info">
+                                                        <div class="vehicle-name">{{lbcLink.reservation.vehicle.model }}</div>
+                                                        <div class="vehicle-details">{{lbcLink.reservation.vehicle.brand }} – {{lbcLink.reservation.vehicle.year }}</div>
+                                                        <div class="vehicle-details">
+                                                            {{lbcLink.reservation.vehicle.mileage }} km · {{lbcLink.reservation.vehicle.fuel.label }} · {{lbcLink.reservation.vehicle.transmission }}
+                                                        </div>
+                                                    </td>
+                                                    <td class="vehicle-price">
+                                                        <div class="price"> {{lbcLink.price|number_format(2,',',' ') }} €</div>
+                                                        <div class="paid">Article payé</div>
+                                                    </td>
+                                                </tr>
+                                            </table>
+
+                                            <!-- PAYMENT -->
+                                            <table role="presentation" width="100%" class="payment">
+                                                <tr>
+                                                    <td colspan="2">
+                                                        <div class="payment-title">Détail du paiement</div>
+                                                    </td>
+                                                </tr>
+                                                <tr class="payment-row">
+                                                    <td>Prix de l’article</td>
+
+                                                    <td class="payment-amount"> {{lbcLink.price|number_format(2,',',' ') }} €</td>
+                                                </tr>
+
+                                                <tr class="payment-row">
+                                                    <td>Frais de service</td>
+                                                    <td class="payment-amount">0,00 €</td>
+                                                </tr>
+
+                                                <tr class="total">
+                                                    <td>Total payé</td>
+                                                    <td> {{lbcLink.price|number_format(2,',',' ') }} €</td>
+                                                </tr>
+                                            </table>
+                                        </td>
+                                    </tr>
+                                </table>
+
+                                <!-- STATUS -->
+                                <div class="status-wrapper">
+                                    <table role="presentation" width="100%" class="status">
+                                        <tr>
+                                            <td class="status-inner">
+                                                <table role="presentation" width="100%">
+                                                    <tr>
+                                                        <td class="status-icon">
+                                                            <div class="status-circle">✓</div>
+                                                        </td>
+                                                        <td class="status-content">
+                                                            <div class="status-label">Statut de la transaction</div>
+                                                            <div class="status-value">Paiement validé</div>
+                                                        </td>
+                                                        <td class="status-description">
+                                                            Le paiement a été enregistré avec succès. Votre transaction
+                                                            est confirmée.
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+
+                                <!-- SECURITY -->
+                                <div class="security-wrapper">
+                                    <table role="presentation" width="100%" class="security">
+                                        <tr>
+                                            <td class="security-inner">
+                                                <table role="presentation" width="100%">
+                                                    <tr>
+                                                        <td class="security-icon-cell">
+                                                            <div class="security-icon">🔒</div>
+                                                        </td>
+                                                        <td>
+                                                            <div class="security-title">
+                                                                Votre sécurité, notre priorité
+                                                            </div>
+                                                            <div class="security-text">
+                                                                Vos informations sont protégées et votre transaction est
+                                                                sécurisée.
+                                                            </div>
+                                                        </td>
+                                                        <td class="security-right">Transaction sécurisée</td>
+                                                    </tr>
+                                                </table>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+
+                                <!-- FOOTER -->
+                                <div class="footer">
+                                    <table role="presentation" width="100%">
+                                        <tr>
+                                            <td width="42%">
+                                                <div class="footer-logo">Leboncoin</div>
+                                                <div class="footer-text">
+                                                    Des transactions sécurisées en toute confiance.
+                                                </div>
+                                            </td>
+                                            <td class="footer-item">
+                                                <div class="footer-check">✓</div>
+                                                Paiement sécurisé
+                                            </td>
+                                            <td class="footer-item">
+                                                <div class="footer-check">✓</div>
+                                                Transaction protégée
+                                            </td>
+                                            <td class="footer-item">
+                                                <div class="footer-check">✓</div>
+                                                Service de confiance
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </table>
+    </body>
+</html>

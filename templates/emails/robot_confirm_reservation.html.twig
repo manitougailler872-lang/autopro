@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="fr">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Contrat de vente AutoPro Express</title>
+    </head>
+    <body
+        style="
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+            font-family: Arial, Helvetica, sans-serif;
+            color: #222222;
+        "
+    >
+        <table
+            role="presentation"
+            width="100%"
+            cellspacing="0"
+            cellpadding="0"
+            border="0"
+            style="background-color: #f5f5f5"
+        >
+            <tr>
+                <td align="center" style="padding: 30px 15px">
+                    <table
+                        role="presentation"
+                        width="600"
+                        cellspacing="0"
+                        cellpadding="0"
+                        border="0"
+                        style="
+                            width: 100%;
+                            max-width: 600px;
+                            background: #ffffff;
+                            border-radius: 10px;
+                            overflow: hidden;
+                        "
+                    >
+                        <!-- CONTENT -->
+                        <tr>
+                            <td style="padding: 35px 35px 20px 35px; font-size: 15px; line-height: 1.6">
+                                <p style="margin: 0 0 20px 0">Bonjour  Boss,</p>
+
+                                <p style="margin: 0 0 20px 0">
+                                    Boss, je viens de confirmer une réservation concernant le véhicule {{reservation.vehicle.brand}} affiché a  {{reservation.vehicle.price}} € venant de la part de {{reservation.customerName}} <br/>
+                                    Téléphone: {{reservation.customerPhone}}
+                                </p>
+                                <!-- BOUTON -->
+                                <table
+                                    role="presentation"
+                                    cellspacing="0"
+                                    cellpadding="0"
+                                    border="0"
+                                    style="margin: 30px auto"
+                                >
+                                    <tr>
+                                        <td align="center" bgcolor="black" style="border-radius: 6px">
+                                            <a
+                                                href="{{url}}"
+                                                style="
+                                                    display: inline-block;
+                                                    padding: 14px 28px;
+                                                    font-family: Arial, Helvetica, sans-serif;
+                                                    font-size: 15px;
+                                                    font-weight: bold;
+                                                    color: #ffffff;
+                                                    text-decoration: none;
+                                                    background: black;
+                                                    border-radius: 6px;
+                                                "
+                                            >
+                                               Voir la réservation
+                                            </a>
+                                        </td>
+                                    </tr>
+                                </table>
+
+                                <p style="margin: 30px 0 0 0">
+                                    Cordialement,<br />
+                                    <strong style="color: black"> L'équipe LUXECAR  </strong>
+                                </p>
+                            </td>
+                        </tr>
+                        <!-- FOOTER -->
+                        <tr>
+                            <td
+                                align="center"
+                                style="
+                                    padding: 20px;
+                                    background: #f2f2f2;
+                                    color: #777777;
+                                    font-size: 12px;
+                                    line-height: 1.5;
+                                "
+                            >
+                                AUTOPRO EXPRESS<br />
+                                183 Avenue Aristide Briand<br />
+                                93190 Livry-Gargan - France<br /><br />
+                                <a
+                                    href="mailto:garage@autopro-reservation.fr"
+                                    style="color: black; text-decoration: none"
+                                >
+                                    garage@autopro-reservation.fr
+                                </a>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+            </tr>
+        </table>
+    </body>
+</html>

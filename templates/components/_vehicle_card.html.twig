@@ -1,0 +1,81 @@
+{% set img = vehicle.primaryImage %}
+{% set _cta = cta|default('Voir détails') %}
+<a {% if not vehicle.reserved %} href="{{ path('vehicle_detail', {slug: vehicle.slug}) }}"  {% endif %} class="group relative flex flex-col card-luxe shadow-none overflow-hidden hover:border-luxe-orange hover:shadow-lg hover:shadow-luxe-orange/5 transition-all duration-200 reveal">
+    <div class="aspect-[3/2] relative bg-luxe-black-alt overflow-hidden">
+        {% if img %}
+            <img src="{{ img.publicPath }}" alt="{{ vehicle.fullName }}" loading="lazy"
+                 class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500">
+        {% else %}
+            <div class="w-full h-full flex items-center justify-center text-4xl text-luxe-muted">🚗</div>
+        {% endif %}
+        {% if vehicle.bestDeal %}
+            <div style="background-color:#F97316; color:white;" class="absolute left-4 top-4 rounded-full px-3 py-1 text-xs font-medium uppercase">
+               Bon Plan
+            </div>
+        {% elseif  vehicle.isAuction  %}
+            <div  class="absolute left-4 top-4 rounded-full text-white  bg-green-600  px-3 py-1 text-xs font-medium uppercase text-black">
+                Enchère
+            </div>
+        {% else %}
+            <div style="background-color:#FACC15; color:black;" class="absolute left-4 top-4 rounded-full px-3 py-1 text-xs font-medium uppercase text-black">
+               Occasion
+            </div>
+        {% endif %}
+    </div>
+
+    {# {% if not vehicle.bestDeal %}
+
+        <div class="flex items-center justify-between gap-4 bg-luxe-orange px-2 py-2 text-white">
+        <div class="flex items-center gap-3">
+                <div
+                    class="flex h-6 w-6 items-center justify-center
+                        rounded-full bg-white/40"
+                >
+                    <svg
+                        class="h-5 w-5"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                    >
+                        <path d="M12 3l2.2 4.5L19 8.2l-3.5 3.4.8 4.8L12 14.2 7.7 16.4l.8-4.8L5 8.2l4.8-.7L12 3Z"/>
+                        <path d="M8 16v5l4-2 4 2v-5"/>
+                    </svg>
+                </div>
+
+                <span class="font-semibold">
+                    Garantie de 12 mois
+                </span>
+            </div>
+        </div> 
+     {% endif %} #}
+    <div class="p-4 flex-1 flex flex-col">
+        <div class="flex items-start justify-between gap-2 mb-1">
+            <h3 class="font-display font-semibold truncate">{{ vehicle.brand }} {{ vehicle.model }}</h3>
+            {% if vehicle.rating %}
+                {% include 'components/_stars.html.twig' with {rating: vehicle.rating} %}
+            {% endif %}
+        </div>
+        <p class="text-xs text-luxe-muted mb-2 truncate">{{ vehicle.version }}</p>
+        {# <p class="text-xs mb-2 text-gray-400">
+            Financement disponible à partir de 1,354 € sur 12 mois
+        </p> #}
+        <div class="flex flex-wrap gap-1.5 text-xs text-luxe-muted mb-4">
+            {% if vehicle.mileage is not empty %}
+                <span class="chip bg-luxe-gold text-white">{{ vehicle.mileage|mileage }}</span>
+            {% endif %}
+            {% if vehicle.year is not empty %}
+                <span class="chip">{{ vehicle.year }}</span>
+            {% endif %}
+            {% if vehicle.fuel is not empty %}
+                <span class="chip">{{ vehicle.fuel.label }}</span>
+            {% endif %}
+        </div>
+        <div class="flex items-center justify-between mt-auto">
+            <div class="luxe-orange-soft text-xl font-bold">{{ vehicle.price|money_eur }}</div>
+            {% if not vehicle.reserved %}
+                <span class="btn-gold bg-black text-xs py-1.5 px-4">{{ _cta }}</span>
+            {% endif %}
+        </div>
+    </div>
+</a>

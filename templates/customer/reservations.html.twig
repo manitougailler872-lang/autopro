@@ -1,0 +1,103 @@
+{% extends 'base.html.twig' %}
+{% block title %}Mes réservations — LUXE CAR{% endblock %}
+
+{% block body %}
+<div class="max-w-7xl mx-auto px-6 py-8">
+    <div class="grid grid-cols-1 lg:grid-cols-[240px_1fr] gap-6">
+        {# ===== Sidebar "Mon compte" ===== #}
+        <aside class="bg-luxe-card border border-luxe-border rounded-xl p-4 h-fit lg:sticky lg:top-24">
+            <div class="flex items-center gap-3 pb-4 mb-4 border-b border-luxe-border">
+                <div class="w-10 h-10 rounded-full bg-luxe-gold flex items-center justify-center text-luxe-black font-semibold text-sm shrink-0">
+                    {{ current.customerName|slice(0, 1)|upper }}
+                </div>
+                <div class="min-w-0">
+                    <div class="text-sm font-semibold truncate">{{ current.customerName }}</div>
+                </div>
+            </div>
+
+            <div class="text-xs uppercase tracking-widest text-luxe-faint px-2 mb-2">Mon compte</div>
+            <nav class="space-y-1 text-sm">
+                <a href="#" class="flex items-center gap-2 px-3 py-2 rounded-lg text-luxe-muted hover:text-luxe-gold hover:bg-luxe-black/40 transition">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="9"/><rect x="14" y="3" width="7" height="5"/><rect x="14" y="12" width="7" height="9"/><rect x="3" y="16" width="7" height="5"/></svg>
+                    Tableau de bord
+                </a>
+                <a href="{{ path('customer_reservations', {uuid: current.uuid}) }}" class="flex items-center gap-2 px-3 py-2 rounded-lg bg-luxe-black text-luxe-gold font-medium">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><path d="M14 2v6h6M9 15h6M9 11h6"/></svg>
+                    Mes réservations
+                </a>
+                <a href="#" class="flex items-center gap-2 px-3 py-2 rounded-lg text-luxe-muted hover:text-luxe-gold hover:bg-luxe-black/40 transition">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 4-6 8-6s8 2 8 6"/></svg>
+                    Mes informations
+                </a>
+                <a href="#" class="flex items-center gap-2 px-3 py-2 rounded-lg text-luxe-muted hover:text-luxe-gold hover:bg-luxe-black/40 transition">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><rect x="2" y="6" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg>
+                    Mes paiements
+                </a>
+                <a href="#" class="flex items-center gap-2 px-3 py-2 rounded-lg text-luxe-muted hover:text-luxe-gold hover:bg-luxe-black/40 transition">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+                    Messages
+                </a>
+
+                <hr class="border-luxe-border my-3">
+
+                <a href="{{ path('home') }}" class="flex items-center gap-2 px-3 py-2 rounded-lg text-luxe-muted hover:text-red-400 transition">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4M16 17l5-5-5-5M21 12H9"/></svg>
+                    Déconnexion
+                </a>
+            </nav>
+        </aside>
+
+        {# ===== Reservations table ===== #}
+        <main>
+            <h1 class="text-2xl font-bold mb-6">Mes réservations</h1>
+
+            {% if reservations|length == 0 %}
+                <div class="text-center py-16 bg-luxe-card border border-luxe-border rounded-xl">
+                    <p class="text-luxe-muted">Aucune réservation pour le moment.</p>
+                </div>
+            {% else %}
+                <div class="bg-luxe-card border border-luxe-border rounded-xl overflow-x-auto">
+                    <table class="w-full text-sm">
+                        <thead>
+                            <tr class="text-luxe-faint text-xs uppercase tracking-widest">
+                                <th class="text-left px-5 py-4 font-medium">Véhicule</th>
+                                <th class="text-left font-medium">Réservation</th>
+                                <th class="text-left font-medium">Date</th>
+                                <th class="text-left font-medium">Statut</th>
+                                <th class="text-left font-medium">Montant</th>
+                                <th class="px-5"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for r in reservations %}
+                                <tr class="border-t border-luxe-border">
+                                    <td class="px-5 py-4">
+                                        <div class="flex items-center gap-3">
+                                            {% if r.vehicle.primaryImage %}
+                                                <img src="{{ r.vehicle.primaryImage.publicPath }}" alt="" class="w-14 h-11 object-cover rounded-md">
+                                            {% else %}
+                                                <div class="w-14 h-11 rounded-md bg-luxe-black-alt flex items-center justify-center text-sm">🚗</div>
+                                            {% endif %}
+                                            <div class="min-w-0">
+                                                <div class="font-semibold text-sm truncate">{{ r.vehicle.brand }} {{ r.vehicle.model }}</div>
+                                                <div class="text-xs text-luxe-muted truncate">{{ r.vehicle.version }}</div>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="font-mono text-xs text-luxe-muted">{{ r.reservationNumber }}</td>
+                                    <td class="text-xs text-luxe-muted">{{ r.createdAt|date('d/m/Y') }}</td>
+                                    <td>{% include 'components/_status_badge.html.twig' with {status: r.status} %}</td>
+                                    <td class="font-medium">{{ r.reservationFeeAmount|money_eur }}</td>
+                                    <td class="text-right px-5">
+                                        <a href="{{ path('reservation_confirmation', {uuid: r.uuid}) }}" class="btn-outline text-xs py-1.5 px-4">Voir</a>
+                                    </td>
+                                </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            {% endif %}
+        </main>
+    </div>
+</div>
+{% endblock %}

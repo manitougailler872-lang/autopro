@@ -1,0 +1,33 @@
+<div
+    id="cookieModal"
+    class="fixed inset-0 z-[9999] hidden items-center justify-center bg-black/40 backdrop-blur-sm p-4"
+>
+    <div class="w-full max-w-lg rounded-2xl bg-white shadow-2xl p-7">
+        <h2 class="text-xl font-bold text-gray-950">🍪 Votre confidentialité</h2>
+
+        <p class="mt-3 text-sm leading-6 text-gray-600">
+            Nous utilisons des cookies pour améliorer votre expérience, mesurer l'audience du site et proposer des
+            contenus adaptés.
+        </p>
+
+        <button onclick="openCookieSettings()" class="mt-3 text-sm font-semibold underline underline-offset-4">
+            Personnaliser mes choix
+        </button>
+
+        <div class="mt-6 flex gap-3">
+            <button
+                onclick="rejectCookies()"
+                class="flex-1 rounded-xl border border-gray-300 px-5 py-3 text-sm font-bold hover:bg-gray-50"
+            >
+                Tout refuser
+            </button>
+
+            <button
+                onclick="acceptCookies()"
+                class="flex-1 rounded-xl bg-black px-5 py-3 text-sm font-bold text-white hover:bg-gray-800"
+            >
+                Tout accepter
+            </button>
+        </div>
+    </div>
+</div>

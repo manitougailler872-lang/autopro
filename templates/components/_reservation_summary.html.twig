@@ -1,0 +1,18 @@
+{# Small vehicle card shown on every reservation step (client requirement) #}
+<div class="card-luxe p-4 flex max-w-xl mx-auto items-center gap-4">
+    {% if reservation.vehicle.primaryImage %}
+        <img src="{{ reservation.vehicle.primaryImage.publicPath }}" alt="{{ reservation.vehicle.fullName }}"
+             class="w-24 h-16 object-cover rounded-xl shrink-0">
+    {% else %}
+        <div class="w-24 h-16 rounded-xl bg-luxe-black-alt flex items-center justify-center text-2xl shrink-0">🚗</div>
+    {% endif %}
+    <div class="min-w-0 flex-1">
+        <div class="font-semibold text-sm truncate">{{ reservation.vehicle.brand }} {{ reservation.vehicle.model }}</div>
+        <div class="text-xs text-luxe-muted truncate">{{ reservation.vehicle.version }}</div>
+        <div class="text-luxe-orange font-bold text-xs mt-1">{{ reservation.reservationNumber }}</div>
+    </div>
+    <div class="text-right shrink-0">
+        <div class="text-xs text-luxe-muted">Prix</div>
+        <div class="font-semibold">{{ reservation.vehicle.price|money_eur }}</div>
+    </div>
+</div>

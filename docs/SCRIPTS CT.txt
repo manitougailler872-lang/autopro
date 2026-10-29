@@ -1,0 +1,67 @@
+Remplace la valeur du champ immatriculation et pays par: GN-204-VB(F)
+Remplace la valeur du champ Date immatriculation par: 04/05/2023
+Remplace la valeur du champ Date de première mise en circulation par: 05/05/2023
+Remplace la valeur du champ Marque par: 05/05/2023
+Remplace la valeur du champ désignation Commerciale par: Peugeot
+Remplace la valeur du champ numéro dans la série du type par: VR3USHNSSPJ557194
+Remplace la valeur du champ catégorie internationale par: M1
+Remplace la valeur du champ genre par: VP
+Remplace la valeur du champ Type/CNIT par: M10PGTVP199V944
+Remplace la valeur du champ Kilométrage révélé par: 20576
+
+Masque le numéro de l'imprimé, numéro du procès verbal,
+numéro d'agrément, et le numéro d'agrément du technicien
+Masque  "Imprimé E 2009 0500SS06901 - 08/2016"
+
+
+
+-------------------------------------------------------------------------------------
+Remplacement dans mentions légales et produit moi un nouveau fichier pdf, les informations suivantes:
+
+Remplace:
+AUTO EXPRESS -> AUTOPRO EXPRESS (Maintient express en rouge)
+Supprime "Document préparé à partir des informations fournies par AUTO EXPRESS.
+AUTO EXPRES"
+
+Enlève le filigrane.
+
+Remplace les autres infos par ceci.
+
+Immatriculée sous le numéro : 393755962
+Numéro SIRET : 39375596200049
+Forme juridique : SAS, société par actions simplifiée
+Numéro RCS : 393 755 962 R.C.S. Meaux
+Capital social : 150 000,00 €
+Numéro de TVA intracommunautaire : FR55393755962
+Adresse : 13 RUE LAVOISIER 77400 LAGNY-SUR-MARNE FRANCE
+
+Téléphone : +33 7 66 36 31 90 / +33 6 44 67 23 57
+E-mail : garage@autopro-reservation.fr
+
+
+---------------------------------------------------------------------------------------
+Remplacement dans POLITIQUE DE CONFIDENTIALITÉ
+
+Remplace opalemotors.com par autopro-reservation.fr
+Remplace GERONA AUTO par AUTOPRO EXPRESS (EXPRESS EN ROUGE)
+
+Immatriculée sous le numéro : 393755962
+Numéro SIRET : 39375596200049
+Numéro de TVA intracommunautaire : FR55393755962
+Adresse : 13 RUE LAVOISIER 77400 LAGNY-SUR-MARNE FRANCE
+
+Remplace Ces données sont collectées exclusivement via :
+• Le formulaire de contact du site par "Le formulaire du contact du site et le formulaire de réservation d'un véhicule.
+
+Enlève "Document établi à partir des informations fournies par GERONA AUTO."
+Remplace "contact@gerona-auto.com" par "contact@autopro-reservation.fr"
+
+
+
+---------------------------------------------------------------------------------
+
+Remplace les deux numéros par ceux-ci: 07 66 36 31 90 / 06 44 67 23 57
+
+
+--------------------------------------------------------------------------------
+Remplace dans CGV AUTO EXPRESS par AUTOPRO EXPRESS, EXPRESS EN ROUGE

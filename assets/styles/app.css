@@ -1,0 +1,142 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ==================================================
+   Global font stack
+   ================================================== */
+html { font-family: 'Space Grotesk', system-ui, sans-serif; }
+body { font-family: 'Space Grotesk', system-ui, sans-serif; letter-spacing: -0.005em; }
+h1, h2, h3, h4, h5, h6, .font-display { font-family: 'Space Grotesk', 'Space Grotesk', sans-serif; letter-spacing: -0.02em; }
+code, .font-mono { font-family: 'JetBrains Mono', ui-monospace, monospace; }
+
+/* ==================================================
+   Buttons + inputs — well-rounded, orange accent
+   ================================================== */
+@layer components {
+    .btn-gold {
+        @apply inline-flex items-center justify-center gap-2 bg-luxe-orange text-white font-semibold px-6 py-3 rounded-full
+               shadow-lg shadow-luxe-orange/20
+               hover:bg-luxe-orange-dark hover:shadow-luxe-orange/30 active:scale-[0.98] transition-all duration-150
+               focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-luxe-orange;
+    }
+    .btn-orange {
+        @apply inline-flex items-center justify-center gap-2 bg-luxe-orange text-white font-semibold px-6 py-3 rounded-full
+               shadow-lg shadow-luxe-orange/20
+               hover:bg-luxe-orange-dark hover:shadow-luxe-orange/30 active:scale-[0.98] transition-all duration-150
+               focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-luxe-orange;
+    }
+    .btn-outline {
+        @apply inline-flex items-center justify-center gap-2 bg-transparent border border-luxe-border text-luxe-text
+               px-5 py-3 rounded-full hover:border-luxe-orange hover:text-luxe-orange transition-colors duration-150;
+    }
+    .input-luxe {
+        @apply w-full bg-luxe-black-alt border border-luxe-border text-luxe-text placeholder-luxe-faint rounded-full
+               px-4 py-2.5 text-sm focus:border-luxe-orange focus:outline-none focus:ring-2 focus:ring-luxe-orange/25 transition;
+    }
+    textarea.input-luxe, textarea.form-control-luxe { @apply rounded-2xl; }
+    .form-label {
+        @apply block text-xs text-luxe-muted mb-1.5;
+    }
+    .admin-nav {
+        @apply flex items-center gap-3 px-3 py-2.5 rounded-xl text-luxe-muted hover:text-luxe-orange hover:bg-luxe-black/60 transition;
+    }
+    .admin-nav--active {
+        @apply bg-luxe-black text-luxe-orange;
+    }
+    .card-luxe {
+        @apply bg-luxe-card border border-luxe-border rounded-xl shadow-sm;
+    }
+    .chip {
+        @apply inline-flex items-center gap-1.5 bg-luxe-black-alt border border-luxe-border rounded-full px-3 py-1 text-xs text-luxe-muted;
+    }
+}
+
+/* ==================================================
+   Symfony Form dark theming (default rendering)
+   ================================================== */
+form label {
+    @apply block text-xs text-luxe-muted mb-1.5;
+}
+form input[type=text], form input[type=email], form input[type=tel],
+form input[type=password], form input[type=number], form input[type=url],
+form input[type=date], form input[type=time], form input[type=search] {
+    @apply w-full bg-luxe-black-alt border border-luxe-border text-luxe-text placeholder-luxe-faint rounded-full
+           px-4 py-2.5 text-sm focus:border-luxe-orange focus:outline-none focus:ring-2 focus:ring-luxe-orange/25 transition;
+}
+form input[type=file] {
+    @apply w-full bg-luxe-black-alt border border-luxe-border text-luxe-text placeholder-luxe-faint rounded-2xl
+           px-4 py-2.5 text-sm focus:border-luxe-orange focus:outline-none focus:ring-2 focus:ring-luxe-orange/25 transition;
+}
+form textarea, form select {
+    @apply w-full bg-luxe-black-alt border border-luxe-border text-luxe-text placeholder-luxe-faint rounded-2xl
+           px-4 py-2.5 text-sm focus:border-luxe-orange focus:outline-none focus:ring-2 focus:ring-luxe-orange/25 transition;
+}
+form select { @apply rounded-full; }
+form input[type=radio], form input[type=checkbox] { @apply accent-luxe-orange; }
+form ul { @apply text-xs text-red-400 mt-1 list-disc list-inside; }
+
+/* ==================================================
+   Animations
+   ================================================== */
+.fade-in    { animation: fadeIn   .5s ease-out both; }
+.fade-in-up { animation: fadeInUp .7s ease-out both; }
+.reveal {
+    opacity: 0;
+    transform: translateY(16px);
+    transition: opacity .6s ease-out, transform .6s ease-out;
+}
+.reveal.is-visible { opacity: 1; transform: translateY(0); }
+
+@keyframes fadeIn   { from { opacity: 0; } to { opacity: 1; } }
+@keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+/* ==================================================
+   Confetti
+   ================================================== */
+.confetti-container {
+    position: absolute; inset: 0;
+    pointer-events: none;
+    overflow: hidden;
+    z-index: 1;
+}
+.confetti-dot {
+    position: absolute; top: -20px;
+    width: 8px; height: 8px;
+    background: #C98800;
+    border-radius: 50%;
+    opacity: 0.85;
+    animation: confettiFall 2.5s linear infinite;
+}
+.confetti-dot:nth-child(3n) { background: #ffb371; width: 6px; height: 6px; }
+.confetti-dot:nth-child(5n) { background: #ffdcbe; width: 5px; height: 5px; }
+@keyframes confettiFall {
+    0%   { transform: translateY(-10vh) rotate(0deg);   opacity: 1; }
+    100% { transform: translateY(110vh) rotate(720deg); opacity: 0; }
+}
+
+/* ==================================================
+   Star rating (read-only + input)
+   ================================================== */
+.stars-input { display: inline-flex; direction: rtl; }
+.stars-input input { display: none; }
+.stars-input label {
+    cursor: pointer; font-size: 1.5rem; color: #2a2a2e;
+    transition: color .12s ease;
+}
+.stars-input label:hover,
+.stars-input label:hover ~ label,
+.stars-input input:checked ~ label { color: #C98800; }
+
+/* ==================================================
+   Reduced motion
+   ================================================== */
+@media (prefers-reduced-motion: reduce) {
+    *, *::before, *::after {
+        animation-duration: 0.001ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.001ms !important;
+    }
+    .reveal { opacity: 1; transform: none; }
+    .confetti-dot { display: none; }
+}

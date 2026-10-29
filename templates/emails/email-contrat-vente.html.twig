@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="x-apple-disable-message-reformatting">
+  <meta name="color-scheme" content="light only">
+  <meta name="supported-color-schemes" content="light only">
+  <title>Contrat de vente - AutoPro</title>
+  <style>
+    body { margin:0; padding:0; background:#f5f7f9; -webkit-text-size-adjust:100%; }
+    table { border-collapse:collapse; }
+    body, table, td, p, div, a { font-family:Verdana,Geneva,sans-serif; }
+    img { border:0; outline:none; text-decoration:none; }
+    a { color:#C81214; }
+    @media (max-width: 620px) {
+      .container { width:100% !important; }
+      .px { padding-left:20px !important; padding-right:20px !important; }
+      .col { display:block !important; width:100% !important; }
+      .col-img { padding:0 0 14px 0 !important; }
+      .h1 { font-size:22px !important; }
+    }
+  </style>
+</head>
+
+<body style="margin:0;padding:0;background:#f5f7f9;font-family:Verdana,Geneva,sans-serif;color:#000000;">
+
+  <!-- Texte d'aperçu -->
+  <div style="display:none;max-height:0;overflow:hidden;opacity:0;font-size:1px;line-height:1px;color:#f5f7f9;">
+    Votre contrat de vente n° CV-2026-004182 est prêt : lisez-le, signez-le et renvoyez-le.
+  </div>
+
+  <!-- ===== EN-TETE DE MAQUETTE (à retirer en production) ===== -->
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#e9edf1;">
+    <tr>
+      <td align="center" style="padding:14px 16px;font-family:Verdana,Geneva,sans-serif;font-size:12px;color:#555555;line-height:1.6;">
+        <strong>De :</strong> AutoPro &lt;noreply@autopro.sale&gt; &nbsp;|&nbsp;
+        <strong>Objet :</strong> Votre contrat de vente n° CV-2026-004182 à signer
+      </td>
+    </tr>
+  </table>
+
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#f5f7f9;">
+    <tr>
+      <td align="center" style="padding:24px 12px 40px;">
+
+        <!-- ===== CONTENEUR 600px ===== -->
+        <table role="presentation" class="container" width="600" cellpadding="0" cellspacing="0" style="width:600px;max-width:600px;background:#FFFFFF;border:1px solid #E6E3DC;font-family:Verdana,Geneva,sans-serif;">
+          <!-- Logo -->
+          <tr>
+            <td class="px" align="center" style="padding:22px 32px;border-top:4px solid #ED1719;border-bottom:1px solid #E6E3DC;">
+              <!-- Remplace par : <img src="https://.../logo-autopro.png" width="150" alt="AutoPro"> -->
+              <span style="font-family:Verdana,Geneva,sans-serif;font-size:26px;font-weight:700;letter-spacing:1px;color:#000000;">AUTO<span style="color:#ED1719;">PRO</span></span>
+            </td>
+          </tr>
+          <!-- Titre -->
+          <tr>
+            <td class="px" align="center" style="padding:32px 32px 0;">
+              <table role="presentation" cellpadding="0" cellspacing="0">
+                <tr>
+                  <td align="center" width="48" height="48" bgcolor="#000000" style="width:48px;height:48px;background:#000000;border-radius:24px;color:#FFFFFF;font-size:24px;font-weight:700;line-height:48px;">&sect;</td>
+                </tr>
+              </table>
+              <p class="h1" style="margin:16px 0 0;font-size:26px;line-height:1.25;font-weight:700;color:#000000;">Votre contrat de vente est prêt</p>
+              <p style="margin:12px 0 0;font-size:14px;line-height:1.7;color:#555555;">
+                Bonjour <b style="color:#000000">{{ reservation.customerName }}</b>, le contrat de vente de votre véhicule est disponible. Lisez-le attentivement, signez-le, puis renvoyez-le-nous pour finaliser votre achat.
+                Il est joint à cet e-mail au format PDF.
+              </p>
+            </td>
+          </tr>
+
+          <!-- Contrat : numéro, date, statut -->
+          <tr>
+            <td class="px" style="padding:24px 32px 0;">
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border:2px dashed #E6E3DC;background:#f5f7f9;">
+                <tr>
+                  <td class="col" width="40%" valign="top" style="padding:16px 18px;">
+                    <div style="font-size:12px;color:#555555;">Contrat de vente n°</div>
+                    <div style="padding-top:2px;font-size:16px;font-weight:700;color:#000000;">CV-2026-004182</div>
+                  </td>
+                  <td class="col" width="30%" valign="top" style="padding:16px 18px;">
+                    <div style="font-size:12px;color:#555555;">Date</div>
+                    <div style="padding-top:2px;font-size:14px;font-weight:600;color:#000000;">20/09/2026</div>
+                  </td>
+                  <td class="col" width="30%" valign="top" style="padding:16px 18px;">
+                    <div style="font-size:12px;color:#555555;">Statut</div>
+                    <div style="padding-top:2px;font-size:14px;font-weight:600;color:#000000;">À signer</div>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+
+          <!-- Pièce jointe -->
+          <tr>
+            <td class="px" style="padding:16px 32px 0;">
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border:1px solid #E6E3DC;">
+                <tr>
+                  <td width="56" valign="middle" style="padding:14px 0 14px 14px;">
+                    <table role="presentation" cellpadding="0" cellspacing="0">
+                      <tr><td align="center" width="42" height="42" bgcolor="#ED1719" style="width:42px;height:42px;background:#ED1719;border-radius:6px;color:#FFFFFF;font-size:12px;font-weight:700;">PDF</td></tr>
+                    </table>
+                  </td>
+                  <td valign="middle" style="padding:14px 12px;">
+                    <div style="font-size:14px;font-weight:700;color:#000000;">contrat-vente-CV-2026-004182.pdf</div>
+                    <div style="padding-top:2px;font-size:12px;color:#555555;">3 pages, contrat et formulaire de rétractation</div>
+                  </td>
+                  <td valign="middle" align="right" width="110" style="padding:14px 14px 14px 0;white-space:nowrap;">
+                    <a href="#" style="font-size:13px;font-weight:600;color:#C81214;text-decoration:none;">Télécharger &rsaquo;</a>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+
+          <!-- Récapitulatif -->
+          <tr>
+            <td class="px" style="padding:28px 32px 0;">
+              <p style="margin:0 0 10px;font-size:16px;font-weight:700;color:#000000;">Récapitulatif de la vente</p>
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border-top:1px solid #E6E3DC;">
+                <tr>
+                  <td valign="top" style="padding:12px 0;border-bottom:1px solid #E6E3DC;font-size:14px;color:#555555;">Véhicule</td>
+                  <td align="right" valign="top" style="padding:12px 0;border-bottom:1px solid #E6E3DC;font-size:14px;font-weight:600;color:#000000;">[{{reservation.vehicle.brand }}], {{reservation.vehicle.category }} {{reservation.vehicle.fuel.label }}<br><span style="font-size:12px;font-weight:400;color:#555555;">Année. {{reservation.vehicle.year }} &middot;&nbsp;{{reservation.vehicle.immatriculation }}</span></td>
+                </tr>
+                <tr>
+                  <td valign="top" style="padding:12px 0;border-bottom:1px solid #E6E3DC;font-size:14px;color:#555555;">Prix de vente TTC</td>
+                  <td align="right" valign="top" style="padding:12px 0;border-bottom:1px solid #E6E3DC;font-size:14px;font-weight:600;color:#000000;">{{reservation.vehicle.price|number_format(2,',',' ') }}&nbsp;€</td>
+                </tr>
+                <tr>
+                  <td valign="top" style="padding:12px 0;border-bottom:1px solid #E6E3DC;font-size:14px;color:#555555;">Acompte versé ({{reservation.reservationFeePercentage}} %)</td>
+                  <td align="right" valign="top" style="padding:12px 0;border-bottom:1px solid #E6E3DC;font-size:14px;font-weight:600;color:#000000;">{{reservation.reservationFeeAmount|number_format(2,',',' ')}}&nbsp;€</td>
+                </tr>
+                <tr>
+                  <td bgcolor="#f5f7f9" style="padding:14px 12px;background:#f5f7f9;font-size:15px;font-weight:700;color:#000000;">Solde à payer</td>
+                  <td bgcolor="#f5f7f9" align="right" style="padding:14px 12px;background:#f5f7f9;font-size:18px;font-weight:700;color:#ED1719;white-space:nowrap;">{{(reservation.vehiclePriceSnapshot - reservation.reservationFeeAmount)|number_format(2,',',' ')}} &nbsp;€</td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+
+          <!-- Comment signer -->
+          <tr>
+            <td class="px" style="padding:28px 32px 0;">
+              <p style="margin:0 0 10px;font-size:16px;font-weight:700;color:#000000;">Comment signer ?</p>
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
+                <tr>
+                  <td width="28" valign="top" style="padding:6px 0;"><span style="display:inline-block;width:22px;height:22px;line-height:22px;text-align:center;border-radius:11px;background:#000000;color:#ffffff;font-size:12px;font-weight:700;">1</span></td>
+                  <td style="padding:6px 0;font-size:14px;line-height:1.5;color:#000000;">Lisez le contrat : prix, livraison, garanties et droit de rétractation.</td>
+                </tr>
+                <tr>
+                  <td width="28" valign="top" style="padding:6px 0;"><span style="display:inline-block;width:22px;height:22px;line-height:22px;text-align:center;border-radius:11px;background:#000000;color:#ffffff;font-size:12px;font-weight:700;">2</span></td>
+                  <td style="padding:6px 0;font-size:14px;line-height:1.5;color:#000000;">Signez-le en ligne ou imprimez-le, signez chaque exemplaire avec la mention « Lu et approuvé, bon pour accord ».</td>
+                </tr>
+                <tr>
+                  <td width="28" valign="top" style="padding:6px 0;"><span style="display:inline-block;width:22px;height:22px;line-height:22px;text-align:center;border-radius:11px;background:#000000;color:#ffffff;font-size:12px;font-weight:700;">3</span></td>
+                  <td style="padding:6px 0;font-size:14px;line-height:1.5;color:#000000;">Renvoyez-nous le contrat signé : nous confirmons sa réception et organisons la livraison.</td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+
+          <!-- Points importants -->
+          <tr>
+            <td class="px" style="padding:24px 32px 0;">
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border:1px solid #E6E3DC;border-left:4px solid #FFCC00;background:#FFFBEA;">
+                <tr>
+                  <td bgcolor="#FFFBEA" style="padding:16px 18px;background:#FFFBEA;">
+                    <p style="margin:0 0 8px;font-size:15px;font-weight:700;color:#000000;">À savoir avant de signer</p>
+                    <table role="presentation" width="100%" cellpadding="0" cellspacing="0">
+                    <tr>
+                      <td width="14" valign="top" style="padding:4px 0;font-size:14px;line-height:1.6;color:#ED1719;font-weight:700;">&bull;</td>
+                      <td valign="top" style="padding:4px 0;font-size:13px;line-height:1.6;color:#000000;"><strong>Garanties</strong> : garantie légale de conformité, garantie des vices cachés et garantie commerciale (article 5).</td>
+                    </tr>
+                    <tr>
+                      <td width="14" valign="top" style="padding:4px 0;font-size:14px;line-height:1.6;color:#ED1719;font-weight:700;">&bull;</td>
+                      <td valign="top" style="padding:4px 0;font-size:13px;line-height:1.6;color:#000000;"><strong>Rétractation</strong> : 14 jours à compter de la réception du véhicule, sans motif (article 6).</td>
+                    </tr>
+                    <tr>
+                      <td width="14" valign="top" style="padding:4px 0;font-size:14px;line-height:1.6;color:#ED1719;font-weight:700;">&bull;</td>
+                      <td valign="top" style="padding:4px 0;font-size:13px;line-height:1.6;color:#000000;"><strong>Acompte</strong> : déduit du prix total, et remboursé intégralement si la vente n'aboutit pas (articles 2 et 7).</td>
+                    </tr>
+                    </table>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+
+          <!-- Boutons -->
+          <tr>
+            <td class="px" align="center" style="padding:32px 32px 8px;">
+              <table role="presentation" cellpadding="0" cellspacing="0" width="320" style="width:320px;max-width:100%;">
+                <tr>
+                  <td align="center" bgcolor="#ED1719" style="background:#ED1719;border:2px solid #ED1719;border-radius:6px;">
+                    <a href="#" target="_blank" style="display:block;padding:14px 20px;font-family:Verdana,Geneva,sans-serif;font-size:15px;font-weight:bold;color:#FFFFFF;text-decoration:none;">Consulter et signer le contrat</a>
+                  </td>
+                </tr>
+                <tr><td height="10" style="height:10px;font-size:0;line-height:0;">&nbsp;</td></tr>
+                <tr>
+                  <td align="center" bgcolor="#FFFFFF" style="background:#FFFFFF;border:2px solid #000000;border-radius:6px;">
+                    <a href="#" target="_blank" style="display:block;padding:14px 20px;font-family:Verdana,Geneva,sans-serif;font-size:15px;font-weight:bold;color:#000000;text-decoration:none;">Télécharger le contrat (PDF)</a>
+                  </td>
+                </tr>
+              </table>
+              <p style="margin:14px 0 0;font-size:13px;">
+                <a href="{{path('contact')}}" style="color:#C81214;text-decoration:underline;">Poser une question sur le contrat</a>
+              </p>
+            </td>
+          </tr>
+
+          <!-- Contact -->
+          <tr>
+            <td class="px" style="padding:24px 32px 32px;">
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border-top:1px solid #E6E3DC;">
+                <tr>
+                  <td style="padding-top:20px;font-size:14px;line-height:1.6;color:#555555;">
+                    Une question sur votre réservation ? Répondez simplement à cet e-mail ou appelez-nous au
+                    <strong style="color:#000000;">{{site_setting('company_phone') }}</strong>.<br>
+                    Pensez à rappeler votre numéro de bon : <strong style="color:#000000;">{{reservation.reservationNumber }}</strong>.
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+
+          <!-- ===== FOOTER ===== -->
+     <!-- ===== FOOTER ===== -->
+          <tr>
+            <td class="px" align="center" bgcolor="#000000" style="background:#000000;padding:30px 32px;">
+              <span style="font-family:Verdana,Geneva,sans-serif;font-size:22px;font-weight:700;letter-spacing:1px;color:#FFFFFF;">AUTO<span style="color:#ED1719;">PRO</span></span>
+
+              <p style="margin:18px 0 0;font-size:13px;line-height:2;color:#999999;">
+                <a download href="{{asset('documents/mentions_legales_autopro_express.pdf')}}" style="color:#FFFFFF;text-decoration:underline;">Mentions légales</a>
+                &nbsp;|&nbsp;
+                <a download href="{{asset('documents/politique_confidentialite_autopro_express.pdf')}}" style="color:#FFFFFF;text-decoration:underline;">Politique de confidentialité</a>
+                &nbsp;|&nbsp;
+                <a download href="{{asset('documents/cgv_autopro_express.pdf')}}" style="color:#FFFFFF;text-decoration:underline;">Politique de livraison</a>
+              </p>
+
+              <p style="margin:16px 0 0;font-size:12px;line-height:1.7;color:#B5B5B5;">
+                Vous recevez cet e-mail suite à votre réservation sur
+                <a href="#" style="color:#FFFFFF;text-decoration:underline;">{{ site_setting('company_site') }}</a>.<br>
+                Ce bon de réservation ne constitue pas une facture.
+              </p>
+
+              <p style="margin:14px 0 0;font-size:12px;line-height:1.7;color:#B5B5B5;">
+                AutoPro, {{ site_setting('legal_notice') }}<br>
+                {{ site_setting('company_address') }}
+              </p>
+            </td>
+          </tr>
+
+        </table>
+        <!-- ===== FIN CONTENEUR ===== -->
+
+      </td>
+    </tr>
+  </table>
+
+</body>
+</html>

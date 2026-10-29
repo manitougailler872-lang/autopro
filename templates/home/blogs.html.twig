@@ -1,0 +1,136 @@
+{% extends 'base.html.twig' %}
+{% block title %}AutoPro - Nos conseils{% endblock %}
+
+{% block body %}
+  <section class="max-w-7xl mx-auto px-5 pt-16">
+          <span class="text-luxe-orange text-xs font-extrabold uppercase tracking-widest">Actualités</span>
+          <h1 class="mt-4 text-5xl font-extrabold">Nos conseils</h1>
+          <p class="mt-4 text-lg text-sm text-luxe-muted">
+              Une berline familiale, une citadine habile ou un utilitaire polyvalent… À chaque projet, son mode de financement d’une voiture ! Selon vos envies et vos capacités financières, l’achat d’une voiture d’occasion ou neuve peut s’opérer par crédit ou bien avec les solutions de Location avec Option d’Achat (LOA) et de Location Longue Durée (LLD). 
+              <br/>
+              Des financements personnalisés, évolutifs avec ou sans apport. En tant que distributeurs d’automobiles, nos collaborateurs sont habilités et régulièrement formés à vous accompagner, en toute transparence, dans la recherche de la solution financière qui vous sera la plus avantageuse. Tout est prévu pour vous simplifier la vie en vous proposant si besoin une pause paiement et des variations de mensualités.
+          </p>
+  </section>
+  <section class="max-w-7xl mx-auto px-6 py-16" id="simulateur">
+        <!-- Carte -->
+        <div class="bg-luxe-card border border-luxe-border rounded-2xl p-8 grid grid-cols-1 md:grid-cols-2 gap-10">
+      
+          <!-- Colonne gauche : paramètres -->
+          <div>
+      
+            <!-- Type de financement -->
+            <div class="mb-8">
+              <div class="text-sm text-luxe-text font-medium mb-3">Type de financement</div>
+              <div class="flex flex-wrap gap-2" id="typesFinancement">
+                <button type="button" class="type-btn px-4 py-2 rounded-full text-sm border transition bg-luxe-orange active:text-white text-white border-luxe-orange font-medium" data-taux="5.9" data-active="true">
+                  Crédit classique
+                </button>
+                <button type="button" class="type-btn px-4 py-2 rounded-full text-sm border transition bg-luxe-card text-luxe-muted border-luxe-border hover:border-luxe-orange-dark" data-taux="3.9">
+                  LLD
+                </button>
+              </div>
+            </div>
+      
+            <!-- Montant emprunté -->
+            <div class="mb-8">
+              <div class="flex items-baseline justify-between mb-2">
+                <label for="montant" class="text-sm text-luxe-text font-medium">Montant du véhicule financé</label>
+                <span class="font-mono text-sm text-luxe-text"><span id="montantAffiche">10 000</span> €</span>
+              </div>
+              <input type="range" id="montant" min="2000" max="80000" step="500" value="10000" class="w-full">
+              <div class="flex justify-between text-xs text-luxe-faint mt-1 font-mono">
+                <span>2 000 €</span>
+                <span>80 000 €</span>
+              </div>
+            </div>
+      
+            <!-- Durée -->
+            <div>
+              <div class="flex items-baseline justify-between mb-2">
+                <label for="duree" class="text-sm text-luxe-text font-medium">Durée de remboursement</label>
+                <span class="font-mono text-sm text-luxe-text"><span id="dureeAffichee">36</span> mois</span>
+              </div>
+              <input type="range" id="duree" min="12" max="84" step="6" value="36" class="w-full">
+              <div class="flex justify-between text-xs text-luxe-faint mt-1 font-mono">
+                <span>12 mois</span>
+                <span>84 mois</span>
+              </div>
+            </div>
+      
+          </div>
+      
+          <!-- Colonne droite : résultat -->
+          <div class="bg-luxe-black-alt border border-luxe-border rounded-xl p-8 flex flex-col">
+      
+            <div class="text-center mb-6">
+              <div class="text-xs font-semibold tracking-widest text-luxe-muted mb-2">MENSUALITÉ ESTIMÉE</div>
+              <div class="flex items-baseline justify-center gap-2">
+                <span class="text-5xl font-semibold text-luxe-text font-mono" id="mensualite">304</span>
+                <span class="text-2xl font-semibold text-luxe-text">€</span>
+                <span class="text-luxe-faint">/mois</span>
+              </div>
+              <div class="text-sm text-luxe-muted mt-2">
+                Taux fixe indicatif : <span class="text-luxe-orange-dark font-medium" id="tauxActuel">5,9</span> % TAEG
+              </div>
+            </div>
+      
+            <div class="border-t border-luxe-border pt-5 space-y-4">
+              <div class="flex justify-between text-sm">
+                <span class="text-luxe-muted">Montant total dû</span>
+                <span class="font-mono font-medium text-luxe-text"><span id="montantTotalDu">10 936</span> €</span>
+              </div>
+              <div class="flex justify-between text-sm">
+                <span class="text-luxe-muted">Coût total du crédit</span>
+                <span class="font-mono font-medium text-luxe-text"><span id="coutTotalCredit">936</span> €</span>
+              </div>
+            </div>
+      
+            <p class="text-xs text-luxe-faint text-center mt-auto pt-6">
+              Simulation indicative et non contractuelle, calculée sur la base d'un taux fixe.
+              Le taux définitif dépend de l'étude de votre dossier.
+            </p>
+          </div>
+      
+        </div>
+        <!-- Tableau d'amortissement -->
+        <div class="mt-10">
+          <button type="button" id="toggleTableau" class="flex items-center gap-2 text-sm font-medium text-luxe-text hover:text-luxe-orange-dark mb-4">
+            <span id="toggleTableauLabel">Voir le tableau d’amortissement</span>
+            <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 transition-transform" id="toggleTableauIcon" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2">
+              <path stroke-linecap="round" stroke-linejoin="round" d="M19 9l-7 7-7-7" />
+            </svg>
+          </button>
+      
+          <div id="tableauWrapper" class="bg-luxe-card border border-luxe-border rounded-xl overflow-hidden" hidden>
+            <div class="overflow-x-auto max-h-96 overflow-y-auto">
+              <table class="w-full text-sm">
+                <thead class="bg-luxe-black-alt sticky top-0">
+                  <tr class="text-left text-luxe-muted text-xs uppercase tracking-wide">
+                    <th class="px-4 py-3 font-medium">Échéance</th>
+                    <th class="px-4 py-3 font-medium text-right">Mensualité</th>
+                    <th class="px-4 py-3 font-medium text-right">Capital</th>
+                    <th class="px-4 py-3 font-medium text-right">Intérêts</th>
+                    <th class="px-4 py-3 font-medium text-right">Capital restant dû</th>
+                  </tr>
+                </thead>
+                <tbody id="tableauCorps">
+                  <!-- lignes générées en JS -->
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+  </section>
+
+  <section class="max-w-7xl mx-auto px-5">
+           <p class="mt-2 text-sm text-luxe-muted">
+              MAÎTRISEZ LES FINS DE MOIS GRÂCE AUX MENSUALITÉS   <br/>
+             <b> 3 façons de financer votre nouveau véhicule neuf ou d’occasion :</b><br/>
+
+              Avec un crédit pour une voiture neuve ou d’occasion, l’achat d’une auto est simple ! Selon vos capacités d’emprunt et l’éventuel apport personnel formulé, vous obtenez un prêt auto, soit la somme nécessaire pour acquérir votre véhicule, possiblement en tenant compte d’éventuelles assurances et garanties. La somme n’est pas directement versée sur votre compte mais auprès de la concession avec laquelle vous êtes en affaire !
+              Propriétaire de votre voiture, vous devez alors rembourser ce crédit par des mensualités calculées à l’avance.</p>
+              
+            <p  class="mt-4 text-sm text-luxe-muted"> Une mensualité est composée du montant que vous devez chaque mois ainsi que des intérêts. Ce montant est généralement plus important que si vous aviez eu recours à un financement par une LOA ou une LLD puisqu’il n’y a pas d’offre de rachat au bout d’un quelconque échéancier. Deux inconvénients se dégagent néanmoins : C’est à vous d’effectuer l’ensemble des démarches financières et administratives. En fournissant un apport personnel, vous grevez de l’épargne qui pouvait servir à d’autres projets.
+              Jusqu’à récemment, le crédit était la solution de financement de voiture d’occasion des particuliers la plus courante en France. Elle reste idéale pour tous ceux qui souhaitent ne pas être pressés par les échéances d’un financement auto en LOA ou LLD. Au contraire, vous êtes propriétaire du véhicule. Libre du calendrier pour une éventuelle revente. À moins que vous ne préfériez conserver votre voiture en n’ayant idéalement à financer, à terme, que les seules dépenses d’entretien.  </p>
+  </section>  
+{% endblock %}

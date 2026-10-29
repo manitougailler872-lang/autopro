@@ -1,0 +1,28 @@
+Bonjour {{ reservation.customerName }},
+
+Votre réservation est confirmée.
+
+═══════════════════════════════
+BON DE RÉSERVATION
+═══════════════════════════════
+
+N° réservation :   {{ reservation.reservationNumber }}
+Véhicule :         {{ reservation.vehicle.brand }} {{ reservation.vehicle.model }} {{ reservation.vehicle.version }}
+Prix :             {{ reservation.vehiclePriceSnapshot }} €
+Frais réservation: {{ reservation.reservationFeeAmount }} € ({{ reservation.reservationFeePercentage }}%)
+Paiement :         Virement bancaire
+Réception :        {{ reservation.receptionMode.label }}
+{% if reservation.receptionMode.value == 'PICKUP' %}
+Retrait :          {{ reservation.pickupFirstName }} {{ reservation.pickupLastName }} — {{ reservation.pickupDate|date('d/m/Y') }} à {{ reservation.pickupTime }}
+{% else %}
+Adresse :          {{ reservation.deliveryAddress }}, {{ reservation.deliveryPostalCode }} {{ reservation.deliveryCity }}
+{% endif %}
+
+Statut : RÉSERVATION CONFIRMÉE
+
+Conservez cet e-mail comme confirmation.
+
+—
+L'équipe {{ settings.company_name|default('LUXE CAR AUTOMOBIL') }}
+{{ settings.company_phone|default('') }}
+{{ settings.company_email|default('') }}

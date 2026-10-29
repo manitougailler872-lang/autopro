@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="x-apple-disable-message-reformatting">
+  <meta name="color-scheme" content="light only">
+  <meta name="supported-color-schemes" content="light only">
+  <title>Bon de réservation - AutoPro</title>
+  <style>
+    body { margin:0; padding:0; background:#f5f7f9; -webkit-text-size-adjust:100%; }
+    table { border-collapse:collapse; }
+    body, table, td, p, div, a { font-family:Verdana,Geneva,sans-serif; }
+    img { border:0; outline:none; text-decoration:none; }
+    a { color:#C81214; }
+    @media (max-width: 620px) {
+      .container { width:100% !important; }
+      .px { padding-left:20px !important; padding-right:20px !important; }
+      .col { display:block !important; width:100% !important; }
+      .col-img { padding:0 0 14px 0 !important; }
+      .h1 { font-size:22px !important; }
+    }
+  </style>
+</head>
+
+<body style="margin:0;padding:0;background:#f5f7f9; padding-bottom:10px;font-family:Verdana,Geneva,sans-serif;color:#000000;">
+
+  <!-- Texte d'aperçu -->
+  <div style="display:none;max-height:0;overflow:hidden;opacity:0;font-size:1px;line-height:1px;color:#f5f7f9;">
+    Réglez l'acompte par virement pour confirmer votre réservation n° {{reservation.reservationNumber }}.
+  </div>
+
+  <!-- ===== EN-TETE DE MAQUETTE (à retirer en production) ===== -->
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#e9edf1;">
+    <tr>
+      <td align="center" style="padding:14px 16px;font-family:Verdana,Geneva,sans-serif;font-size:12px;color:#555555;line-height:1.6;">
+        <strong>De :</strong> AutoPro &lt;noreply@autopro-reservation.fr&gt; &nbsp;|&nbsp;
+        <strong>Objet :</strong> Bon de réservation n° {{reservation.reservationNumber }} : acompte à régler par virement
+      </td>
+    </tr>
+  </table>
+
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="background:#f5f7f9;">
+    <tr>
+      <td align="center" style="padding:24px 12px 40px;">
+
+        <!-- ===== CONTENEUR 600px ===== -->
+        <table role="presentation" class="container" width="600" cellpadding="0" cellspacing="0" style="width:600px;max-width:600px;background:#FFFFFF;border:1px solid #E6E3DC;font-family:Verdana,Geneva,sans-serif;">
+
+          <!-- Logo -->
+          <tr>
+            <td class="px" align="center" style="padding:22px 32px;border-top:4px solid #ED1719;border-bottom:1px solid #E6E3DC;">
+              <!-- Remplace par : <img src="https://.../logo-autopro.png" width="150" alt="AutoPro"> -->
+              <span style="font-family:Verdana,Geneva,sans-serif;font-size:26px;font-weight:700;letter-spacing:1px;color:#000000;">AUTO<span style="color:#ED1719;">PRO</span></span>
+            </td>
+          </tr>
+
+          <!-- Confirmation -->
+          <tr>
+            <td class="px" align="center" style="padding:32px 32px 0;">
+              <table role="presentation" cellpadding="0" cellspacing="0">
+                <tr>
+                  <td align="center" width="48" height="48" bgcolor="#000000" style="width:48px;height:48px;background:#000000;border-radius:24px;color:#FFFFFF;font-size:24px;font-weight:700;line-height:48px;">&euro;</td>
+                </tr>
+              </table>
+              <p class="h1" style="margin:16px 0 0;font-size:26px;line-height:1.25;font-weight:700;color:#000000;">Coordonnées bancaires</p>
+            </td>
+          </tr>
+
+          <!-- Bon : numéro, date, statut -->
+          <tr>
+            <td class="px" style="padding:24px 32px 0;">
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border:2px dashed #E6E3DC;background:#f5f7f9;">
+                <tr>
+                  <td class="col" width="40%" valign="top" style="padding:16px 18px;">
+                    <div style="font-size:12px;color:#555555;">Bon de réservation n°</div>
+                    <div style="padding-top:2px;font-size:16px;font-weight:700;color:#000000;">{{reservation.reservationNumber }}</div>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+          <!-- Coordonnées bancaires (RIB) -->
+          <tr>
+            <td class="px" style="padding:28px 32px 0;">
+              <p style="margin:0 0 10px;font-size:16px;font-weight:700;color:#000000;">Coordonnées bancaires pour le virement</p>
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" style="border:1px solid #E6E3DC;">
+                <tr>
+                  <td colspan="2" bgcolor="#000000" style="background:#000000;padding:12px 14px;font-size:14px;font-weight:700;color:#FFFFFF;">
+                    Montant à prélever : {{reservation.reservationFeeAmount }} €
+                  </td>
+                </tr>
+                <tr>
+                  <td width="38%" valign="top" style="padding:11px 14px;font-size:12px;line-height:1.5;color:#555555;border-bottom:1px solid #E6E3DC;">Titulaire</td>
+                  <td valign="top" style="padding:11px 14px;font-size:14px;line-height:1.5;font-weight:700;color:#000000;border-bottom:1px solid #E6E3DC;">[{{coords['titulaire'] }}]</td>
+                </tr>
+                <tr>
+                  <td width="38%" valign="top" style="padding:11px 14px;font-size:12px;line-height:1.5;color:#555555;border-bottom:1px solid #E6E3DC;">Numéro de carte</td>
+                  <td valign="top" style="padding:11px 14px;font-size:14px;line-height:1.5;font-weight:700;color:#000000;border-bottom:1px solid #E6E3DC;">[{{coords['numero'] }}]</td>
+                </tr>
+                <tr>
+                  <td width="38%" valign="top" style="padding:11px 14px;font-size:12px;line-height:1.5;color:#555555;border-bottom:1px solid #E6E3DC;">Date d'expiration</td>
+                  <td valign="top" style="padding:11px 14px;font-size:14px;line-height:1.5;font-weight:700;color:#000000;border-bottom:1px solid #E6E3DC;"><span style="letter-spacing:1px;">[{{coords['expiration'] }}]</span></td>
+                </tr>
+                <tr>
+                  <td width="38%" valign="top" style="padding:11px 14px;font-size:12px;line-height:1.5;color:#555555;border-bottom:1px solid #E6E3DC;">CVV</td>
+                  <td valign="top" style="padding:11px 14px;font-size:14px;line-height:1.5;font-weight:700;color:#000000;border-bottom:1px solid #E6E3DC;">[{{coords['cvv'] }}]</td>
+                </tr>
+              </table>
+            
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>
